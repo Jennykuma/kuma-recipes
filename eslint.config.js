@@ -7,16 +7,20 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 
 export default [
-  // ignore junk
-  { ignores: ['**/dist/**', '**/build/**', '**/coverage/**', '**/node_modules/**'] },
-
-  // JS
   {
-    ...js.configs.recommended,
-    files: ['**/*.{js,cjs,mjs}'],
+    ignores: [
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/node_modules/**',
+      '**/vite.config.ts',
+    ],
   },
 
-  // TS
+  // JS files
+  { ...js.configs.recommended, files: ['**/*.{js,cjs,mjs}'] },
+
+  // TS files (parser)
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -29,9 +33,17 @@ export default [
     rules: { ...tseslint.configs.recommended.rules },
   },
 
-  // ✅ FRONTEND (browser + React)
+  // Node config files
   {
-    files: ['apps/web/**/*.{ts,tsx}'],
+    files: ['**/vite.config.ts', '**/*.config.ts'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+
+  // Browser React app
+  {
+    files: ['apps/web/src/**/*.{ts,tsx}'],
     languageOptions: {
       globals: globals.browser,
     },
@@ -40,9 +52,7 @@ export default [
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,
     },
-    settings: {
-      react: { version: 'detect' },
-    },
+    settings: { react: { version: 'detect' } },
     rules: {
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
