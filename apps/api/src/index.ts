@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import fastify, { FastifyReply } from 'fastify';
 import { prisma } from './prisma';
 
 const app = fastify();
@@ -7,11 +7,11 @@ app.get('/health', async () => {
     return { ok: true };
 });
 
-app.get('/recipes', async () => {
+app.get('/recipes', async (_, reply: FastifyReply) => {
     const recipes = await prisma.recipe.findMany({
         orderBy: { createdAt: 'desc' },
     });
-    return { recipes };
+    reply.send({ recipes });
 });
 
 const start = async () => {

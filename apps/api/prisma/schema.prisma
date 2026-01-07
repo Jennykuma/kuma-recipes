@@ -14,12 +14,14 @@ datasource db {
 }
 
 model Recipe {
-  id        String    @id @default(uuid())
-  title     String
-  notes     String?   // optional
-  rating    Int?      // optional
-  recipe    String?   // optional
-  remake    Boolean?  // optional
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String   @id @default(uuid())
+  title       String
+  ingredients Json?
+  notes       String?
+  rating      Int?
+  remake      Boolean?
+  steps       Json?
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
