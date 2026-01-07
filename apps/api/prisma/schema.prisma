@@ -19,7 +19,7 @@ model Recipe {
   ingredients Json?
   notes       String?
   rating      Int?
-  remake      Boolean?
+  remake      Boolean? @default(false)
   steps       Json?
   tags        String[]
   createdAt   DateTime @default(now())
