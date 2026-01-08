@@ -1,5 +1,12 @@
 import { FastifyInstance } from 'fastify';
 import { buildApp } from '../../src/app';
+import { vi } from 'vitest';
+
+vi.mock('../../src/services/recipes.service', () => ({
+    listRecipes: vi.fn(),
+}));
+
+import { listRecipes } from '../../src/services/recipes.service';
 
 describe('recipes routes', () => {
     let app: FastifyInstance;
@@ -30,13 +37,25 @@ describe('recipes routes', () => {
         });
     });
 
-    test('GET /recipes -> gets all recipes', async () => {
+    test('GET /recipes -> returns mocked recipes', async () => {
+        const mockedListRecipes = vi.mocked(listRecipes);
+        mockedListRecipes.mockResolvedValue([
+            {
+                title: 'Matcha Cookies',
+            },
+            {
+                title: 'Salt Bread',
+            },
+        ]);
+
         const res = await app.inject({
             method: 'GET',
             url: '/recipes',
         });
 
         expect(res.statusCode).toBe(200);
-        expect(res.json()).toMatchObject({});
+        expect(res.json()).toEqual({
+            recipes: [{ title: 'Matcha Cookies' }, { title: 'Salt Bread' }],
+        });
     });
 });
