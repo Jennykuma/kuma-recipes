@@ -41,9 +41,11 @@ describe('recipes routes', () => {
         const mockedListRecipes = vi.mocked(listRecipes);
         mockedListRecipes.mockResolvedValue([
             {
+                id: '1',
                 title: 'Matcha Cookies',
             },
             {
+                id: '2',
                 title: 'Salt Bread',
             },
         ]);
@@ -55,7 +57,10 @@ describe('recipes routes', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.json()).toEqual({
-            recipes: [{ title: 'Matcha Cookies' }, { title: 'Salt Bread' }],
+            recipes: [
+                { id: '1', title: 'Matcha Cookies' },
+                { id: '2', title: 'Salt Bread' },
+            ],
         });
     });
 });
