@@ -1,12 +1,12 @@
 packages:
-    - apps/*
-    - packages/*
+  - apps/*
+  - packages/*
 
 catalog:
-    '@types/node': ^24.10.4
-    '@types/pg': ^8.16.0
+  '@types/node': ^24.10.4
+  '@types/pg': ^8.16.0
 
 onlyBuiltDependencies:
-    - '@prisma/engines'
-    - esbuild
-    - prisma
+  - '@prisma/engines'
+  - esbuild
+  - prisma
