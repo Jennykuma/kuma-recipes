@@ -14,8 +14,13 @@ const App = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {recipes &&
                 recipes?.map((recipe: RecipeListItem) => {
-                    // return <div key={recipe.id}>{recipe.title}</div>
-                    return <RecipeCard title={recipe.title} key={recipe.id} />;
+                    return (
+                        <RecipeCard
+                            rating={recipe.rating}
+                            title={recipe.title}
+                            key={recipe.id}
+                        />
+                    );
                 })}
         </div>
     );

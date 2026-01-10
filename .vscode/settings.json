@@ -2,10 +2,6 @@
     "eslint.workingDirectories": [{ "mode": "auto" }],
     "editor.formatOnSave": true,
 
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
 
@@ -13,6 +9,9 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
