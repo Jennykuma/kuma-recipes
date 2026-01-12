@@ -3,7 +3,7 @@ import { prisma } from '../prisma';
 import { Prisma } from '@prisma/client';
 import { recipeDetails, listRecipes } from '../services/recipes.service';
 
-interface CreateRecipeBody {
+interface NewRecipeBody {
     title: string;
     ingredients?: Prisma.InputJsonValue;
     notes?: string;
@@ -25,7 +25,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         reply.send({ recipe });
     });
 
-    fastify.post<{ Body: CreateRecipeBody }>('/', async (request, reply) => {
+    fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
         const { title, ingredients, notes, rating, remake, steps, tags } = request.body;
         const result = await prisma.recipe.create({
             data: { title, ingredients, notes, rating, remake, steps, tags },
