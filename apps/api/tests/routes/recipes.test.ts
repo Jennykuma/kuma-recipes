@@ -4,9 +4,10 @@ import { vi } from 'vitest';
 
 vi.mock('../../src/services/recipes.service', () => ({
     listRecipes: vi.fn(),
+    recipeDetails: vi.fn(),
 }));
 
-import { listRecipes } from '../../src/services/recipes.service';
+import { listRecipes, recipeDetails } from '../../src/services/recipes.service';
 
 describe('recipes routes', () => {
     let app: FastifyInstance;
@@ -41,12 +42,14 @@ describe('recipes routes', () => {
         const mockedListRecipes = vi.mocked(listRecipes);
         mockedListRecipes.mockResolvedValue([
             {
-                id: '1',
+                id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
                 title: 'Matcha Cookies',
+                rating: 4,
             },
             {
-                id: '2',
+                id: 'ceada500-2341-42c5-869b-f231869a94aa',
                 title: 'Salt Bread',
+                rating: 5,
             },
         ]);
 
@@ -58,9 +61,52 @@ describe('recipes routes', () => {
         expect(res.statusCode).toBe(200);
         expect(res.json()).toEqual({
             recipes: [
-                { id: '1', title: 'Matcha Cookies' },
-                { id: '2', title: 'Salt Bread' },
+                {
+                    id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+                    title: 'Matcha Cookies',
+                    rating: 4,
+                },
+                {
+                    id: 'ceada500-2341-42c5-869b-f231869a94aa',
+                    title: 'Salt Bread',
+                    rating: 5,
+                },
             ],
+        });
+    });
+
+    test('GET /recipes/:id -> returns mocked recipe details', async () => {
+        const id = 'ceada500-2341-42c5-869b-f231869a94aa';
+        const mockedRecipeDetails = vi.mocked(recipeDetails);
+        mockedRecipeDetails.mockResolvedValue({
+            id: id,
+            title: 'Salt Bread',
+            rating: 5,
+            ingredients: null,
+            notes: null,
+            remake: false,
+            steps: null,
+            tags: [],
+        });
+
+        const res = await app.inject({
+            method: 'GET',
+            url: `/recipes/${id}`,
+        });
+
+        expect(res.statusCode).toBe(200);
+        console.log('res.json(): ', res.json());
+        expect(res.json()).toEqual({
+            recipe: {
+                id: id,
+                title: 'Salt Bread',
+                rating: 5,
+                ingredients: null,
+                notes: null,
+                remake: false,
+                steps: null,
+                tags: [],
+            },
         });
     });
 });

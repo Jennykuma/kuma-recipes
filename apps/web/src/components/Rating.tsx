@@ -14,6 +14,7 @@ const Rating = ({ rating = 0 }: RatingProps) => {
     const star = (index: number) => (
         <svg
             className={`w-5 h-5 ${colorClass(index)}`}
+            key={`star-${index}`}
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"

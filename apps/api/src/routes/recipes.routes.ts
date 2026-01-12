@@ -1,7 +1,7 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
 import { prisma } from '../prisma';
 import { Prisma } from '@prisma/client';
-import { listRecipes } from '../services/recipes.service';
+import { recipeDetails, listRecipes } from '../services/recipes.service';
 
 interface CreateRecipeBody {
     title: string;
@@ -14,12 +14,18 @@ interface CreateRecipeBody {
 }
 
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
-    fastify.get('/recipes', async (_, reply: FastifyReply) => {
+    fastify.get('/', async (_, reply: FastifyReply) => {
         const recipes = await listRecipes();
         reply.send({ recipes });
     });
 
-    fastify.post<{ Body: CreateRecipeBody }>('/recipes', async (request, reply) => {
+    fastify.get('/:id', async (request, reply) => {
+        const params = request.params as { id: string };
+        const recipe = await recipeDetails(params.id);
+        reply.send({ recipe });
+    });
+
+    fastify.post<{ Body: CreateRecipeBody }>('/', async (request, reply) => {
         const { title, ingredients, notes, rating, remake, steps, tags } = request.body;
         const result = await prisma.recipe.create({
             data: { title, ingredients, notes, rating, remake, steps, tags },

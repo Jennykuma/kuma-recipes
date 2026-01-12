@@ -16,6 +16,7 @@ const App = () => {
                 recipes?.map((recipe: RecipeListItem) => {
                     return (
                         <RecipeCard
+                            id={recipe.id}
                             rating={recipe.rating}
                             title={recipe.title}
                             key={recipe.id}

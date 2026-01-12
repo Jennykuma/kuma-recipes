@@ -1,20 +1,27 @@
 import React from 'react';
 import Rating from './Rating';
+import { Link } from 'react-router-dom';
 
 interface RecipeCardProps {
+    id: string;
     rating?: number;
     title: string;
 }
 
-const RecipeCard = ({ rating, title }: RecipeCardProps) => {
+const RecipeCard = ({ id, rating, title }: RecipeCardProps) => {
     return (
-        <div className="flex flex-col w-96 md:w-full md:flex-row gap-4 p-4 border border-gray-200 rounded-sm shadow-sm hover:shadow-none cursor-pointer">
+        <Link
+            role="link"
+            tabIndex={0}
+            className="flex flex-col w-96 md:w-full md:flex-row gap-4 p-4 border border-gray-200 rounded-sm shadow-sm hover:shadow-none cursor-pointer"
+            to={`/recipes/${id}`}
+        >
             <div className="flex flex-col w-full md:w-2/3 justify-center">
                 <span>{title}</span>
                 <Rating rating={rating} />
             </div>
             <div className="w-full md:w-32 h-32 bg-gray-100">photo</div>
-        </div>
+        </Link>
     );
 };
 
