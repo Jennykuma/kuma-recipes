@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import Table from './Table';
 import Rating from './Rating';
 
 interface IRecipeFormInput {
@@ -33,6 +34,7 @@ const NewRecipe = () => {
                 <Rating interactive />
 
                 <label htmlFor="ingredients">Ingredients</label>
+                <Table />
             </form>
         </div>
     );
