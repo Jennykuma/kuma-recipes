@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
 const MAX_NUMBER_OF_STARS = 5;
 
 interface RatingProps {
+    interactive?: boolean;
     rating?: number;
+    onChange?: (rating: number) => void;
 }
 
-const Rating = ({ rating = 0 }: RatingProps) => {
-    const colorClass = (index: number) => {
-        return index < rating ? 'text-yellow-500' : 'text-gray-30';
-    };
+const Rating = ({ rating = 0, interactive = false, onChange }: RatingProps) => {
+    const [hoverRating, setHoverRating] = useState<number | null>(null);
+
+    const activeRating = hoverRating ?? rating;
+    const starValue = (index: number) => MAX_NUMBER_OF_STARS - index;
+    const isFilled = (index: number) => starValue(index) <= activeRating;
 
     const star = (index: number) => (
         <svg
-            className={`w-5 h-5 ${colorClass(index)}`}
-            key={`star-${index}`}
+            className={classNames(
+                'rating-star w-5 h-5',
+                interactive && 'cursor-pointer',
+                isFilled(index) ? 'text-yellow-500' : 'text-gray-300'
+            )}
+            onClick={interactive ? () => onChange?.(starValue(index)) : undefined}
+            onMouseEnter={
+                interactive ? () => setHoverRating(starValue(index)) : undefined
+            }
+            onMouseLeave={interactive ? () => setHoverRating(null) : undefined}
+            key={`${index}`}
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -27,7 +41,10 @@ const Rating = ({ rating = 0 }: RatingProps) => {
     );
 
     return (
-        <div className="flex justify-center">
+        // flex-row-reverse causes the star rating to start from the right
+        // index 4 3 2 1 0
+        // star  ★ ★ ★ ★ ★
+        <div className="flex flex-row-reverse justify-center">
             {[...Array(MAX_NUMBER_OF_STARS)].map((_, i) => star(i))}
         </div>
     );

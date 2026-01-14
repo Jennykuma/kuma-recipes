@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 export type Recipe = {
     id: string;
     ingredients: JSON;
@@ -16,3 +18,13 @@ export type RecipeListItem = {
     rating: number;
     title: string;
 };
+
+export interface NewRecipeBody {
+    title: string;
+    ingredients?: Prisma.InputJsonValue;
+    notes?: string;
+    rating?: number;
+    remake?: boolean;
+    steps?: Prisma.InputJsonValue;
+    tags?: string[];
+}

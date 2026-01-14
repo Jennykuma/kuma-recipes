@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import Rating from './Rating';
 
 interface IRecipeFormInput {
     ingredients: JSON;
@@ -27,6 +28,9 @@ const NewRecipe = () => {
                     className="border border-gray-200 w-full"
                     {...register('title')}
                 ></input>
+
+                <label htmlFor="rating">Rating</label>
+                <Rating interactive />
 
                 <label htmlFor="ingredients">Ingredients</label>
             </form>

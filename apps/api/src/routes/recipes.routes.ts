@@ -1,7 +1,12 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
 import { prisma } from '../prisma';
 import { Prisma } from '@prisma/client';
-import { recipeDetails, listRecipes } from '../services/recipes.service';
+import {
+    recipeDetails,
+    listRecipes,
+    updateRecipeRating,
+    createNewRecipe,
+} from '../services/recipes.service';
 
 interface NewRecipeBody {
     title: string;
@@ -11,6 +16,10 @@ interface NewRecipeBody {
     remake?: boolean;
     steps?: Prisma.InputJsonValue;
     tags?: string[];
+}
+
+interface UpdateRecipeBody {
+    rating: number;
 }
 
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
@@ -27,10 +36,23 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
     fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
         const { title, ingredients, notes, rating, remake, steps, tags } = request.body;
-        const result = await prisma.recipe.create({
-            data: { title, ingredients, notes, rating, remake, steps, tags },
+        const result = await createNewRecipe({
+            title,
+            ingredients,
+            notes,
+            rating,
+            remake,
+            steps,
+            tags,
         });
         reply.code(201).send(result);
+    });
+
+    fastify.patch<{ Body: UpdateRecipeBody }>('/:id/rating', async (request, reply) => {
+        const params = request.params as { id: string };
+        const { rating } = request.body;
+        const result = await updateRecipeRating(params.id, rating);
+        reply.code(200).send(result);
     });
 };
 
