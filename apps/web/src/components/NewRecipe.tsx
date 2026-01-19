@@ -19,24 +19,32 @@ const NewRecipe = () => {
     const { register, handleSubmit } = useForm<IRecipeFormInput>();
 
     return (
-        <div>
+        <>
             <span>Create new recipe</span>
-            <form>
-                <label htmlFor="title">Title</label>
-                <input
-                    id="title"
-                    type="text"
-                    className="border border-gray-200 w-full"
-                    {...register('title')}
-                ></input>
+            <div className="w-full h-screen">
+                <form>
+                    <div className="flex gap-8">
+                        <div className="w-3/8 p-8 border border-gray-200 rounded-sm shadow-sm">
+                            <label htmlFor="title">Title</label>
+                            <input
+                                id="title"
+                                type="text"
+                                className="border border-gray-200 w-full mb-8"
+                                {...register('title')}
+                            ></input>
 
-                <label htmlFor="rating">Rating</label>
-                <Rating interactive />
+                            <label htmlFor="rating">Rating</label>
+                            <Rating interactive />
+                        </div>
 
-                <label htmlFor="ingredients">Ingredients</label>
-                <Table />
-            </form>
-        </div>
+                        <div className="w-5/8 p-8 border border-gray-200 rounded-sm shadow-sm">
+                            <label htmlFor="ingredients">Ingredients</label>
+                            <Table />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </>
     );
 };
 
