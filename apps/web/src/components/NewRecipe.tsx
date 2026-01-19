@@ -40,6 +40,10 @@ const NewRecipe = () => {
                         <div className="w-5/8 p-8 border border-gray-200 rounded-sm shadow-sm">
                             <label htmlFor="ingredients">Ingredients</label>
                             <Table />
+
+                            <label htmlFor="steps" className="block mt-8">
+                                Steps
+                            </label>
                         </div>
                     </div>
                 </form>
