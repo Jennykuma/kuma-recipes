@@ -1,7 +1,8 @@
 import React from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import Table from './Table';
+import IngredientTable from './IngredientTable';
 import Rating from './Rating';
+import StepsTable from './StepsTable';
 
 interface IRecipeFormInput {
     ingredients: JSON;
@@ -39,11 +40,12 @@ const NewRecipe = () => {
 
                         <div className="w-5/8 p-8 border border-gray-200 rounded-sm shadow-sm">
                             <label htmlFor="ingredients">Ingredients</label>
-                            <Table />
+                            <IngredientTable />
 
                             <label htmlFor="steps" className="block mt-8">
                                 Steps
                             </label>
+                            <StepsTable />
                         </div>
                     </div>
                 </form>
