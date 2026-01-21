@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { type KeyboardEvent } from 'react';
 import { useState, useRef } from 'react';
-import { useForm, useFieldArray, useWatch } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch, type FieldArray } from 'react-hook-form';
 import classNames from 'classnames';
 import { Plus, CircleMinus } from 'lucide-react';
 
@@ -12,7 +12,7 @@ const StepsTable = () => {
     const [data, setData] = useState<StepFormValues[]>([{}]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
-    const { control, register, handleSubmit } = useForm<StepFormValues>({
+    const { control, register, handleSubmit, setFocus } = useForm<StepFormValues>({
         defaultValues: {
             stepTableRows: [{ index: '', step: '' }],
         },
@@ -31,6 +31,33 @@ const StepsTable = () => {
             if (!containerRef.current?.contains(el)) {
                 setActiveIndex(null);
             }
+        });
+    };
+
+    const handleKeyDown = (
+        event: KeyboardEvent<HTMLInputElement>,
+        step: string,
+        index: number
+    ) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            append({ index: '', step: '' }, { shouldFocus: true });
+        }
+
+        if (step === '' && event.key === 'Backspace') {
+            event.preventDefault();
+            if (fields.length === 1) return;
+            removeAndFocus(index);
+        }
+    };
+
+    const removeAndFocus = (removeIndex: number) => {
+        const nextIndex = Math.min(removeIndex, fields.length - 2);
+        remove(removeIndex);
+
+        requestAnimationFrame(() => {
+            setFocus(`stepTableRows.${nextIndex}.step`);
+            setActiveIndex(nextIndex);
         });
     };
 
@@ -57,6 +84,13 @@ const StepsTable = () => {
                             {...register(`stepTableRows.${index}.step`)}
                             onFocus={() => setActiveIndex(index)}
                             onBlur={handleBlur}
+                            onKeyDown={(e) =>
+                                handleKeyDown(
+                                    e,
+                                    stepTableRows?.[index]?.step ?? '',
+                                    index
+                                )
+                            }
                         />
                         {fields.length !== 1 && (
                             <CircleMinus
@@ -64,9 +98,7 @@ const StepsTable = () => {
                                 className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer 
                                            text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
                                 aria-label="Remove step"
-                                onClick={() => {
-                                    remove(index);
-                                }}
+                                onClick={() => removeAndFocus(index)}
                             />
                         )}
                     </div>
