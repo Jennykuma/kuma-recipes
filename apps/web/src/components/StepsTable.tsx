@@ -35,14 +35,14 @@ const StepsTable = () => {
     };
 
     return (
-        <div ref={containerRef}>
+        <div ref={containerRef} className="space-y-3">
             {fields.map((field, index) => {
                 return (
                     <div key={field.id} className="flex items-center">
-                        <span className="w-8">{index + 1}.</span>
+                        <span className="text-xs w-8 text-gray-500">{index + 1}.</span>
                         <input
                             className={classNames(
-                                'border w-100 transition-colors pl-1 mt-1',
+                                'text-sm border w-100 transition-colors pl-1',
                                 activeIndex === index
                                     ? 'border-blue-500 text-gray-900'
                                     : 'border-gray-300 text-gray-400'
@@ -54,7 +54,8 @@ const StepsTable = () => {
                         {fields.length !== 1 && (
                             <CircleMinus
                                 type="button"
-                                className="w-5 h-5 ml-4 cursor-pointer text-red-500"
+                                className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer 
+                                           text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
                                 aria-label="Remove step"
                                 onClick={() => {
                                     remove(index);
@@ -68,8 +69,8 @@ const StepsTable = () => {
             <button
                 type="button"
                 className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-md
-                   bg-gray-50 hover:bg-gray-100
-                   disabled:opacity-50 disabled:cursor-not-allowed"
+                           bg-gray-50 hover:bg-gray-100
+                           disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => append({ index: '', step: '' }, { shouldFocus: true })}
                 disabled={stepTableRows[stepTableRows.length - 1].step === ''}
             >

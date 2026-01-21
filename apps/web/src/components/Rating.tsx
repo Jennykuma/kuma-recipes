@@ -6,10 +6,16 @@ const MAX_NUMBER_OF_STARS = 5;
 interface RatingProps {
     interactive?: boolean;
     rating?: number;
+    className?: string;
     onChange?: (rating: number) => void;
 }
 
-const Rating = ({ rating = 0, interactive = false, onChange }: RatingProps) => {
+const Rating = ({
+    rating = 0,
+    interactive = false,
+    className,
+    onChange,
+}: RatingProps) => {
     const [hoverRating, setHoverRating] = useState<number | null>(null);
 
     const activeRating = hoverRating ?? rating;
@@ -44,8 +50,8 @@ const Rating = ({ rating = 0, interactive = false, onChange }: RatingProps) => {
         // flex-row-reverse causes the star rating to start from the right
         // index 4 3 2 1 0
         // star  ★ ★ ★ ★ ★
-        <div className="flex flex-row-reverse justify-center">
-            {[...Array(MAX_NUMBER_OF_STARS)].map((_, i) => star(i))}
+        <div className={classNames('flex flex-row-reverse justify-center', className)}>
+            {[...Array(MAX_NUMBER_OF_STARS)].map((_, index) => star(index))}
         </div>
     );
 };

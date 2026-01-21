@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useRef } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
-import { Plus, CircleMinus } from 'lucide-react';
+import { Plus, Circle, CircleMinus } from 'lucide-react';
 
 type IngredientFormValues = {
     ingredientTableRows: { amount?: string; ingredient: string }[];
@@ -35,13 +35,14 @@ const IngredientTable = () => {
     };
 
     return (
-        <div ref={containerRef}>
+        <div ref={containerRef} className="space-y-2">
             {fields.map((field, index) => {
                 return (
                     <div key={field.id} className="flex items-center">
+                        <Circle className="w-8 h-1.5 text-gray-500" />
                         <input
                             className={classNames(
-                                'border w-100 transition-colors pl-1 mt-1',
+                                'text-sm border w-100 transition-colors pl-1',
                                 activeIndex === index
                                     ? 'border-blue-500 text-gray-900'
                                     : 'border-gray-300 text-gray-400'
@@ -53,7 +54,8 @@ const IngredientTable = () => {
                         {fields.length !== 1 && (
                             <CircleMinus
                                 type="button"
-                                className="w-5 h-5 ml-4 cursor-pointer text-red-500"
+                                className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer
+                                           text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
                                 aria-label="Remove ingredient"
                                 onClick={() => {
                                     remove(index);
@@ -67,8 +69,8 @@ const IngredientTable = () => {
             <button
                 type="button"
                 className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-md
-                   bg-gray-50 hover:bg-gray-100
-                   disabled:opacity-50 disabled:cursor-not-allowed"
+                           bg-gray-50 hover:bg-gray-100
+                           disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() =>
                     append({ amount: '', ingredient: '' }, { shouldFocus: true })
                 }
