@@ -39,13 +39,20 @@ const StepsTable = () => {
             {fields.map((field, index) => {
                 return (
                     <div key={field.id} className="flex items-center">
-                        <span className="text-xs w-8 text-gray-500">{index + 1}.</span>
+                        <span
+                            className={classNames(
+                                'text-xs w-8',
+                                activeIndex === index ? 'text-gray-700' : 'text-gray-400'
+                            )}
+                        >
+                            {index + 1}.
+                        </span>
                         <input
                             className={classNames(
                                 'text-sm border w-100 transition-colors pl-1',
                                 activeIndex === index
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-gray-300 text-gray-400'
+                                    ? 'border-blue-500 text-gray-900 bg-white'
+                                    : 'border-gray-300 text-gray-600 bg-gray-50'
                             )}
                             {...register(`stepTableRows.${index}.step`)}
                             onFocus={() => setActiveIndex(index)}

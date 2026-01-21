@@ -39,13 +39,18 @@ const IngredientTable = () => {
             {fields.map((field, index) => {
                 return (
                     <div key={field.id} className="flex items-center">
-                        <Circle className="w-8 h-1.5 text-gray-500" />
+                        <Circle
+                            className={classNames(
+                                'w-8 h-1.5',
+                                activeIndex === index ? 'text-gray-600' : 'text-gray-400'
+                            )}
+                        />
                         <input
                             className={classNames(
                                 'text-sm border w-100 transition-colors pl-1',
                                 activeIndex === index
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-gray-300 text-gray-400'
+                                    ? 'border-blue-500 text-gray-900 bg-white'
+                                    : 'border-gray-300 text-gray-600 bg-gray-50'
                             )}
                             {...register(`ingredientTableRows.${index}.ingredient`)}
                             onFocus={() => setActiveIndex(index)}
