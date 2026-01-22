@@ -12,7 +12,7 @@ const App = () => {
     if (error) return <div>Error...</div>;
 
     return (
-        <>
+        <div>
             <Link
                 role="link"
                 tabIndex={0}
@@ -34,7 +34,7 @@ const App = () => {
                         );
                     })}
             </div>
-        </>
+        </div>
     );
 };
 

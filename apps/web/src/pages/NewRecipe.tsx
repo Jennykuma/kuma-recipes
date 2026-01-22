@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import IngredientTable from './IngredientTable';
-import Rating from './Rating';
-import StepsTable from './StepsTable';
+import IngredientTable from '../components/IngredientTable';
+import Rating from '../components/Rating';
+import StepsTable from '../components/StepsTable';
 
 interface IRecipeFormInput {
     ingredients: JSON;
@@ -22,11 +22,11 @@ const NewRecipe = () => {
 
     return (
         <>
-            <span>Create new recipe</span>
+            <header className="text-lg text-left font-bold">Create new recipe</header>
             <div className="w-full h-screen">
                 <form>
-                    <div className="flex gap-8 items-start">
-                        <div className="sticky top-6 w-3/8 p-6 space-y-6 border border-gray-200 rounded-md shadow-sm self-start">
+                    <div className="flex flex-col sm:flex-row gap-8 items-start">
+                        <div className="md:sticky top-6 w-full md:w-2/8 p-6 space-y-6 border border-gray-200 rounded-md shadow-sm shadow-gray-100 self-start">
                             <div className="space-y-1">
                                 <label
                                     htmlFor="title"
@@ -37,7 +37,7 @@ const NewRecipe = () => {
                                 <input
                                     id="title"
                                     type="text"
-                                    className="w-full border border-gray-200 pl-1"
+                                    className="w-full pl-1 rounded-md border border-gray-200"
                                     {...register('title')}
                                 ></input>
                             </div>
@@ -69,8 +69,11 @@ const NewRecipe = () => {
                                 >
                                     Notes
                                 </label>
+                                <span className="block text-[11px] text-left text-gray-400">
+                                    Messy thoughts are welcome
+                                </span>
                                 <textarea
-                                    className="w-full text-xs resize-none border border-gray-200 rounded-sm p-2 placeholder:text-xs"
+                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-xs"
                                     rows={4}
                                     placeholder="e.g. too sweet, bake 2 min longer next time"
                                     {...register('notes')}
@@ -91,14 +94,14 @@ const NewRecipe = () => {
                                 </div>
                                 <input
                                     type="url"
-                                    className="w-full text-xs resize-none border border-gray-200 rounded-sm p-2 placeholder:text-sm"
+                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-sm"
                                     placeholder="URL"
                                     {...register('url')}
                                 ></input>
                             </div>
                         </div>
 
-                        <div className="w-5/8 p-6 space-y-6 border border-gray-200 rounded-md shadow-sm">
+                        <div className="w-full md:w-6/8 p-6 space-y-6 border border-gray-200 rounded-md shadow-sm shadow-gray-100">
                             <div className="space-y-1">
                                 <label
                                     htmlFor="ingredients"

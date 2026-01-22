@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecipeDetails, useRecipeRating } from '../hooks/';
-import Rating from './Rating';
+import { useRecipeDetails, useRecipeRating } from '../hooks';
+import Rating from '../components/Rating';
 
 const RecipeDetails = () => {
     const { id } = useParams();

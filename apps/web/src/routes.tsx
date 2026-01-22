@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import RecipeDetails from './components/RecipeDetails';
-import NewRecipe from './components/NewRecipe';
+import RecipeDetails from './pages/RecipeDetails';
+import NewRecipe from './pages/NewRecipe';
 
 const router = createBrowserRouter([
     { path: '/', element: <App /> },

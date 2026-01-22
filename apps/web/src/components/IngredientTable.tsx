@@ -74,7 +74,7 @@ const IngredientTable = () => {
                         />
                         <input
                             className={classNames(
-                                'text-sm border w-100 transition-colors pl-1',
+                                'w-full text-sm pl-1 rounded-md border w-100 transition-colors',
                                 activeIndex === index
                                     ? 'border-blue-500 text-gray-900 bg-white'
                                     : 'border-gray-300 text-gray-600 bg-gray-50'
@@ -107,7 +107,7 @@ const IngredientTable = () => {
 
             <button
                 type="button"
-                className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-md
+                className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-lg
                            bg-gray-50 hover:bg-gray-100
                            disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => append({ ingredient: '' }, { shouldFocus: true })}
