@@ -41,6 +41,7 @@ const IngredientTable = () => {
     ) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            if (ingredient === '') return;
             append({ ingredient: '' }, { shouldFocus: true });
         }
 

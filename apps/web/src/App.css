@@ -1,12 +1,15 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
 #root {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 2rem;
-    text-align: center;
+  margin: 0;
+  padding: 0;
+  max-width: none;
 }
 
 .card {

@@ -1,6 +1,6 @@
 import React, { type KeyboardEvent } from 'react';
 import { useState, useRef } from 'react';
-import { useForm, useFieldArray, useWatch, type FieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
 import { Plus, CircleMinus } from 'lucide-react';
 
@@ -9,7 +9,7 @@ type StepFormValues = {
 };
 
 const StepsTable = () => {
-    const [data, setData] = useState<StepFormValues[]>([{}]);
+    // const [data, setData] = useState<StepFormValues[]>([{ stepTableRows: [] }]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
     const { control, register, handleSubmit, setFocus } = useForm<StepFormValues>({
@@ -41,6 +41,8 @@ const StepsTable = () => {
     ) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            if (step === '') return;
+            // setData([{ stepTableRows: [{ index: index.toString(), step }] }]);
             append({ index: '', step: '' }, { shouldFocus: true });
         }
 

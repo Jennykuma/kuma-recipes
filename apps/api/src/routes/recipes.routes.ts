@@ -10,11 +10,11 @@ import {
 
 interface NewRecipeBody {
     title: string;
-    ingredients?: Prisma.InputJsonValue;
+    ingredients?: string[];
     notes?: string;
     rating?: number;
     remake?: boolean;
-    steps?: Prisma.InputJsonValue;
+    steps?: string[];
     tags?: string[];
 }
 

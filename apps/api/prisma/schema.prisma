@@ -16,11 +16,11 @@ datasource db {
 model Recipe {
   id          String   @id @default(uuid())
   title       String
-  ingredients Json?
+  ingredients String[]
   notes       String?
   rating      Int?
   remake      Boolean? @default(false)
-  steps       Json?
+  steps       String[]
   tags        String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
