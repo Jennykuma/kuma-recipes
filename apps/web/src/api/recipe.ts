@@ -1,4 +1,8 @@
-import type { Recipe, RecipeListItem } from '../../../api/src/services/recipes.types';
+import type {
+    Recipe,
+    RecipeListItem,
+    NewRecipeBody,
+} from '../../../api/src/services/recipes.types';
 
 type GetRecipeDetailsResponse = {
     recipe: Recipe;
@@ -33,6 +37,23 @@ const recipe = {
         if (!response.ok) {
             const error = await response.json();
             throw new Error(error.message ?? 'Failed to update recipe rating');
+        }
+
+        return response.json();
+    },
+
+    async createRecipe(recipe: NewRecipeBody): Promise<any> {
+        const response = await fetch(`/api/recipes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(recipe),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message ?? 'Failed to create recipe');
         }
 
         return response.json();

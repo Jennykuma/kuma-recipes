@@ -2,11 +2,11 @@ import { Prisma } from '@prisma/client';
 
 export type Recipe = {
     id: string;
-    ingredients: JSON;
+    ingredients: string[];
     notes: string;
     rating: number;
     remake: boolean;
-    steps: JSON;
+    steps: string[];
     tags: string[];
     title: string;
     createdAt: string;
@@ -21,10 +21,10 @@ export type RecipeListItem = {
 
 export interface NewRecipeBody {
     title: string;
-    ingredients?: Prisma.InputJsonValue;
+    ingredients?: string[];
     notes?: string;
     rating?: number;
     remake?: boolean;
-    steps?: Prisma.InputJsonValue;
+    steps?: string[];
     tags?: string[];
 }

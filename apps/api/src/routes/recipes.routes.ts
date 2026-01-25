@@ -35,7 +35,8 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     });
 
     fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
-        const { title, ingredients, notes, rating, remake, steps, tags } = request.body;
+        const body = (request.body as { recipe?: NewRecipeBody }).recipe ?? request.body;
+        const { title, ingredients, notes, rating, remake, steps, tags } = body;
         const result = await createNewRecipe({
             title,
             ingredients,

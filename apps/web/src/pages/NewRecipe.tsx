@@ -2,6 +2,7 @@ import { useForm, FormProvider, Controller } from 'react-hook-form';
 import IngredientTable from '../components/IngredientTable';
 import Rating from '../components/Rating';
 import StepsTable from '../components/StepsTable';
+import { recipe as recipeApi } from '../api';
 import { type RecipeFormValues } from '../types/recipeForm';
 
 const NewRecipe = () => {
@@ -34,7 +35,7 @@ const NewRecipe = () => {
             steps: normalizedSteps,
         };
 
-        console.log(payload);
+        recipeApi.createRecipe(payload);
     };
 
     return (

@@ -18,7 +18,15 @@ export async function recipeDetails(recipeId: string): Promise<any> {
 export async function createNewRecipe(recipeParams: NewRecipeBody) {
     const { title, ingredients, notes, rating, remake, steps, tags } = recipeParams;
     return prisma.recipe.create({
-        data: { title, ingredients, notes, rating, remake, steps, tags },
+        data: {
+            title,
+            ingredients: ingredients,
+            steps: steps,
+            tags: tags,
+            notes: notes ?? null,
+            rating: rating ?? null,
+            remake: remake ?? false,
+        },
     });
 }
 
