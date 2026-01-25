@@ -21,7 +21,7 @@ const RecipeDetails = () => {
         <div>
             <span>{recipe?.title}</span>
             <Rating
-                rating={recipe?.rating}
+                value={recipe?.rating}
                 onChange={handleChangeRating}
                 interactive={!isPending}
             />

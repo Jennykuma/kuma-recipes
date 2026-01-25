@@ -52,7 +52,7 @@ describe('IngredientTable', () => {
         });
     });
 
-    it('normalizes empty rows on blur leaving a single empty row at the end', async () => {
+    it('normalizes empty rows on blur and keeps only filled rows', async () => {
         const user = userEvent.setup();
 
         renderWithForm(
@@ -77,7 +77,7 @@ describe('IngredientTable', () => {
         await user.click(screen.getByRole('button', { name: /outside/i }));
 
         await waitFor(() => {
-            expect(screen.getAllByRole('textbox')).toHaveLength(3);
+            expect(screen.getAllByRole('textbox')).toHaveLength(2);
         });
     });
 });

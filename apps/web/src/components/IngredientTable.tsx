@@ -73,10 +73,8 @@ const IngredientTable = () => {
     const normalizeIngredients = (rows: { ingredient: string }[]) => {
         const nonEmpty = rows.filter((r) => r.ingredient.trim() !== '');
 
-        // always keep one empty row at the bottom
-        return nonEmpty.length === 0
-            ? [{ ingredient: '' }]
-            : [...nonEmpty, { ingredient: '' }];
+        // keep at least one row, but don't auto-append an empty row on blur
+        return nonEmpty.length === 0 ? [{ ingredient: '' }] : nonEmpty;
     };
 
     return (

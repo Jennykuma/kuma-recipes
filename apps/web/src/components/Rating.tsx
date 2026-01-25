@@ -5,20 +5,32 @@ const MAX_NUMBER_OF_STARS = 5;
 
 interface RatingProps {
     interactive?: boolean;
+    readOnly?: boolean;
+    value?: number;
     rating?: number;
     className?: string;
     onChange?: (rating: number) => void;
+    id?: string;
+    ariaLabel?: string;
+    ariaLabelledby?: string;
 }
 
 const Rating = ({
-    rating = 0,
-    interactive = false,
+    value,
+    rating,
+    interactive,
+    readOnly = false,
     className,
     onChange,
+    id,
+    ariaLabel,
+    ariaLabelledby,
 }: RatingProps) => {
     const [hoverRating, setHoverRating] = useState<number | null>(null);
 
-    const activeRating = hoverRating ?? rating;
+    const isInteractive = !readOnly && (interactive ?? Boolean(onChange));
+    const canChange = isInteractive && Boolean(onChange);
+    const activeRating = hoverRating ?? value ?? rating ?? 0;
     const starValue = (index: number) => MAX_NUMBER_OF_STARS - index;
     const isFilled = (index: number) => starValue(index) <= activeRating;
 
@@ -26,14 +38,14 @@ const Rating = ({
         <svg
             className={classNames(
                 'rating-star w-5 h-5',
-                interactive && 'cursor-pointer',
+                isInteractive && 'cursor-pointer',
                 isFilled(index) ? 'text-yellow-500' : 'text-gray-300'
             )}
-            onClick={interactive ? () => onChange?.(starValue(index)) : undefined}
+            onClick={canChange ? () => onChange?.(starValue(index)) : undefined}
             onMouseEnter={
-                interactive ? () => setHoverRating(starValue(index)) : undefined
+                canChange ? () => setHoverRating(starValue(index)) : undefined
             }
-            onMouseLeave={interactive ? () => setHoverRating(null) : undefined}
+            onMouseLeave={canChange ? () => setHoverRating(null) : undefined}
             key={`${index}`}
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +62,12 @@ const Rating = ({
         // flex-row-reverse causes the star rating to start from the right
         // index 4 3 2 1 0
         // star  ★ ★ ★ ★ ★
-        <div className={classNames('flex flex-row-reverse justify-center', className)}>
+        <div
+            id={id}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledby}
+            className={classNames('flex flex-row-reverse justify-center', className)}
+        >
             {[...Array(MAX_NUMBER_OF_STARS)].map((_, index) => star(index))}
         </div>
     );

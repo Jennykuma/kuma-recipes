@@ -17,7 +17,7 @@ const RecipeCard = ({ id, rating, title }: RecipeCardProps) => {
         >
             <div className="flex flex-col w-full md:w-2/3 justify-center">
                 <span>{title}</span>
-                <Rating rating={rating} />
+                <Rating value={rating} />
             </div>
             <div className="w-full md:w-32 h-32 bg-gray-100">photo</div>
         </Link>

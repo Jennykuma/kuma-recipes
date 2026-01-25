@@ -1,4 +1,4 @@
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import IngredientTable from '../components/IngredientTable';
 import Rating from '../components/Rating';
 import StepsTable from '../components/StepsTable';
@@ -18,13 +18,20 @@ const NewRecipe = () => {
             steps: [{ step: '' }],
         },
     });
-    const { register, handleSubmit } = methods;
+    const { register, handleSubmit, control } = methods;
 
     const onSubmit = (data: RecipeFormValues) => {
+        const normalizedIngredients = data.ingredients
+            .map((i) => i.ingredient.trim())
+            .filter((ingredient) => ingredient !== '');
+        const normalizedSteps = data.steps
+            .map((s) => s.step.trim())
+            .filter((step) => step !== '');
+
         const payload = {
             ...data,
-            ingredients: data.ingredients.map((i) => i.ingredient),
-            steps: data.steps.map((s) => s.step),
+            ingredients: normalizedIngredients,
+            steps: normalizedSteps,
         };
 
         console.log(payload);
@@ -61,7 +68,18 @@ const NewRecipe = () => {
                                 >
                                     Rating
                                 </label>
-                                <Rating interactive />
+                                <Controller
+                                    name="rating"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Rating
+                                            id="rating"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            interactive
+                                        />
+                                    )}
+                                />
                             </div>
 
                             <div className="flex gap-2 items-center">

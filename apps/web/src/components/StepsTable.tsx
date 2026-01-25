@@ -72,8 +72,8 @@ const StepsTable = () => {
     const normalizeSteps = (rows: { step: string }[]) => {
         const nonEmpty = rows.filter((r) => r.step.trim() !== '');
 
-        // always keep one empty row at the bottom
-        return nonEmpty.length === 0 ? [{ step: '' }] : [...nonEmpty, { step: '' }];
+        // keep at least one row, but don't auto-append an empty row on blur
+        return nonEmpty.length === 0 ? [{ step: '' }] : nonEmpty;
     };
 
     return (
