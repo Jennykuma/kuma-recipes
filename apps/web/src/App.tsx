@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import type { RecipeListItem } from '../../api/src/services/recipes.types';
 import useRecipes from './hooks/useRecipes';

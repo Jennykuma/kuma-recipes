@@ -1,35 +1,42 @@
-import React, { type KeyboardEvent } from 'react';
+import { type KeyboardEvent } from 'react';
 import { useState, useRef } from 'react';
-import { useForm, useFieldArray, useWatch } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
+import { type RecipeFormValues } from '../types/recipeForm';
 import { Plus, CircleMinus } from 'lucide-react';
 
-// type StepFormValues = {
-//     stepTableRows: { index: string; step: string }[];
-// };
-
 const StepsTable = () => {
-    // const [data, setData] = useState<StepFormValues[]>([{ stepTableRows: [] }]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
-    const { control, register, handleSubmit, setFocus } = useForm<StepFormValues>({
-        defaultValues: {
-            stepTableRows: [{ index: '', step: '' }],
-        },
-    });
-    const stepTableRows = useWatch({ control, name: 'stepTableRows' });
 
-    const { fields, append, remove } = useFieldArray({
+    const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
+    const stepTableRows = useWatch({ control, name: 'steps' });
+
+    const { fields, append, remove, replace } = useFieldArray({
         control,
-        name: 'stepTableRows',
+        name: 'steps',
     });
+
+    const lastStep = stepTableRows?.[stepTableRows.length - 1]?.step ?? '';
 
     const handleBlur = () => {
         // wait for the next focused element to be set
         requestAnimationFrame(() => {
             const el = document.activeElement;
-            if (!containerRef.current?.contains(el)) {
+            const stillInside = containerRef.current?.contains(el);
+
+            if (!stillInside) {
                 setActiveIndex(null);
+
+                const rows = getValues('steps') ?? [];
+                const next = normalizeSteps(rows);
+
+                // avoid extra replace if nothing changed
+                const same =
+                    rows.length === next.length &&
+                    rows.every((row, index) => row.step === next[index].step);
+
+                if (!same) replace(next);
             }
         });
     };
@@ -42,8 +49,7 @@ const StepsTable = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             if (step === '') return;
-            // setData([{ stepTableRows: [{ index: index.toString(), step }] }]);
-            append({ index: '', step: '' }, { shouldFocus: true });
+            append({ step: '' }, { shouldFocus: true });
         }
 
         if (step === '' && event.key === 'Backspace') {
@@ -58,9 +64,16 @@ const StepsTable = () => {
         remove(removeIndex);
 
         requestAnimationFrame(() => {
-            setFocus(`stepTableRows.${nextIndex}.step`);
+            setFocus(`steps.${nextIndex}.step`);
             setActiveIndex(nextIndex);
         });
+    };
+
+    const normalizeSteps = (rows: { step: string }[]) => {
+        const nonEmpty = rows.filter((r) => r.step.trim() !== '');
+
+        // always keep one empty row at the bottom
+        return nonEmpty.length === 0 ? [{ step: '' }] : [...nonEmpty, { step: '' }];
     };
 
     return (
@@ -83,7 +96,7 @@ const StepsTable = () => {
                                     ? 'border-blue-500 text-gray-900 bg-white'
                                     : 'border-gray-300 text-gray-600 bg-gray-50'
                             )}
-                            {...register(`stepTableRows.${index}.step`)}
+                            {...register(`steps.${index}.step`)}
                             onFocus={() => setActiveIndex(index)}
                             onBlur={handleBlur}
                             onKeyDown={(e) =>
@@ -112,8 +125,8 @@ const StepsTable = () => {
                 className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-lg
                            bg-gray-50 hover:bg-gray-100
                            disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => append({ index: '', step: '' }, { shouldFocus: true })}
-                disabled={stepTableRows[stepTableRows.length - 1].step === ''}
+                onClick={() => append({ step: '' }, { shouldFocus: true })}
+                disabled={lastStep === ''}
             >
                 <Plus className="w-4 h-4" />
                 Add step

@@ -1,34 +1,43 @@
-import React, { type KeyboardEvent } from 'react';
+import { type KeyboardEvent } from 'react';
 import { useState, useRef } from 'react';
-import { useForm, useFieldArray, useWatch } from 'react-hook-form';
+import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
+import { type RecipeFormValues } from '../types/recipeForm';
 import { Plus, Circle, CircleMinus } from 'lucide-react';
-
-type IngredientFormValues = {
-    ingredientTableRows: { ingredient: string }[];
-};
 
 const IngredientTable = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
-    const { control, register, handleSubmit, setFocus } = useForm<IngredientFormValues>({
-        defaultValues: {
-            ingredientTableRows: [{ ingredient: '' }],
-        },
-    });
-    const ingredientTableRows = useWatch({ control, name: 'ingredientTableRows' });
 
-    const { fields, append, remove } = useFieldArray({
+    const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
+    const ingredientTableRows = useWatch({ control, name: 'ingredients' });
+
+    const { fields, append, remove, replace } = useFieldArray({
         control,
-        name: 'ingredientTableRows',
+        name: 'ingredients',
     });
+
+    const lastIngredient =
+        ingredientTableRows?.[ingredientTableRows.length - 1]?.ingredient ?? '';
 
     const handleBlur = () => {
         // wait for the next focused element to be set
         requestAnimationFrame(() => {
             const el = document.activeElement;
-            if (!containerRef.current?.contains(el)) {
+            const stillInside = containerRef.current?.contains(el);
+
+            if (!stillInside) {
                 setActiveIndex(null);
+
+                const rows = getValues('ingredients') ?? [];
+                const next = normalizeIngredients(rows);
+
+                // avoid extra replace if nothing changed
+                const same =
+                    rows.length === next.length &&
+                    rows.every((row, index) => row.ingredient === next[index].ingredient);
+
+                if (!same) replace(next);
             }
         });
     };
@@ -56,9 +65,18 @@ const IngredientTable = () => {
         remove(removeIndex);
 
         requestAnimationFrame(() => {
-            setFocus(`ingredientTableRows.${nextIndex}.ingredient`);
+            setFocus(`ingredients.${nextIndex}.ingredient`);
             setActiveIndex(nextIndex);
         });
+    };
+
+    const normalizeIngredients = (rows: { ingredient: string }[]) => {
+        const nonEmpty = rows.filter((r) => r.ingredient.trim() !== '');
+
+        // always keep one empty row at the bottom
+        return nonEmpty.length === 0
+            ? [{ ingredient: '' }]
+            : [...nonEmpty, { ingredient: '' }];
     };
 
     return (
@@ -79,7 +97,7 @@ const IngredientTable = () => {
                                     ? 'border-blue-500 text-gray-900 bg-white'
                                     : 'border-gray-300 text-gray-600 bg-gray-50'
                             )}
-                            {...register(`ingredientTableRows.${index}.ingredient`)}
+                            {...register(`ingredients.${index}.ingredient`)}
                             onFocus={() => setActiveIndex(index)}
                             onBlur={handleBlur}
                             onKeyDown={(e) =>
@@ -111,9 +129,7 @@ const IngredientTable = () => {
                            bg-gray-50 hover:bg-gray-100
                            disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => append({ ingredient: '' }, { shouldFocus: true })}
-                disabled={
-                    ingredientTableRows[ingredientTableRows.length - 1].ingredient === ''
-                }
+                disabled={lastIngredient === ''}
             >
                 <Plus className="w-4 h-4" />
                 Add ingredient
