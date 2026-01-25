@@ -9,7 +9,6 @@ type IngredientFormValues = {
 };
 
 const IngredientTable = () => {
-    const [data, setData] = useState<IngredientFormValues[]>([{}]);
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
     const { control, register, handleSubmit, setFocus } = useForm<IngredientFormValues>({

@@ -11,13 +11,21 @@ type RecipeFormValues = {
     rating: number;
     remake: boolean;
     tags: string[];
-    ingriedients: string[];
-    steps: string[];
+    ingriedients: { ingriedient: string }[];
+    steps: { step: string }[];
 };
 
 const NewRecipe = () => {
     const { register, handleSubmit } = useForm<RecipeFormValues>();
-    const onSubmit = (data: RecipeFormValues) => console.log(data);
+    const onSubmit = (data: RecipeFormValues) => {
+        const payload = {
+            ...data,
+            ingredients: data.ingriedients.map((i) => i.ingriedient),
+            steps: data.steps.map((s) => s.step),
+        };
+
+        console.log(payload);
+    };
 
     return (
         <div className="h-dvh flex flex-col p-6 box-border">

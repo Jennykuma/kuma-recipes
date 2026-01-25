@@ -4,9 +4,9 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
 import { Plus, CircleMinus } from 'lucide-react';
 
-type StepFormValues = {
-    stepTableRows: { index: string; step: string }[];
-};
+// type StepFormValues = {
+//     stepTableRows: { index: string; step: string }[];
+// };
 
 const StepsTable = () => {
     // const [data, setData] = useState<StepFormValues[]>([{ stepTableRows: [] }]);
