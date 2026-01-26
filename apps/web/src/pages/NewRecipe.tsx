@@ -1,12 +1,18 @@
 import { useForm, FormProvider, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import IngredientTable from '../components/IngredientTable';
 import Rating from '../components/Rating';
 import StepsTable from '../components/StepsTable';
 import { recipe as recipeApi } from '../api';
 import { type RecipeFormValues } from '../types/recipeForm';
 import BackButton from '../components/BackButton';
+import CancelModal from '../components/CancelModal';
+import { useState } from 'react';
 
 const NewRecipe = () => {
+    const navigate = useNavigate();
+    const [showCancelModal, setShowCancelModal] = useState(false);
+
     // method also returns register, handleSubmit, control, setFocus, watch, etc
     const methods = useForm<RecipeFormValues>({
         defaultValues: {
@@ -20,7 +26,25 @@ const NewRecipe = () => {
             steps: [{ step: '' }],
         },
     });
-    const { register, handleSubmit, control } = methods;
+    const { register, handleSubmit, control, formState, watch, reset } = methods;
+    const { errors } = formState;
+    const shouldConfirmCancel = formState.isDirty;
+
+    const ingredients = watch('ingredients');
+    const steps = watch('steps');
+
+    const isTitleValid = (title: string) => {
+        return title.trim().length > 0 || 'Title is required';
+    };
+
+    const hasNonEmpty = <T,>(items: T[], getValue: (item: T) => string) =>
+        items.some((item) => getValue(item).trim() !== '');
+
+    const ingredientsValid = hasNonEmpty(ingredients ?? [], (i) => i.ingredient);
+    const stepsValid = hasNonEmpty(steps ?? [], (s) => s.step);
+
+    const showIngredientsError = formState.isSubmitted && !ingredientsValid;
+    const showStepsError = formState.isSubmitted && !stepsValid;
 
     const onSubmit = (data: RecipeFormValues) => {
         const normalizedIngredients = data.ingredients
@@ -35,13 +59,21 @@ const NewRecipe = () => {
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
-
         recipeApi.createRecipe(payload);
+    };
+
+    const handleDiscard = () => {
+        reset();
+        navigate('/');
     };
 
     return (
         <div className="h-dvh flex flex-col p-6 box-border space-y-2">
-            <BackButton />
+            <BackButton
+                onClick={() =>
+                    shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
+                }
+            />
             <header className="shrink-0 text-lg text-left font-bold">
                 Create new recipe
             </header>
@@ -60,8 +92,13 @@ const NewRecipe = () => {
                                     id="title"
                                     type="text"
                                     className="w-full pl-1 rounded-md border border-gray-200"
-                                    {...register('title')}
-                                ></input>
+                                    {...register('title', { validate: isTitleValid })}
+                                />
+                                {formState.isSubmitted && errors.title && (
+                                    <p className="text-xs text-red-500">
+                                        {errors.title.message}
+                                    </p>
+                                )}
                             </div>
 
                             <div className="flex gap-2 items-center">
@@ -144,6 +181,11 @@ const NewRecipe = () => {
                                         Ingredients
                                         <span className="align-top text-red-500">*</span>
                                     </label>
+                                    {showIngredientsError && (
+                                        <p className="text-xs text-red-500">
+                                            At least one ingredient is required
+                                        </p>
+                                    )}
                                     <IngredientTable />
                                 </div>
 
@@ -157,18 +199,38 @@ const NewRecipe = () => {
                                         Steps
                                         <span className="align-top text-red-500">*</span>
                                     </label>
+                                    {showStepsError && (
+                                        <p className="text-xs text-red-500">
+                                            At least one step is required
+                                        </p>
+                                    )}
                                     <StepsTable />
                                 </div>
                             </div>
 
                             <div className="shrink-0 bg-white border-t border-gray-200 text-xs p-4 flex justify-end gap-3">
-                                <button type="button">Cancel</button>
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        shouldConfirmCancel
+                                            ? setShowCancelModal(true)
+                                            : navigate(-1)
+                                    }
+                                >
+                                    Cancel
+                                </button>
                                 <button type="submit">Save recipe</button>
                             </div>
                         </div>
                     </div>
                 </form>
             </FormProvider>
+            {shouldConfirmCancel && showCancelModal && (
+                <CancelModal
+                    onClose={() => setShowCancelModal(false)}
+                    onDiscard={() => handleDiscard()}
+                />
+            )}
         </div>
     );
 };
