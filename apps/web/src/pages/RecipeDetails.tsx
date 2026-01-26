@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useRecipeDetails, useRecipeRating } from '../hooks';
 import Rating from '../components/Rating';
+import BackButton from '../components/BackButton';
 
 const RecipeDetails = () => {
     const { id } = useParams();
@@ -18,8 +19,11 @@ const RecipeDetails = () => {
     };
 
     return (
-        <div>
-            <span>{recipe?.title}</span>
+        <div className="p-6">
+            <BackButton />
+            <header className="shrink-0 text-lg text-left font-bold">
+                {recipe?.title}
+            </header>
             <Rating
                 value={recipe?.rating}
                 onChange={handleChangeRating}

@@ -4,6 +4,7 @@ import Rating from '../components/Rating';
 import StepsTable from '../components/StepsTable';
 import { recipe as recipeApi } from '../api';
 import { type RecipeFormValues } from '../types/recipeForm';
+import BackButton from '../components/BackButton';
 
 const NewRecipe = () => {
     // method also returns register, handleSubmit, control, setFocus, watch, etc
@@ -39,7 +40,8 @@ const NewRecipe = () => {
     };
 
     return (
-        <div className="h-dvh flex flex-col p-6 box-border">
+        <div className="h-dvh flex flex-col p-6 box-border space-y-2">
+            <BackButton />
             <header className="shrink-0 text-lg text-left font-bold">
                 Create new recipe
             </header>
