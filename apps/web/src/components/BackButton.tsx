@@ -28,7 +28,7 @@ const BackButton = ({ to, onClick }: BackButtonProps) => {
                 text-xs text-gray-400 p-0
                 visited:text-gray-400 hover:text-accent
                 inline-flex items-center gap-1
-                cursor-pointer transition-colors"
+                transition-colors"
             onClick={handleClick}
         >
             <MoveLeft className="w-3 h-3 translate-y-[0.5px]" />

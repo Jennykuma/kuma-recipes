@@ -60,7 +60,6 @@ const NewRecipe = () => {
             steps: normalizedSteps,
         };
         const response = await recipeApi.createRecipe(payload);
-
         navigate(`/recipes/${response.id}`);
     };
 
@@ -76,13 +75,13 @@ const NewRecipe = () => {
                     shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
                 }
             />
-            <header className="shrink-0 text-lg text-left font-bold">
+            <header className="shrink-0 text-lg text-left font-bold text-gray-700">
                 Create new recipe
             </header>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex-1 min-h-0">
                     <div className="h-full md:flex gap-8 min-h-0 items-stretch">
-                        <div className="md:sticky top-6 w-full md:w-1/3 self-start p-6 space-y-6 border border-gray-200 rounded-md shadow-sm shadow-gray-100">
+                        <div className="md:sticky top-6 w-full md:w-1/3 self-start p-6 space-y-6 bg-white border border-sage-300/50 rounded-md shadow-sm shadow-gray-100">
                             <div className="space-y-1">
                                 <label
                                     htmlFor="title"
@@ -173,7 +172,7 @@ const NewRecipe = () => {
                             </div>
                         </div>
 
-                        <div className="w-full md:w-2/3 md:h-full self-stretch flex flex-col min-h-0 border border-gray-200 rounded-md shadow-sm shadow-gray-100">
+                        <div className="w-full md:w-2/3 md:h-full self-stretch flex flex-col min-h-0 bg-white border border-sage-300/50 rounded-md shadow-sm shadow-gray-100">
                             <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 pb-28">
                                 <div className="space-y-1">
                                     <label
@@ -213,6 +212,7 @@ const NewRecipe = () => {
                             <div className="shrink-0 bg-white border-t border-gray-200 text-xs p-4 flex justify-end gap-3">
                                 <button
                                     type="button"
+                                    className="bg-sage-50 text-sage-400 border border-sage-300 hover:bg-sage-300 hover:text-white p-2 rounded transition-colors"
                                     onClick={() =>
                                         shouldConfirmCancel
                                             ? setShowCancelModal(true)
@@ -221,7 +221,10 @@ const NewRecipe = () => {
                                 >
                                     Cancel
                                 </button>
-                                <button type="submit" onClick={() => {}}>
+                                <button
+                                    type="submit"
+                                    className="bg-blush-200 hover:bg-blush-400 p-2 rounded text-white shadow-sm transition-colors"
+                                >
                                     Save recipe
                                 </button>
                             </div>
