@@ -2,14 +2,19 @@ import { MoveLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 type BackButtonProps = {
+    to?: string;
     onClick?: () => void;
 };
 
-const BackButton = ({ onClick }: BackButtonProps) => {
+const BackButton = ({ to, onClick }: BackButtonProps) => {
     const navigate = useNavigate();
     const handleClick = () => {
         if (onClick) {
             onClick();
+            return;
+        }
+        if (to) {
+            navigate(to);
             return;
         }
         navigate(-1);

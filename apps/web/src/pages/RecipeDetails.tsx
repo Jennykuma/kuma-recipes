@@ -20,7 +20,7 @@ const RecipeDetails = () => {
 
     return (
         <div className="p-6">
-            <BackButton />
+            <BackButton to="/" />
             <header className="shrink-0 text-lg text-left font-bold">
                 {recipe?.title}
             </header>

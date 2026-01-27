@@ -46,7 +46,7 @@ const NewRecipe = () => {
     const showIngredientsError = formState.isSubmitted && !ingredientsValid;
     const showStepsError = formState.isSubmitted && !stepsValid;
 
-    const onSubmit = (data: RecipeFormValues) => {
+    const onSubmit = async (data: RecipeFormValues) => {
         const normalizedIngredients = data.ingredients
             .map((i) => i.ingredient.trim())
             .filter((ingredient) => ingredient !== '');
@@ -59,7 +59,9 @@ const NewRecipe = () => {
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
-        recipeApi.createRecipe(payload);
+        const response = await recipeApi.createRecipe(payload);
+
+        navigate(`/recipes/${response.id}`);
     };
 
     const handleDiscard = () => {
@@ -219,7 +221,9 @@ const NewRecipe = () => {
                                 >
                                     Cancel
                                 </button>
-                                <button type="submit">Save recipe</button>
+                                <button type="submit" onClick={() => {}}>
+                                    Save recipe
+                                </button>
                             </div>
                         </div>
                     </div>
