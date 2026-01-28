@@ -7,7 +7,10 @@ const useRecipeRating = (id: string) => {
     // TODO: If the rating is the same, just return the cached version or cancel the mutation
     return useMutation({
         mutationFn: (rating: number) => recipeApi.updateRecipeRating(id, rating),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['recipes', id] }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['recipe', id] });
+            queryClient.invalidateQueries({ queryKey: ['recipes'] });
+        },
     });
 };
 

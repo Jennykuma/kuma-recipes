@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import IngredientTable from '../IngredientTable';
+import IngredientTable from '../../pages/NewRecipe/components/IngredientTable';
 import { renderWithForm } from './testUtils';
 
 describe('IngredientTable', () => {

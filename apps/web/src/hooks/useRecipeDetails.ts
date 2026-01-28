@@ -8,7 +8,7 @@ const useRecipeDetails = (id: string) => {
         isLoading,
         error,
     } = useQuery<Recipe>({
-        queryKey: ['recipes', id],
+        queryKey: ['recipe', id],
         queryFn: () => recipeApi.getRecipeDetails(id),
     });
 

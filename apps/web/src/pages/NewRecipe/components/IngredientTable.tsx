@@ -2,7 +2,7 @@ import { type KeyboardEvent } from 'react';
 import { useState, useRef } from 'react';
 import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
 import classNames from 'classnames';
-import { type RecipeFormValues } from '../types/recipeForm';
+import { type RecipeFormValues } from '../../../types/recipeForm';
 import { Plus, Circle, CircleMinus } from 'lucide-react';
 
 const IngredientTable = () => {

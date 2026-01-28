@@ -1,12 +1,12 @@
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import IngredientTable from '../components/IngredientTable';
-import Rating from '../components/Rating';
-import StepsTable from '../components/StepsTable';
-import { recipe as recipeApi } from '../api';
-import { type RecipeFormValues } from '../types/recipeForm';
-import BackButton from '../components/BackButton';
-import CancelModal from '../components/CancelModal';
+import IngredientTable from './components/IngredientTable';
+import Rating from '../../components/Rating';
+import StepsTable from './components/StepsTable';
+import { recipe as recipeApi } from '../../api';
+import { type RecipeFormValues } from '../../types/recipeForm';
+import BackButton from '../../components/BackButton';
+import CancelModal from '../RecipeDetails/components/CancelModal';
 import { useState } from 'react';
 
 const NewRecipe = () => {

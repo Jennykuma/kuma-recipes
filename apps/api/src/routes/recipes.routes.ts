@@ -6,6 +6,7 @@ import {
     listRecipes,
     updateRecipeRating,
     createNewRecipe,
+    deleteRecipe,
 } from '../services/recipes.service';
 
 interface NewRecipeBody {
@@ -54,6 +55,12 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         const { rating } = request.body;
         const result = await updateRecipeRating(params.id, rating);
         reply.code(200).send(result);
+    });
+
+    fastify.delete('/:id', async (request, reply) => {
+        const params = request.params as { id: string };
+        await deleteRecipe(params.id);
+        reply.code(204);
     });
 };
 

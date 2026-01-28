@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import StepsTable from '../StepsTable';
+import StepsTable from '../../pages/NewRecipe/components/StepsTable';
 import { renderWithForm } from './testUtils';
 
 describe('StepsTable', () => {

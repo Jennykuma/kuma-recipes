@@ -58,6 +58,17 @@ const recipe = {
 
         return response.json();
     },
+
+    async deleteRecipe(id: string): Promise<any> {
+        const response = await fetch(`/api/recipes/${id}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message ?? 'Failed to delete recipe');
+        }
+    },
 };
 
 export default recipe;

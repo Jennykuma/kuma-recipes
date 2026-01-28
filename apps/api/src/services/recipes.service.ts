@@ -40,3 +40,11 @@ export async function updateRecipeRating(recipeId: string, rating: number): Prom
         },
     });
 }
+
+export async function deleteRecipe(recipeId: string): Promise<any> {
+    return prisma.recipe.delete({
+        where: {
+            id: recipeId,
+        },
+    });
+}
