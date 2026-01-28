@@ -7,21 +7,9 @@ import {
     updateRecipeRating,
     createNewRecipe,
     deleteRecipe,
+    updateRecipe,
 } from '../services/recipes.service';
-
-interface NewRecipeBody {
-    title: string;
-    ingredients?: string[];
-    notes?: string;
-    rating?: number;
-    remake?: boolean;
-    steps?: string[];
-    tags?: string[];
-}
-
-interface UpdateRecipeBody {
-    rating: number;
-}
+import { type NewRecipeBody, type UpdateRecipeBody } from '../services/recipes.types';
 
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     fastify.get('/', async (_, reply: FastifyReply) => {
@@ -37,7 +25,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
     fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
         const body = (request.body as { recipe?: NewRecipeBody }).recipe ?? request.body;
-        const { title, ingredients, notes, rating, remake, steps, tags } = body;
+        const { title, ingredients, notes, rating, remake, steps, tags, source } = body;
         const result = await createNewRecipe({
             title,
             ingredients,
@@ -46,6 +34,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             remake,
             steps,
             tags,
+            source,
         });
         reply.code(201).send(result);
     });
@@ -53,7 +42,17 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     fastify.patch<{ Body: UpdateRecipeBody }>('/:id/rating', async (request, reply) => {
         const params = request.params as { id: string };
         const { rating } = request.body;
+        if (typeof rating !== 'number') {
+            reply.code(400).send({ error: 'Rating is required and must be a number.' });
+            return;
+        }
         const result = await updateRecipeRating(params.id, rating);
+        reply.code(200).send(result);
+    });
+
+    fastify.patch<{ Body: UpdateRecipeBody }>('/:id/', async (request, reply) => {
+        const params = request.params as { id: string };
+        const result = await updateRecipe(params.id, request.body);
         reply.code(200).send(result);
     });
 

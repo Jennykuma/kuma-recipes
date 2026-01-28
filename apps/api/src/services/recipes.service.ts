@@ -1,5 +1,5 @@
 import { prisma } from '../prisma';
-import { Recipe, RecipeListItem, NewRecipeBody } from './recipes.types';
+import { Recipe, RecipeListItem, NewRecipeBody, UpdateRecipeBody } from './recipes.types';
 
 export async function listRecipes(): Promise<RecipeListItem[]> {
     return prisma.recipe.findMany({
@@ -16,7 +16,9 @@ export async function recipeDetails(recipeId: string): Promise<any> {
 }
 
 export async function createNewRecipe(recipeParams: NewRecipeBody) {
-    const { title, ingredients, notes, rating, remake, steps, tags } = recipeParams;
+    const { title, ingredients, notes, rating, remake, steps, tags, source } =
+        recipeParams;
+    const normalizedSource = source?.trim();
     return prisma.recipe.create({
         data: {
             title,
@@ -26,6 +28,7 @@ export async function createNewRecipe(recipeParams: NewRecipeBody) {
             notes: notes ?? null,
             rating: rating ?? null,
             remake: remake ?? false,
+            source: normalizedSource ? normalizedSource : null,
         },
     });
 }
@@ -38,6 +41,15 @@ export async function updateRecipeRating(recipeId: string, rating: number): Prom
         data: {
             rating,
         },
+    });
+}
+
+export async function updateRecipe(recipeId: string, updatedRecipe: UpdateRecipeBody) {
+    return prisma.recipe.update({
+        where: {
+            id: recipeId,
+        },
+        data: updateRecipe,
     });
 }
 

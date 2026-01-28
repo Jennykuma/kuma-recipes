@@ -17,7 +17,7 @@ const NewRecipe = () => {
     const methods = useForm<RecipeFormValues>({
         defaultValues: {
             title: '',
-            url: '',
+            source: '',
             notes: '',
             rating: 0,
             remake: false,
@@ -164,10 +164,10 @@ const NewRecipe = () => {
                                     </span>
                                 </div>
                                 <input
-                                    type="url"
+                                    type="text"
                                     className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-sm"
                                     placeholder="URL"
-                                    {...register('url')}
+                                    {...register('source')}
                                 ></input>
                             </div>
                         </div>

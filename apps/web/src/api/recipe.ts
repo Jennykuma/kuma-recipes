@@ -2,6 +2,7 @@ import type {
     Recipe,
     RecipeListItem,
     NewRecipeBody,
+    UpdateRecipeBody,
 } from '../../../api/src/services/recipes.types';
 
 type GetRecipeDetailsResponse = {
@@ -39,6 +40,17 @@ const recipe = {
             throw new Error(error.message ?? 'Failed to update recipe rating');
         }
 
+        return response.json();
+    },
+
+    async updateRecipe(id: string, updatedRecipe: UpdateRecipeBody): Promise<any> {
+        const response = await fetch(`/api/recipes/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedRecipe),
+        });
         return response.json();
     },
 

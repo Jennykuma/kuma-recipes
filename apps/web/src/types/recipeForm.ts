@@ -1,6 +1,6 @@
 export type RecipeFormValues = {
     title: string;
-    url: string;
+    source: string;
     notes: string;
     rating: number;
     remake: boolean;

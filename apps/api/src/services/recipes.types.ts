@@ -9,6 +9,7 @@ export type Recipe = {
     steps: string[];
     tags: string[];
     title: string;
+    source: string;
     createdAt: string;
     updatedAt: string;
 };
@@ -19,7 +20,7 @@ export type RecipeListItem = {
     title: string;
 };
 
-export interface NewRecipeBody {
+export type NewRecipeBody = {
     title: string;
     ingredients?: string[];
     notes?: string;
@@ -27,4 +28,16 @@ export interface NewRecipeBody {
     remake?: boolean;
     steps?: string[];
     tags?: string[];
-}
+    source?: string;
+};
+
+export type UpdateRecipeBody = Partial<{
+    title: string;
+    notes: string;
+    source: string;
+    remake: boolean;
+    ingredients: string[];
+    steps: string[];
+    tags: string[];
+    rating: number;
+}>;
