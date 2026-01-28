@@ -6,7 +6,7 @@ import StepsTable from './components/StepsTable';
 import { recipe as recipeApi } from '../../api';
 import { type RecipeFormValues } from '../../types/recipeForm';
 import BackButton from '../../components/BackButton';
-import CancelModal from '../RecipeDetails/components/CancelModal';
+import CancelModal from './components/CancelModal';
 import { useState } from 'react';
 
 const NewRecipe = () => {

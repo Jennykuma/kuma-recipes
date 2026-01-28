@@ -16,7 +16,7 @@ const DeleteModal = ({ onClose, onConfirm, title }: DeleteModalProps) => {
                 <p className="text-sm text-gray-800">
                     <strong>Delete{title ? ` “${title}”` : ''}?</strong>
                     <br />
-                    This can’t be undone.
+                    This cannot be undone.
                 </p>
                 <div className="mt-4 flex justify-end gap-2">
                     <button

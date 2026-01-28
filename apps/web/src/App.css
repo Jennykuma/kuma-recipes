@@ -6,6 +6,10 @@ html, body, #root {
   width: 100%;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 #root {
   margin: 0;
   padding: 0;

@@ -1,10 +1,12 @@
+import { createPortal } from 'react-dom';
+
 type CancelModalProps = {
     onClose: () => void;
     onDiscard: () => void;
 };
 
 const CancelModal = ({ onClose, onDiscard }: CancelModalProps) => {
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
             <div
@@ -13,7 +15,7 @@ const CancelModal = ({ onClose, onDiscard }: CancelModalProps) => {
                 className="relative z-10 w-[90vw] max-w-md rounded-lg bg-white p-5 shadow-lg"
             >
                 <p className="text-sm text-gray-800">
-                    You have unsaved changes. If you leave now, they’ll be lost.
+                    You have unsaved changes. If you leave now, they will be lost.
                 </p>
                 <div className="mt-4 flex justify-end gap-2">
                     <button
@@ -30,7 +32,8 @@ const CancelModal = ({ onClose, onDiscard }: CancelModalProps) => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
