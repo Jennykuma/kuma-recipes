@@ -41,3 +41,11 @@ export type UpdateRecipeBody = Partial<{
     tags: string[];
     rating: number;
 }>;
+
+export type IngredientsForm = {
+    ingredients: { ingredient: string }[];
+};
+
+export type StepsForm = {
+    steps: { step: string }[];
+};
