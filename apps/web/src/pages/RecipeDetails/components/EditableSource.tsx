@@ -37,47 +37,47 @@ const EditableSource = ({
     })();
 
     return (
-        <span className="flex items-baseline gap-2 w-full min-w-0">
+        <span className="flex items-baseline gap-2 w-full">
             <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full shrink-0">
                 Source
             </span>
             {isEditing ? (
-                <>
+                <div className="flex w-full items-baseline gap-2">
                     <input
                         className="w-full max-w-125 border-b border-gray-300 bg-transparent focus:outline-none"
                         value={draftValue ?? ''}
                         onChange={(e) => onChange(e.target.value)}
                         onBlur={onSave}
                     />
-                    <button className="text-xs text-blush-400" onClick={onSave}>
+                    <button className="text-xs text-blush-400 shrink-0" onClick={onSave}>
                         Save
                     </button>
-                    <button className="text-xs text-gray-400" onClick={onCancel}>
+                    <button className="text-xs text-gray-400 shrink-0" onClick={onCancel}>
                         Cancel
                     </button>
-                </>
+                </div>
             ) : (
-                <>
+                <div className="inline-flex items-baseline gap-1 min-w-0 max-w-full">
                     {sourceLink ? (
                         <a
                             href={sourceLink}
                             target="_blank"
                             rel="noreferrer"
                             title={sourceLink}
-                            className="link-blush text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis"
+                            className="link-blush text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis min-w-0 max-w-full"
                         >
                             {sourceText}
                         </a>
                     ) : (
-                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis">
+                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full">
                             {sourceText || '—'}
                         </span>
                     )}
                     <Pencil
-                        className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                        className="w-3 h-4 pt-1 cursor-pointer link-blush shrink-0"
                         onClick={onEdit}
                     />
-                </>
+                </div>
             )}
         </span>
     );

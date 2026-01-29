@@ -130,51 +130,61 @@ const RecipeDetails = () => {
                 />
             ) : null}
 
-            <div className="text-sm flex flex-col space-y-4 items-start">
-                <Rating value={recipe?.rating} onChange={handleChangeRating} />
-                <RemakeToggle checked={recipe?.remake} onToggle={handleToggleRemake} />
+            <div className="flex w-full flex-col gap-6 md:flex-row">
+                <div className="text-sm flex flex-col space-y-4 items-start w-full md:w-2/3">
+                    <Rating
+                        value={recipe?.rating}
+                        onChange={handleChangeRating}
+                        className="justify-end"
+                    />
+                    <RemakeToggle
+                        checked={recipe?.remake}
+                        onToggle={handleToggleRemake}
+                    />
 
-                <EditableSource
-                    source={recipe?.source}
-                    isEditing={editingField === 'source'}
-                    draftValue={draft.source}
-                    onEdit={() => {
-                        setDraft({ ...draft, source: recipe?.source ?? '' });
-                        setEditingField('source');
-                    }}
-                    onChange={(value) => setDraft({ ...draft, source: value })}
-                    onSave={() => handleSave('source')}
-                    onCancel={() => handleCancel('source')}
-                />
+                    <EditableSource
+                        source={recipe?.source}
+                        isEditing={editingField === 'source'}
+                        draftValue={draft.source}
+                        onEdit={() => {
+                            setDraft({ ...draft, source: recipe?.source ?? '' });
+                            setEditingField('source');
+                        }}
+                        onChange={(value) => setDraft({ ...draft, source: value })}
+                        onSave={() => handleSave('source')}
+                        onCancel={() => handleCancel('source')}
+                    />
 
-                <IngredientsSection
-                    ingredients={recipe?.ingredients}
-                    isEditing={editingField === 'ingredients'}
-                    onEdit={() => setEditingField('ingredients')}
-                    onSave={handleIngredientsSave}
-                    onCancel={handleIngredientsCancel}
-                />
+                    <IngredientsSection
+                        ingredients={recipe?.ingredients}
+                        isEditing={editingField === 'ingredients'}
+                        onEdit={() => setEditingField('ingredients')}
+                        onSave={handleIngredientsSave}
+                        onCancel={handleIngredientsCancel}
+                    />
 
-                <StepsSection
-                    steps={recipe?.steps}
-                    isEditing={editingField === 'steps'}
-                    onEdit={() => setEditingField('steps')}
-                    onSave={handleStepsSave}
-                    onCancel={handleStepsCancel}
-                />
+                    <StepsSection
+                        steps={recipe?.steps}
+                        isEditing={editingField === 'steps'}
+                        onEdit={() => setEditingField('steps')}
+                        onSave={handleStepsSave}
+                        onCancel={handleStepsCancel}
+                    />
 
-                <NotesSection
-                    notes={recipe?.notes}
-                    isEditing={editingField === 'notes'}
-                    draftValue={draft.notes}
-                    onEdit={() => {
-                        setDraft({ ...draft, notes: recipe?.notes ?? '' });
-                        setEditingField('notes');
-                    }}
-                    onChange={(value) => setDraft({ ...draft, notes: value })}
-                    onSave={() => handleSave('notes')}
-                    onCancel={() => handleCancel('notes')}
-                />
+                    <NotesSection
+                        notes={recipe?.notes}
+                        isEditing={editingField === 'notes'}
+                        draftValue={draft.notes}
+                        onEdit={() => {
+                            setDraft({ ...draft, notes: recipe?.notes ?? '' });
+                            setEditingField('notes');
+                        }}
+                        onChange={(value) => setDraft({ ...draft, notes: value })}
+                        onSave={() => handleSave('notes')}
+                        onCancel={() => handleCancel('notes')}
+                    />
+                </div>
+                <div className="w-full md:w-1/3">photos area</div>
             </div>
         </div>
     );

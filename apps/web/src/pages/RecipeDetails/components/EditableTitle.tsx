@@ -21,17 +21,17 @@ const EditableTitle = ({
 }: EditableTitleProps) => {
     if (isEditing) {
         return (
-            <span className="flex w-full items-baseline gap-1">
+            <span className="flex w-full items-baseline gap-2">
                 <input
                     className="text-lg w-full max-w-125 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
                     value={draftValue ?? ''}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onSave}
                 />
-                <button className="text-xs text-blush-400" onClick={onSave}>
+                <button className="text-xs text-blush-400 shrink-0" onClick={onSave}>
                     Save
                 </button>
-                <button className="text-xs text-gray-400" onClick={onCancel}>
+                <button className="text-xs text-gray-400 shrink-0" onClick={onCancel}>
                     Cancel
                 </button>
             </span>
