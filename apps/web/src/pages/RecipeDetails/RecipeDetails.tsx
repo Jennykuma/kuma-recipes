@@ -14,7 +14,7 @@ const RecipeDetails = () => {
     const recipeId = id ?? '';
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
+    const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
     const [draft, setDraft] = useState<Partial<Recipe>>({});
 
     const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
@@ -39,7 +39,7 @@ const RecipeDetails = () => {
             delete next[field];
             return next;
         });
-        setIsEditing(false);
+        setEditingField(null);
     };
 
     const handleDelete = () => {
@@ -54,7 +54,7 @@ const RecipeDetails = () => {
 
         try {
             updateRecipe({ [field]: value });
-            setIsEditing(false);
+            setEditingField(null);
         } catch (err) {
             console.error(err);
             handleCancel(field);
@@ -91,12 +91,12 @@ const RecipeDetails = () => {
     return (
         <div className="p-6">
             <BackButton to="/" />
-            <header className="flex items-center justify-between">
-                <span className="flex w-full items-baseline gap-2">
-                    {isEditing ? (
+            <header className="flex items-center justify-between mb-1">
+                <span className="flex w-full items-baseline gap-1">
+                    {editingField === 'title' ? (
                         <>
                             <input
-                                className="text-lg w-full max-w-150 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
+                                className="text-lg w-full max-w-125 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
                                 value={draft?.title}
                                 onChange={(e) =>
                                     setDraft({ ...draft, title: e.target.value })
@@ -119,8 +119,8 @@ const RecipeDetails = () => {
                         <>
                             <h1 className="text-lg font-bold">{recipe?.title}</h1>
                             <Pencil
-                                className="w-4 h-4 cursor-pointer text-blush-400"
-                                onClick={() => setIsEditing(true)}
+                                className="w-3 h-4 pt-1 cursor-pointer text-blush-400"
+                                onClick={() => setEditingField('title')}
                             />
                         </>
                     )}
@@ -142,7 +142,7 @@ const RecipeDetails = () => {
 
             <div className="text-sm flex flex-col space-y-3 items-start">
                 <Rating value={recipe?.rating} onChange={handleChangeRating} />
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 text-xs text-gray-500">
                     <input
                         type="checkbox"
                         checked={recipe?.remake}
@@ -155,20 +155,50 @@ const RecipeDetails = () => {
                     <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full shrink-0">
                         Source
                     </span>
-                    {sourceLink ? (
-                        <a
-                            href={sourceLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            title={sourceLink}
-                            className="text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis flex-1 min-w-0"
-                        >
-                            {sourceText}
-                        </a>
+                    {editingField === 'source' ? (
+                        <>
+                            <input
+                                className="w-full max-w-125 border-b border-gray-300 bg-transparent focus:outline-none"
+                                value={draft?.source}
+                                onChange={(e) =>
+                                    setDraft({ ...draft, source: e.target.value })
+                                }
+                            />
+                            <button
+                                className="text-xs text-blush-400"
+                                onClick={() => handleSave('source')}
+                            >
+                                Save
+                            </button>
+                            <button
+                                className="text-xs text-gray-400"
+                                onClick={() => handleCancel('source')}
+                            >
+                                Cancel
+                            </button>
+                        </>
                     ) : (
-                        <span className="text-sm text-gray-700 truncate overflow-hidden text-ellipsis flex-1 min-w-0">
-                            {sourceText || 'N/A'}
-                        </span>
+                        <>
+                            {sourceLink ? (
+                                <a
+                                    href={sourceLink}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={sourceLink}
+                                    className="text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis"
+                                >
+                                    {sourceText}
+                                </a>
+                            ) : (
+                                <span className="text-sm text-gray-700 truncate overflow-hidden text-ellipsis">
+                                    {sourceText || 'N/A'}
+                                </span>
+                            )}
+                            <Pencil
+                                className="w-3 h-4 pt-1 cursor-pointer text-blush-400"
+                                onClick={() => setEditingField('source')}
+                            />
+                        </>
                     )}
                 </span>
 
