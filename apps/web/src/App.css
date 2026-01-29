@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 html, body, #root {
-  height: 100%;
   width: 100%;
 }
+
 
 html {
   overflow-y: scroll;
@@ -23,4 +23,3 @@ html {
 .link-blush {
   @apply text-blush-400 hover:text-blush-200;
 }
-

@@ -11,16 +11,29 @@ const App = () => {
     if (error) return <div>Error...</div>;
 
     return (
-        <div>
-            <Link
-                role="link"
-                tabIndex={0}
-                className="border border-gray-200 rounded-sm shadow-sm hover:shadow-none cursor-pointer"
-                to={`/recipes/new`}
+        <div className="p-6">
+            <header className="flex justify-between">
+                <h1>Kuma Recipes</h1>
+                <Link
+                    role="link"
+                    tabIndex={0}
+                    className="
+                    inline-flex items-center gap-2 
+                    text-xs text-blush-400
+                    border border-blush-200 bg-white
+                    px-2.5 py-1.5 rounded-full
+                    hover:bg-blush-200 hover:text-white
+                    transition-colors"
+                    to={`/recipes/new`}
+                >
+                    Add recipe
+                </Link>
+            </header>
+            <div
+                className="
+                grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+                gap-4 p-6"
             >
-                Add recipe
-            </Link>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6">
                 {recipes &&
                     recipes?.map((recipe: RecipeListItem) => {
                         return (

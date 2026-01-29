@@ -11,6 +11,7 @@ import IngredientsSection from './components/IngredientsSection';
 import StepsSection from './components/StepsSection';
 import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
+import PhotosSection from './components/PhotosSection';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
@@ -100,7 +101,7 @@ const RecipeDetails = () => {
     };
 
     return (
-        <div className="p-6">
+        <div className="p-8">
             <BackButton to="/" />
             <header className="flex items-center justify-between mb-1">
                 <EditableTitle
@@ -130,8 +131,8 @@ const RecipeDetails = () => {
                 />
             ) : null}
 
-            <div className="flex w-full flex-col gap-6 md:flex-row">
-                <div className="text-sm flex flex-col space-y-4 items-start w-full md:w-2/3">
+            <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="text-sm flex flex-col space-y-3 items-start md:col-span-2">
                     <Rating
                         value={recipe?.rating}
                         onChange={handleChangeRating}
@@ -154,7 +155,9 @@ const RecipeDetails = () => {
                         onSave={() => handleSave('source')}
                         onCancel={() => handleCancel('source')}
                     />
+                </div>
 
+                <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
                     <IngredientsSection
                         ingredients={recipe?.ingredients}
                         isEditing={editingField === 'ingredients'}
@@ -162,15 +165,6 @@ const RecipeDetails = () => {
                         onSave={handleIngredientsSave}
                         onCancel={handleIngredientsCancel}
                     />
-
-                    <StepsSection
-                        steps={recipe?.steps}
-                        isEditing={editingField === 'steps'}
-                        onEdit={() => setEditingField('steps')}
-                        onSave={handleStepsSave}
-                        onCancel={handleStepsCancel}
-                    />
-
                     <NotesSection
                         notes={recipe?.notes}
                         isEditing={editingField === 'notes'}
@@ -184,7 +178,17 @@ const RecipeDetails = () => {
                         onCancel={() => handleCancel('notes')}
                     />
                 </div>
-                <div className="w-full md:w-1/3">photos area</div>
+
+                <div className="order-2 md:order-none md:col-start-2 flex flex-col gap-3">
+                    <StepsSection
+                        steps={recipe?.steps}
+                        isEditing={editingField === 'steps'}
+                        onEdit={() => setEditingField('steps')}
+                        onSave={handleStepsSave}
+                        onCancel={handleStepsCancel}
+                    />
+                    <PhotosSection />
+                </div>
             </div>
         </div>
     );

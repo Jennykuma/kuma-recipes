@@ -82,8 +82,15 @@ const IngredientsSection = ({
                 <ul>
                     {ingredients?.map((ingredient) => {
                         return (
-                            <li key={ingredient} className="ml-4 list-disc">
+                            <li
+                                key={ingredient}
+                                className="ml-4 list-disc max-w-2xl text-sm/6"
+                            >
                                 {ingredient}
+                                <input
+                                    type="checkbox"
+                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70"
+                                />
                             </li>
                         );
                     })}

@@ -82,8 +82,12 @@ const StepsSection = ({
                 <ul>
                     {steps?.map((step) => {
                         return (
-                            <li key={step} className="ml-4 list-decimal text-sm/6">
+                            <li key={step} className="ml-4 list-decimal text-sm/7">
                                 {step}
+                                <input
+                                    type="checkbox"
+                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70"
+                                />
                             </li>
                         );
                     })}
