@@ -42,9 +42,7 @@ const Rating = ({
                 isFilled(index) ? 'text-yellow-500' : 'text-gray-300'
             )}
             onClick={canChange ? () => onChange?.(starValue(index)) : undefined}
-            onMouseEnter={
-                canChange ? () => setHoverRating(starValue(index)) : undefined
-            }
+            onMouseEnter={canChange ? () => setHoverRating(starValue(index)) : undefined}
             onMouseLeave={canChange ? () => setHoverRating(null) : undefined}
             key={`${index}`}
             aria-hidden="true"

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecipeDetails, useRecipeRating, useDeleteRecipe } from '../../hooks';
+import { useRecipeDetails, useDeleteRecipe } from '../../hooks';
 import { Pencil } from 'lucide-react';
 import { type Recipe } from '../../../../api/src/services/recipes.types';
 import Rating from '../../components/Rating';
@@ -97,7 +97,7 @@ const RecipeDetails = () => {
                         <>
                             <input
                                 className="text-lg w-full max-w-150 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
-                                value={draft?.title ?? recipe?.title}
+                                value={draft?.title}
                                 onChange={(e) =>
                                     setDraft({ ...draft, title: e.target.value })
                                 }
@@ -141,11 +141,7 @@ const RecipeDetails = () => {
             ) : null}
 
             <div className="text-sm flex flex-col space-y-3 items-start">
-                <Rating
-                    value={recipe?.rating}
-                    onChange={handleChangeRating}
-                    interactive={!isPending}
-                />
+                <Rating value={recipe?.rating} onChange={handleChangeRating} />
                 <span className="flex items-center gap-2">
                     <input
                         type="checkbox"
