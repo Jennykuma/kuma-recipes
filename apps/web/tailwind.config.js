@@ -20,6 +20,9 @@ export default {
                 primarySoft: '#A7D7C5',
                 accent: '#F2A1B3',
             },
+            fontFamily: {
+                nanum: ['"Nanum Pen Script"', 'cursive'],
+            },
         },
     },
     plugins: [],

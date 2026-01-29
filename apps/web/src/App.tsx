@@ -13,7 +13,9 @@ const App = () => {
     return (
         <div className="p-6">
             <header className="flex justify-between">
-                <h1>Kuma Recipes</h1>
+                <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
+                    Kuma Recipes 🧸
+                </Link>
                 <Link
                     role="link"
                     tabIndex={0}
@@ -21,7 +23,7 @@ const App = () => {
                     inline-flex items-center gap-2 
                     text-xs text-blush-400
                     border border-blush-200 bg-white
-                    px-2.5 py-1.5 rounded-full
+                    px-2.5 py-1.5 rounded-xl
                     hover:bg-blush-200 hover:text-white
                     transition-colors"
                     to={`/recipes/new`}
