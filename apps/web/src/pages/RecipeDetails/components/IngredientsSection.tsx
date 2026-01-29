@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
-import IngredientTable from '../../NewRecipe/components/IngredientTable';
+import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
 import type { IngredientsForm } from '../../../../../api/src/services/recipes.types';
 
 type IngredientsSectionProps = {
@@ -63,8 +63,8 @@ const IngredientsSection = ({
             {isEditing ? (
                 <FormProvider {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
-                        <IngredientTable />
-                        <div className="mt-3 flex gap-2 justify-end">
+                        <IngredientsTable />
+                        <div className="mt-2 flex gap-2 justify-end">
                             <button
                                 className="text-xs text-gray-400"
                                 type="button"

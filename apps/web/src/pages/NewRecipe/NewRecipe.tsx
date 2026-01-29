@@ -1,6 +1,6 @@
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import IngredientTable from './components/IngredientTable';
+import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
 import { recipe as recipeApi } from '../../api';
@@ -187,7 +187,7 @@ const NewRecipe = () => {
                                             At least one ingredient is required
                                         </p>
                                     )}
-                                    <IngredientTable />
+                                    <IngredientsTable />
                                 </div>
 
                                 <hr className="border-gray-100 border-t-1" />

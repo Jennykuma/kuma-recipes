@@ -17,7 +17,8 @@ const RecipeDetails = () => {
     const { id } = useParams();
     const recipeId = id ?? '';
     const { recipe } = useRecipeDetails(recipeId);
-    const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
+    const { mutate: updateRecipe, mutateAsync: updateRecipeAsync } =
+        useUpdateRecipe(recipeId);
     const { mutate: deleteRecipe } = useDeleteRecipe(recipeId);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -49,30 +50,38 @@ const RecipeDetails = () => {
         deleteRecipe(undefined, { onSuccess: () => navigate('/') });
     };
 
-    const handleIngredientsSave = (normalizedIngredients: string[]) => {
-        updateRecipe({ ingredients: normalizedIngredients });
-        setEditingField(null);
+    const handleIngredientsSave = async (normalizedIngredients: string[]) => {
+        try {
+            await updateRecipeAsync({ ingredients: normalizedIngredients });
+            setEditingField(null);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleIngredientsCancel = () => {
         setEditingField(null);
     };
 
-    const handleStepsSave = (normalizedSteps: string[]) => {
-        updateRecipe({ steps: normalizedSteps });
-        setEditingField(null);
+    const handleStepsSave = async (normalizedSteps: string[]) => {
+        try {
+            await updateRecipeAsync({ steps: normalizedSteps });
+            setEditingField(null);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleStepsCancel = () => {
         setEditingField(null);
     };
 
-    const handleSave = (field: keyof Recipe) => {
+    const handleSave = async (field: keyof Recipe) => {
         const value = draft[field] ?? recipe?.[field];
         if (value === undefined) return;
 
         try {
-            updateRecipe({ [field]: value });
+            await updateRecipeAsync({ [field]: value });
             setEditingField(null);
         } catch (err) {
             console.error(err);
@@ -98,7 +107,10 @@ const RecipeDetails = () => {
                     title={recipe?.title}
                     isEditing={editingField === 'title'}
                     draftValue={draft.title}
-                    onEdit={() => setEditingField('title')}
+                    onEdit={() => {
+                        setDraft({ ...draft, title: recipe?.title ?? '' });
+                        setEditingField('title');
+                    }}
                     onChange={(value) => setDraft({ ...draft, title: value })}
                     onSave={() => handleSave('title')}
                     onCancel={() => handleCancel('title')}
@@ -126,7 +138,10 @@ const RecipeDetails = () => {
                     source={recipe?.source}
                     isEditing={editingField === 'source'}
                     draftValue={draft.source}
-                    onEdit={() => setEditingField('source')}
+                    onEdit={() => {
+                        setDraft({ ...draft, source: recipe?.source ?? '' });
+                        setEditingField('source');
+                    }}
                     onChange={(value) => setDraft({ ...draft, source: value })}
                     onSave={() => handleSave('source')}
                     onCancel={() => handleCancel('source')}
@@ -148,7 +163,18 @@ const RecipeDetails = () => {
                     onCancel={handleStepsCancel}
                 />
 
-                <NotesSection notes={recipe?.notes} />
+                <NotesSection
+                    notes={recipe?.notes}
+                    isEditing={editingField === 'notes'}
+                    draftValue={draft.notes}
+                    onEdit={() => {
+                        setDraft({ ...draft, notes: recipe?.notes ?? '' });
+                        setEditingField('notes');
+                    }}
+                    onChange={(value) => setDraft({ ...draft, notes: value })}
+                    onSave={() => handleSave('notes')}
+                    onCancel={() => handleCancel('notes')}
+                />
             </div>
         </div>
     );

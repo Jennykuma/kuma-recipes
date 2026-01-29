@@ -9,15 +9,16 @@ const StepsTable = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
-    const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
+    const { control, register, setFocus } = useFormContext<RecipeFormValues>();
     const stepTableRows = useWatch({ control, name: 'steps' });
 
-    const { fields, append, remove, replace } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control,
         name: 'steps',
     });
 
     const lastStep = stepTableRows?.[stepTableRows.length - 1]?.step ?? '';
+    const isAddDisabled = lastStep.trim() === '';
 
     const handleBlur = () => {
         // wait for the next focused element to be set
@@ -27,16 +28,6 @@ const StepsTable = () => {
 
             if (!stillInside) {
                 setActiveIndex(null);
-
-                const rows = getValues('steps') ?? [];
-                const next = normalizeSteps(rows);
-
-                // avoid extra replace if nothing changed
-                const same =
-                    rows.length === next.length &&
-                    rows.every((row, index) => row.step === next[index].step);
-
-                if (!same) replace(next);
             }
         });
     };
@@ -67,13 +58,6 @@ const StepsTable = () => {
             setFocus(`steps.${nextIndex}.step`);
             setActiveIndex(nextIndex);
         });
-    };
-
-    const normalizeSteps = (rows: { step: string }[]) => {
-        const nonEmpty = rows.filter((r) => r.step.trim() !== '');
-
-        // keep at least one row, but don't auto-append an empty row on blur
-        return nonEmpty.length === 0 ? [{ step: '' }] : nonEmpty;
     };
 
     return (
@@ -122,11 +106,17 @@ const StepsTable = () => {
 
             <button
                 type="button"
-                className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-lg
-                           bg-gray-50 hover:bg-gray-100
-                           disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => append({ step: '' }, { shouldFocus: true })}
-                disabled={lastStep === ''}
+                className="mt-2 inline-flex items-center gap-2 
+                           text-xs text-blush-400
+                           border border-blush-200 bg-white
+                           px-2.5 py-1.5 rounded-full
+                           hover:bg-blush-200 hover:text-white
+                           transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => {
+                    if (isAddDisabled) return;
+                    append({ step: '' }, { shouldFocus: true });
+                }}
+                disabled={isAddDisabled}
             >
                 <Plus className="w-4 h-4" />
                 Add step

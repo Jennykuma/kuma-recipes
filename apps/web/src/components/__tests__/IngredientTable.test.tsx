@@ -1,11 +1,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import IngredientTable from '../../pages/NewRecipe/components/IngredientTable';
+import IngredientsTable from '../../pages/NewRecipe/components/IngredientsTable';
 import { renderWithForm } from './testUtils';
 
 describe('IngredientTable', () => {
     it('renders one row and disables add when last ingredient is empty', () => {
-        renderWithForm(<IngredientTable />);
+        renderWithForm(<IngredientsTable />);
 
         expect(screen.getAllByRole('textbox')).toHaveLength(1);
         expect(screen.getByRole('button', { name: /add ingredient/i })).toBeDisabled();
@@ -13,7 +13,7 @@ describe('IngredientTable', () => {
 
     it('enables add and appends a new row when the add button is clicked', async () => {
         const user = userEvent.setup();
-        renderWithForm(<IngredientTable />);
+        renderWithForm(<IngredientsTable />);
 
         await user.type(screen.getAllByRole('textbox')[0], 'Sugar');
 
@@ -27,7 +27,7 @@ describe('IngredientTable', () => {
 
     it('adds a row on Enter when the current ingredient is not empty', async () => {
         const user = userEvent.setup();
-        renderWithForm(<IngredientTable />);
+        renderWithForm(<IngredientsTable />);
 
         await user.type(screen.getAllByRole('textbox')[0], 'Salt{enter}');
 
@@ -37,7 +37,7 @@ describe('IngredientTable', () => {
     it('removes an empty row on Backspace and focuses the previous row', async () => {
         const user = userEvent.setup();
 
-        renderWithForm(<IngredientTable />, {
+        renderWithForm(<IngredientsTable />, {
             defaultValues: {
                 ingredients: [{ ingredient: 'A' }, { ingredient: '' }],
             },
@@ -57,7 +57,7 @@ describe('IngredientTable', () => {
 
         renderWithForm(
             <div>
-                <IngredientTable />
+                <IngredientsTable />
                 <button type="button">Outside</button>
             </div>,
             {

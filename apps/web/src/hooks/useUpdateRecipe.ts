@@ -45,6 +45,9 @@ const useUpdateRecipe = (id: string) => {
                                   ...(updatedRecipe.rating !== undefined && {
                                       rating: updatedRecipe.rating,
                                   }),
+                                  ...(updatedRecipe.notes !== undefined && {
+                                      notes: updatedRecipe.notes,
+                                  }),
                               }
                             : item
                     )

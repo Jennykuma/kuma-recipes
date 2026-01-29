@@ -26,6 +26,7 @@ const EditableTitle = ({
                     className="text-lg w-full max-w-125 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
                     value={draftValue ?? ''}
                     onChange={(e) => onChange(e.target.value)}
+                    onBlur={onSave}
                 />
                 <button className="text-xs text-blush-400" onClick={onSave}>
                     Save

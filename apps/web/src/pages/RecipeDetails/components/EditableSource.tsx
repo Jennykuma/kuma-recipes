@@ -47,6 +47,7 @@ const EditableSource = ({
                         className="w-full max-w-125 border-b border-gray-300 bg-transparent focus:outline-none"
                         value={draftValue ?? ''}
                         onChange={(e) => onChange(e.target.value)}
+                        onBlur={onSave}
                     />
                     <button className="text-xs text-blush-400" onClick={onSave}>
                         Save
@@ -68,8 +69,8 @@ const EditableSource = ({
                             {sourceText}
                         </a>
                     ) : (
-                        <span className="text-sm text-gray-700 truncate overflow-hidden text-ellipsis">
-                            {sourceText || 'N/A'}
+                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis">
+                            {sourceText || '—'}
                         </span>
                     )}
                     <Pencil

@@ -12,7 +12,13 @@ type StepsSectionProps = {
     onCancel: () => void;
 };
 
-const StepsSection = ({ steps, isEditing, onEdit, onSave, onCancel }: StepsSectionProps) => {
+const StepsSection = ({
+    steps,
+    isEditing,
+    onEdit,
+    onSave,
+    onCancel,
+}: StepsSectionProps) => {
     const form = useForm<StepsForm>({
         defaultValues: {
             steps: (steps ?? ['']).map((step) => ({ step })),
@@ -58,7 +64,7 @@ const StepsSection = ({ steps, isEditing, onEdit, onSave, onCancel }: StepsSecti
                 <FormProvider {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
                         <StepsTable />
-                        <div className="mt-3 flex gap-2 justify-end">
+                        <div className="mt-2 flex gap-2 justify-end">
                             <button
                                 className="text-xs text-gray-400"
                                 type="button"

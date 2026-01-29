@@ -5,20 +5,21 @@ import classNames from 'classnames';
 import { type RecipeFormValues } from '../../../types/recipeForm';
 import { Plus, Circle, CircleMinus } from 'lucide-react';
 
-const IngredientTable = () => {
+const IngredientsTable = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
-    const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
+    const { control, register, setFocus } = useFormContext<RecipeFormValues>();
     const ingredientTableRows = useWatch({ control, name: 'ingredients' });
 
-    const { fields, append, remove, replace } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control,
         name: 'ingredients',
     });
 
     const lastIngredient =
         ingredientTableRows?.[ingredientTableRows.length - 1]?.ingredient ?? '';
+    const isAddDisabled = lastIngredient.trim() === '';
 
     const handleBlur = () => {
         // wait for the next focused element to be set
@@ -28,16 +29,6 @@ const IngredientTable = () => {
 
             if (!stillInside) {
                 setActiveIndex(null);
-
-                const rows = getValues('ingredients') ?? [];
-                const next = normalizeIngredients(rows);
-
-                // avoid extra replace if nothing changed
-                const same =
-                    rows.length === next.length &&
-                    rows.every((row, index) => row.ingredient === next[index].ingredient);
-
-                if (!same) replace(next);
             }
         });
     };
@@ -68,13 +59,6 @@ const IngredientTable = () => {
             setFocus(`ingredients.${nextIndex}.ingredient`);
             setActiveIndex(nextIndex);
         });
-    };
-
-    const normalizeIngredients = (rows: { ingredient: string }[]) => {
-        const nonEmpty = rows.filter((r) => r.ingredient.trim() !== '');
-
-        // keep at least one row, but don't auto-append an empty row on blur
-        return nonEmpty.length === 0 ? [{ ingredient: '' }] : nonEmpty;
     };
 
     return (
@@ -123,11 +107,17 @@ const IngredientTable = () => {
 
             <button
                 type="button"
-                className="px-3 py-1.5 mt-2 text-xs flex items-center gap-2 rounded-lg
-                           bg-gray-50 hover:bg-gray-100
-                           disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={() => append({ ingredient: '' }, { shouldFocus: true })}
-                disabled={lastIngredient === ''}
+                className="mt-2 inline-flex items-center gap-2 
+                           text-xs text-blush-400
+                           border border-blush-200 bg-white
+                           px-2.5 py-1.5 rounded-full
+                           hover:bg-blush-200 hover:text-white
+                           transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => {
+                    if (isAddDisabled) return;
+                    append({ ingredient: '' }, { shouldFocus: true });
+                }}
+                disabled={isAddDisabled}
             >
                 <Plus className="w-4 h-4" />
                 Add ingredient
@@ -136,4 +126,4 @@ const IngredientTable = () => {
     );
 };
 
-export default IngredientTable;
+export default IngredientsTable;
