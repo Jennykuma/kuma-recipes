@@ -4,7 +4,6 @@ import { Prisma } from '@prisma/client';
 import {
     recipeDetails,
     listRecipes,
-    updateRecipeRating,
     createNewRecipe,
     deleteRecipe,
     updateRecipe,
@@ -37,17 +36,6 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             source,
         });
         reply.code(201).send(result);
-    });
-
-    fastify.patch<{ Body: UpdateRecipeBody }>('/:id/rating', async (request, reply) => {
-        const params = request.params as { id: string };
-        const { rating } = request.body;
-        if (typeof rating !== 'number') {
-            reply.code(400).send({ error: 'Rating is required and must be a number.' });
-            return;
-        }
-        const result = await updateRecipeRating(params.id, rating);
-        reply.code(200).send(result);
     });
 
     fastify.patch<{ Body: UpdateRecipeBody }>('/:id', async (request, reply) => {

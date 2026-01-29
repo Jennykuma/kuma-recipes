@@ -17,7 +17,6 @@ const RecipeDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [draft, setDraft] = useState<Partial<Recipe>>({});
 
-    const { mutate: updateRating, isPending } = useRecipeRating(recipeId);
     const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
     const { mutate: deleteRecipe } = useDeleteRecipe(recipeId);
     const { recipe } = useRecipeDetails(recipeId);
@@ -30,7 +29,7 @@ const RecipeDetails = () => {
         }
 
         if (recipe?.rating !== rating) {
-            updateRating(rating);
+            updateRecipe({ rating });
         }
     };
 
@@ -62,6 +61,16 @@ const RecipeDetails = () => {
         }
     };
 
+    const handleToggleRemake = () => {
+        if (!recipeId || recipe?.remake === undefined) return;
+
+        try {
+            updateRecipe({ remake: !recipe.remake });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const sourceText = recipe?.source?.trim() ?? '';
     const sourceLink = (() => {
         if (!sourceText) return null;
@@ -83,11 +92,11 @@ const RecipeDetails = () => {
         <div className="p-6">
             <BackButton to="/" />
             <header className="flex items-center justify-between">
-                <span className="flex items-baseline gap-2">
+                <span className="flex w-full items-baseline gap-2">
                     {isEditing ? (
                         <>
                             <input
-                                className="text-lg font-bold border-b border-gray-300 bg-transparent focus:outline-none"
+                                className="text-lg w-full max-w-150 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
                                 value={draft?.title ?? recipe?.title}
                                 onChange={(e) =>
                                     setDraft({ ...draft, title: e.target.value })
@@ -118,7 +127,7 @@ const RecipeDetails = () => {
                 </span>
                 <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="text-xs text-white border border-blush-400 bg-blush-400 px-2.5 py-1 rounded hover:bg-blush-200 hover:text-white transition-colors"
+                    className="text-xs text-white border border-blush-400 bg-blush-400 px-2.5 py-1 ml-8 rounded hover:bg-blush-200 hover:text-white transition-colors"
                 >
                     Delete
                 </button>
@@ -138,7 +147,11 @@ const RecipeDetails = () => {
                     interactive={!isPending}
                 />
                 <span className="flex items-center gap-2">
-                    <input type="checkbox" checked={recipe?.remake} disabled />
+                    <input
+                        type="checkbox"
+                        checked={recipe?.remake}
+                        onClick={handleToggleRemake}
+                    />
                     Would remake
                 </span>
 

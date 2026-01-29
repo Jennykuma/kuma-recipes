@@ -33,17 +33,6 @@ export async function createNewRecipe(recipeParams: NewRecipeBody) {
     });
 }
 
-export async function updateRecipeRating(recipeId: string, rating: number): Promise<any> {
-    return prisma.recipe.update({
-        where: {
-            id: recipeId,
-        },
-        data: {
-            rating,
-        },
-    });
-}
-
 export async function updateRecipe(recipeId: string, updatedRecipe: UpdateRecipeBody) {
     return prisma.recipe.update({
         where: {
