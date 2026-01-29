@@ -119,7 +119,7 @@ const RecipeDetails = () => {
                         <>
                             <h1 className="text-lg font-bold">{recipe?.title}</h1>
                             <Pencil
-                                className="w-3 h-4 pt-1 cursor-pointer text-blush-400"
+                                className="w-3 h-4 pt-1 cursor-pointer link-blush"
                                 onClick={() => setEditingField('title')}
                             />
                         </>
@@ -185,7 +185,7 @@ const RecipeDetails = () => {
                                     target="_blank"
                                     rel="noreferrer"
                                     title={sourceLink}
-                                    className="text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis"
+                                    className="link-blush text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis"
                                 >
                                     {sourceText}
                                 </a>
@@ -195,7 +195,7 @@ const RecipeDetails = () => {
                                 </span>
                             )}
                             <Pencil
-                                className="w-3 h-4 pt-1 cursor-pointer text-blush-400"
+                                className="w-3 h-4 pt-1 cursor-pointer link-blush"
                                 onClick={() => setEditingField('source')}
                             />
                         </>
