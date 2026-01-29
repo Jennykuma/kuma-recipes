@@ -1,19 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecipeDetails, useRecipeRating, useDeleteRecipe } from '../../hooks';
 import { Pencil } from 'lucide-react';
+import { type Recipe } from '../../../../api/src/services/recipes.types';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
 import DeleteModal from './components/DeleteModal';
+import useUpdateRecipe from '../../hooks/useUpdateRecipe';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const recipeId = id ?? '';
+
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [draft, setDraft] = useState<Partial<Recipe>>({});
+
     const { mutate: updateRating, isPending } = useRecipeRating(recipeId);
+    const { mutate: updateRecipe } = useUpdateRecipe(recipeId);
     const { mutate: deleteRecipe } = useDeleteRecipe(recipeId);
     const { recipe } = useRecipeDetails(recipeId);
+
+    useEffect(() => {});
 
     const handleChangeRating = (rating: number) => {
         if (!recipe) {
@@ -25,10 +34,32 @@ const RecipeDetails = () => {
         }
     };
 
+    const handleCancel = (field: keyof Recipe) => {
+        setDraft((prev) => {
+            const next = { ...prev };
+            delete next[field];
+            return next;
+        });
+        setIsEditing(false);
+    };
+
     const handleDelete = () => {
         if (!recipeId) return;
         setShowDeleteModal(false);
         deleteRecipe(undefined, { onSuccess: () => navigate('/') });
+    };
+
+    const handleSave = (field: keyof Recipe) => {
+        const value = draft[field] ?? recipe?.[field];
+        if (value === undefined) return;
+
+        try {
+            updateRecipe({ [field]: value });
+            setIsEditing(false);
+        } catch (err) {
+            console.error(err);
+            handleCancel(field);
+        }
     };
 
     const sourceText = recipe?.source?.trim() ?? '';
@@ -53,10 +84,37 @@ const RecipeDetails = () => {
             <BackButton to="/" />
             <header className="flex items-center justify-between">
                 <span className="flex items-baseline gap-2">
-                    <h1 className="shrink-0 text-lg text-left font-bold">
-                        {recipe?.title}
-                    </h1>
-                    <Pencil className="w-4 h-4 cursor-pointer text-blush-400" />
+                    {isEditing ? (
+                        <>
+                            <input
+                                className="text-lg font-bold border-b border-gray-300 bg-transparent focus:outline-none"
+                                value={draft?.title ?? recipe?.title}
+                                onChange={(e) =>
+                                    setDraft({ ...draft, title: e.target.value })
+                                }
+                            />
+                            <button
+                                className="text-xs text-blush-400"
+                                onClick={() => handleSave('title')}
+                            >
+                                Save
+                            </button>
+                            <button
+                                className="text-xs text-gray-400"
+                                onClick={() => handleCancel('title')}
+                            >
+                                Cancel
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <h1 className="text-lg font-bold">{recipe?.title}</h1>
+                            <Pencil
+                                className="w-4 h-4 cursor-pointer text-blush-400"
+                                onClick={() => setIsEditing(true)}
+                            />
+                        </>
+                    )}
                 </span>
                 <button
                     onClick={() => setShowDeleteModal(true)}

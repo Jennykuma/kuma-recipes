@@ -49,7 +49,7 @@ export async function updateRecipe(recipeId: string, updatedRecipe: UpdateRecipe
         where: {
             id: recipeId,
         },
-        data: updateRecipe,
+        data: updatedRecipe,
     });
 }
 

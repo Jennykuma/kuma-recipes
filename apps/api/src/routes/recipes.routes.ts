@@ -50,7 +50,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         reply.code(200).send(result);
     });
 
-    fastify.patch<{ Body: UpdateRecipeBody }>('/:id/', async (request, reply) => {
+    fastify.patch<{ Body: UpdateRecipeBody }>('/:id', async (request, reply) => {
         const params = request.params as { id: string };
         const result = await updateRecipe(params.id, request.body);
         reply.code(200).send(result);
