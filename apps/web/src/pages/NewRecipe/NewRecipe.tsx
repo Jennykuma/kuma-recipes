@@ -209,10 +209,10 @@ const NewRecipe = () => {
                                 </div>
                             </div>
 
-                            <div className="shrink-0 bg-white border-t border-gray-200 text-xs p-4 flex justify-end gap-3">
+                            <div className="shrink-0 bg-white border-t border-gray-200 text-sm p-4 flex justify-end gap-3">
                                 <button
                                     type="button"
-                                    className="bg-sage-50 text-sage-400 border border-sage-300 hover:bg-sage-300 hover:text-white p-2 rounded transition-colors"
+                                    className="font-jua text-sage-400 border border-sage-300 bg-surface hover:bg-sage-100 px-5 py-2.5 rounded-xl transition-colors"
                                     onClick={() =>
                                         shouldConfirmCancel
                                             ? setShowCancelModal(true)
@@ -223,7 +223,7 @@ const NewRecipe = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-blush-200 hover:bg-blush-400 p-2 rounded text-white shadow-sm transition-colors"
+                                    className="font-jua bg-blush-200 hover:bg-blush-400 px-5 py-2.5 rounded-xl text-white transition-colors"
                                 >
                                     Save recipe
                                 </button>

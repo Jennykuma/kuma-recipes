@@ -118,7 +118,10 @@ const RecipeDetails = () => {
                 />
                 <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="text-xs text-white border border-blush-400 bg-blush-400 px-2.5 py-1 ml-8 rounded hover:bg-blush-200 hover:text-white transition-colors"
+                    className="
+                        font-jua text-sm text-red-500
+                        px-3 py-1.5 rounded-xl
+                        bg-red-50 hover:bg-red-100"
                 >
                     Delete
                 </button>

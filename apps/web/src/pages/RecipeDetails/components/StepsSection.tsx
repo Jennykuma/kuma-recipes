@@ -64,15 +64,18 @@ const StepsSection = ({
                 <FormProvider {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
                         <StepsTable />
-                        <div className="mt-2 flex gap-2 justify-end">
+                        <div className="mt-1 flex gap-2 justify-end">
                             <button
-                                className="text-xs text-gray-400"
+                                className="font-jua text-xs text-gray-400 hover:text-gray-500"
                                 type="button"
                                 onClick={handleCancel}
                             >
                                 Cancel
                             </button>
-                            <button className="text-xs text-blush-400" type="submit">
+                            <button
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                type="submit"
+                            >
                                 Save
                             </button>
                         </div>

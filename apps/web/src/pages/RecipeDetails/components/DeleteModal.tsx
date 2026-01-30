@@ -20,13 +20,13 @@ const DeleteModal = ({ onClose, onConfirm, title }: DeleteModalProps) => {
                 </p>
                 <div className="mt-4 flex justify-end gap-2">
                     <button
-                        className="rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100"
+                        className="font-jua rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100"
                         onClick={onClose}
                     >
                         Cancel
                     </button>
                     <button
-                        className="rounded-md bg-blush-200 px-3 py-1.5 text-xs text-white hover:bg-blush-400"
+                        className="font-jua rounded-md bg-red-500 px-3 py-1.5 text-xs text-white hover:bg-red-600"
                         onClick={onConfirm}
                     >
                         Delete

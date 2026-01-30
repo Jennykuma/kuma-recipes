@@ -25,7 +25,7 @@ const BackButton = ({ to, onClick }: BackButtonProps) => {
             type="button"
             tabIndex={0}
             className="
-                text-xs text-gray-400 p-0
+                font-jua text-xs text-gray-400 p-0
                 visited:text-gray-400 hover:text-accent
                 inline-flex items-center gap-1
                 transition-colors"

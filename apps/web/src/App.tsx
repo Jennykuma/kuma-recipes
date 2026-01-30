@@ -21,9 +21,9 @@ const App = () => {
                     tabIndex={0}
                     className="
                     inline-flex items-center gap-2 
-                    text-xs text-blush-400
+                    font-jua text-sm text-blush-500
                     border border-blush-200 bg-white
-                    px-2.5 py-1.5 rounded-xl
+                    px-4 py-2 rounded-xl
                     hover:bg-blush-200 hover:text-white
                     transition-colors"
                     to={`/recipes/new`}

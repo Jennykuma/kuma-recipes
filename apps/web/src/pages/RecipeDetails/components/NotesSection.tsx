@@ -34,9 +34,9 @@ const NotesSection = ({
                     onBlur={onSave}
                 ></textarea>
                 {isEditing && (
-                    <div className="mt-3 flex gap-2 justify-end max-w-125">
+                    <div className="mt-1 flex gap-2 justify-end max-w-125">
                         <button
-                            className="text-xs text-gray-400"
+                            className="font-jua text-xs text-gray-400 hover:text-gray-500"
                             type="button"
                             onClick={onCancel}
                         >
@@ -44,7 +44,7 @@ const NotesSection = ({
                         </button>
                         <button
                             onClick={onSave}
-                            className="text-xs text-blush-400"
+                            className="font-jua text-xs text-blush-400 hover:text-blush-500"
                             type="submit"
                         >
                             Save

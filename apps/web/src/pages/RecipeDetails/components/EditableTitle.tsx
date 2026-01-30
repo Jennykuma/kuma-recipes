@@ -28,10 +28,16 @@ const EditableTitle = ({
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onSave}
                 />
-                <button className="text-xs text-blush-400 shrink-0" onClick={onSave}>
+                <button
+                    className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0"
+                    onClick={onSave}
+                >
                     Save
                 </button>
-                <button className="text-xs text-gray-400 shrink-0" onClick={onCancel}>
+                <button
+                    className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0"
+                    onClick={onCancel}
+                >
                     Cancel
                 </button>
             </span>
