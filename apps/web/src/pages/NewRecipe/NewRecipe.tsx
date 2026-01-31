@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import IngredientsTable from './components/IngredientsTable';
@@ -7,7 +8,7 @@ import { recipe as recipeApi } from '../../api';
 import { type RecipeFormValues } from '../../types/recipeForm';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
-import { useState } from 'react';
+import Tags from '../../components/Tags';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
@@ -178,6 +179,7 @@ const NewRecipe = () => {
                                 >
                                     Tags
                                 </label>
+                                <Tags />
                             </div>
                         </div>
 
