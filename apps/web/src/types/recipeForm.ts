@@ -4,7 +4,7 @@ export type RecipeFormValues = {
     notes: string;
     rating: number;
     remake: boolean;
-    tags: string[];
+    tags: { tag: string }[];
     ingredients: { ingredient: string }[];
     steps: { step: string }[];
 };

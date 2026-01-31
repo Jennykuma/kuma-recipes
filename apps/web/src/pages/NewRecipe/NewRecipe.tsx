@@ -134,6 +134,26 @@ const NewRecipe = () => {
                             </div>
 
                             <div className="space-y-1">
+                                <div className="space-y-0.5">
+                                    <label
+                                        htmlFor="source"
+                                        className="block text-sm text-left font-semibold"
+                                    >
+                                        Source
+                                    </label>
+                                    <span className="block text-[11px] text-left text-gray-400">
+                                        Original recipe link
+                                    </span>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-sm"
+                                    placeholder="URL"
+                                    {...register('source')}
+                                ></input>
+                            </div>
+
+                            <div className="space-y-1">
                                 <label
                                     htmlFor="notes"
                                     className="block text-sm text-left font-semibold"
@@ -152,23 +172,12 @@ const NewRecipe = () => {
                             </div>
 
                             <div className="space-y-1">
-                                <div className="space-y-0.5">
-                                    <label
-                                        htmlFor="source"
-                                        className="block text-sm text-left font-semibold"
-                                    >
-                                        Source
-                                    </label>
-                                    <span className="block text-[11px] text-left text-gray-400">
-                                        Original recipe link
-                                    </span>
-                                </div>
-                                <input
-                                    type="text"
-                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-sm"
-                                    placeholder="URL"
-                                    {...register('source')}
-                                ></input>
+                                <label
+                                    htmlFor="notes"
+                                    className="block text-sm text-left font-semibold"
+                                >
+                                    Tags
+                                </label>
                             </div>
                         </div>
 
