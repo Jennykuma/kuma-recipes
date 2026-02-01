@@ -76,8 +76,8 @@ const IngredientsTable = () => {
                             className={classNames(
                                 'w-full text-sm pl-1 rounded-md border w-100 transition-colors',
                                 activeIndex === index
-                                    ? 'border-blue-500 text-gray-900 bg-white'
-                                    : 'border-gray-300 text-gray-600 bg-gray-50'
+                                    ? 'border-blush-500'
+                                    : 'border-gray-300'
                             )}
                             {...register(`ingredients.${index}.ingredient`)}
                             onFocus={() => setActiveIndex(index)}
@@ -107,7 +107,7 @@ const IngredientsTable = () => {
 
             <button
                 type="button"
-                className="mt-2 inline-flex items-center gap-2 
+                className="mt-2 inline-flex items-center gap-2
                            text-xs text-blush-400
                            border border-blush-200 bg-white
                            px-2.5 py-1.5 rounded-full

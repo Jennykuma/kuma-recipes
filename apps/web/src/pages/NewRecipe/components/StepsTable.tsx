@@ -68,7 +68,7 @@ const StepsTable = () => {
                         <span
                             className={classNames(
                                 'text-xs w-8',
-                                activeIndex === index ? 'text-gray-700' : 'text-gray-400'
+                                activeIndex === index ? 'text-gray-500' : 'text-gray-400'
                             )}
                         >
                             {index + 1}.
@@ -77,8 +77,8 @@ const StepsTable = () => {
                             className={classNames(
                                 'w-full text-sm pl-1 rounded-md border w-100 transition-colors',
                                 activeIndex === index
-                                    ? 'border-blue-500 text-gray-900 bg-white'
-                                    : 'border-gray-300 text-gray-600 bg-gray-50'
+                                    ? 'border-blush-500'
+                                    : 'border-gray-300'
                             )}
                             {...register(`steps.${index}.step`)}
                             onFocus={() => setActiveIndex(index)}
@@ -94,7 +94,7 @@ const StepsTable = () => {
                         {fields.length !== 1 && (
                             <CircleMinus
                                 type="button"
-                                className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer 
+                                className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer
                                            text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
                                 aria-label="Remove step"
                                 onClick={() => removeAndFocus(index)}
@@ -106,7 +106,7 @@ const StepsTable = () => {
 
             <button
                 type="button"
-                className="mt-2 inline-flex items-center gap-2 
+                className="mt-2 inline-flex items-center gap-2
                            text-xs text-blush-400
                            border border-blush-200 bg-white
                            px-2.5 py-1.5 rounded-full
