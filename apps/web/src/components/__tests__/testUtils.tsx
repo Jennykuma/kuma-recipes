@@ -5,7 +5,7 @@ import { type RecipeFormValues } from '../../types/recipeForm';
 
 const baseDefaults: RecipeFormValues = {
     title: '',
-    url: '',
+    source: '',
     notes: '',
     rating: 0,
     remake: false,

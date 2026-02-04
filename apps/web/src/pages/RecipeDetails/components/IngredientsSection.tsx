@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
-import type { IngredientsForm } from '../../../../../api/src/services/recipes.types';
+import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
 
 type IngredientsSectionProps = {
     ingredients?: string[];
@@ -49,7 +49,7 @@ const IngredientsSection = ({
     return (
         <div className="w-full max-w-125">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
                     Ingredients
                 </span>
                 {!isEditing && (

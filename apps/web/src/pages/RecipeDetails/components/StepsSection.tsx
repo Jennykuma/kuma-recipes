@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
-import type { StepsForm } from '../../../../../api/src/services/recipes.types';
+import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
 
 type StepsSectionProps = {
     steps?: string[];
@@ -49,7 +49,7 @@ const StepsSection = ({
     return (
         <div className="w-full max-w-150">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
                     Steps
                 </span>
                 {!isEditing && (

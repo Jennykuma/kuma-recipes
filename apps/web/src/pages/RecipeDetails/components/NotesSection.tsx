@@ -20,7 +20,7 @@ const NotesSection = ({
     if (isEditing) {
         return (
             <div className="flex flex-col w-full min-w-0">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
                     Notes
                 </span>
                 <textarea
@@ -60,7 +60,7 @@ const NotesSection = ({
             <span
                 className="
                     text-[10px] uppercase tracking-wide
-                    text-gray-500 bg-sage-50 rounded-full"
+                    text-gray-500 rounded-full"
             >
                 Notes
             </span>

@@ -21,8 +21,16 @@ model Recipe {
   rating      Int?
   remake      Boolean? @default(false)
   steps       String[]
-  tags        String[]
   source      String?
+  tags        Tag[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique // normalized unique key for lookups + URL filters
+  recipes   Recipe[]
+  createdAt DateTime @default(now())
 }

@@ -7,7 +7,7 @@ vi.mock('../../src/services/recipes.service', () => ({
     recipeDetails: vi.fn(),
 }));
 
-import { listRecipes, recipeDetails } from '../../src/services/recipes.service';
+import { listRecipes, recipeDetails } from '../../src/services/recipes/recipes.service';
 
 describe('recipes routes', () => {
     let app: FastifyInstance;

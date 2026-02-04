@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecipeDetails, useDeleteRecipe, useUpdateRecipe } from '../../hooks';
-import { type Recipe } from '../../../../api/src/services/recipes.types';
+import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
 import DeleteModal from './components/DeleteModal';
@@ -120,7 +120,7 @@ const RecipeDetails = () => {
                     onClick={() => setShowDeleteModal(true)}
                     className="
                         font-jua text-sm text-red-500
-                        px-3 py-1.5 rounded-xl
+                        ml-2 px-3 py-1.5 rounded-xl
                         bg-red-50 hover:bg-red-100"
                 >
                     Delete

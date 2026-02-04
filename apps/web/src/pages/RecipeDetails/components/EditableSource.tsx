@@ -38,7 +38,7 @@ const EditableSource = ({
 
     return (
         <span className="flex items-baseline gap-2 w-full">
-            <span className="text-[10px] uppercase tracking-wide text-gray-500 bg-sage-50 rounded-full shrink-0">
+            <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full shrink-0">
                 Source
             </span>
             {isEditing ? (

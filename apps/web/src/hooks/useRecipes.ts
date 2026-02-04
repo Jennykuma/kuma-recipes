@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { RecipeListItem } from '../../../api/src/services/recipes.types';
+import type { RecipeListItem } from '../../../api/src/services/recipes/recipes.types';
 import { recipe as recipeApi } from '../api';
 
 const useRecipes = () => {

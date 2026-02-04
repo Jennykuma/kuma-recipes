@@ -4,7 +4,7 @@ import type {
     UpdateRecipeBody,
     Recipe,
     RecipeListItem,
-} from '../../../api/src/services/recipes.types';
+} from '../../../api/src/services/recipes/recipes.types';
 
 const useUpdateRecipe = (id: string) => {
     const queryClient = useQueryClient();

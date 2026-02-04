@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { type Tag } from '../tags/tags.types';
 
 export type Recipe = {
     id: string;
@@ -7,7 +7,7 @@ export type Recipe = {
     rating: number;
     remake: boolean;
     steps: string[];
-    tags: string[];
+    tags: Tag[];
     title: string;
     source: string;
     createdAt: string;
@@ -18,6 +18,7 @@ export type RecipeListItem = {
     id: string;
     rating: number;
     title: string;
+    tags?: Tag[];
 };
 
 export type NewRecipeBody = {
@@ -27,7 +28,7 @@ export type NewRecipeBody = {
     rating?: number;
     remake?: boolean;
     steps?: string[];
-    tags?: string[];
+    tagIds?: string[];
     source?: string;
 };
 
@@ -38,7 +39,7 @@ export type UpdateRecipeBody = Partial<{
     remake: boolean;
     ingredients: string[];
     steps: string[];
-    tags: string[];
+    tagIds?: string[];
     rating: number;
 }>;
 

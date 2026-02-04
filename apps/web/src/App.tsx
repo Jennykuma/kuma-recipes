@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { RecipeListItem } from '../../api/src/services/recipes.types';
+import type { RecipeListItem } from '../../api/src/services/recipes/recipes.types';
 import useRecipes from './hooks/useRecipes';
 import RecipeCard from './components/RecipeCard';
 import './App.css';

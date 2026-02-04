@@ -3,7 +3,7 @@ import type {
     RecipeListItem,
     NewRecipeBody,
     UpdateRecipeBody,
-} from '../../../api/src/services/recipes.types';
+} from '../../../api/src/services/recipes/recipes.types';
 
 type GetRecipeDetailsResponse = {
     recipe: Recipe;
