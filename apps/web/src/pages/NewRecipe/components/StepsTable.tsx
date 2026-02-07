@@ -75,10 +75,10 @@ const StepsTable = () => {
                         </span>
                         <input
                             className={classNames(
-                                'w-full text-sm pl-1 rounded-md border w-100 transition-colors',
+                                'w-full text-sm pl-1 rounded-md border w-100 transition-colors focus:outline-none',
                                 activeIndex === index
-                                    ? 'border-blush-500'
-                                    : 'border-gray-300'
+                                    ? 'border-sage-300'
+                                    : 'border-gray-200'
                             )}
                             {...register(`steps.${index}.step`)}
                             onFocus={() => setActiveIndex(index)}

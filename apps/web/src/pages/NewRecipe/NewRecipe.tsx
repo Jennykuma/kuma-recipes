@@ -82,7 +82,12 @@ const NewRecipe = () => {
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex-1 min-h-0">
                     <div className="h-full md:flex gap-8 min-h-0 items-stretch">
-                        <div className="md:sticky top-6 w-full md:w-1/3 self-start p-6 space-y-6 border border-sage-300/50 rounded-md shadow-sm shadow-gray-100">
+                        <div
+                            className="
+                            md:sticky top-6 w-full md:w-1/3 self-start
+                            p-6 space-y-6 border border-sage-300/50
+                            rounded-md shadow-sm shadow-gray-100"
+                        >
                             <div className="space-y-1">
                                 <label
                                     htmlFor="title"
@@ -93,7 +98,9 @@ const NewRecipe = () => {
                                 <input
                                     id="title"
                                     type="text"
-                                    className="w-full pl-1 rounded-md border border-gray-200"
+                                    className="
+                                        w-full pl-1 rounded-md border border-gray-200
+                                        focus:border-sage-300 focus:outline-none"
                                     {...register('title', { validate: isTitleValid })}
                                 />
                                 {formState.isSubmitted && errors.title && (
@@ -148,7 +155,10 @@ const NewRecipe = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-sm"
+                                    className="
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
                                     placeholder="URL"
                                     {...register('source')}
                                 ></input>
@@ -165,7 +175,10 @@ const NewRecipe = () => {
                                     Messy thoughts are welcome
                                 </span>
                                 <textarea
-                                    className="w-full p-2 rounded-md text-xs resize-none border border-gray-200 rounded-sm placeholder:text-xs"
+                                    className="
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm placeholder:text-xs
+                                        focus:border-sage-300 focus:outline-none"
                                     rows={4}
                                     placeholder="e.g. too sweet, bake 2 min longer next time"
                                     {...register('notes')}
@@ -183,7 +196,12 @@ const NewRecipe = () => {
                             </div>
                         </div>
 
-                        <div className="w-full md:w-2/3 md:h-full self-stretch flex flex-col min-h-0 border border-sage-300/50 rounded-md shadow-sm shadow-gray-100">
+                        <div
+                            className="
+                            w-full md:w-2/3 md:h-full self-stretch
+                            flex flex-col min-h-0 border border-sage-300/50
+                            rounded-md shadow-sm shadow-gray-100"
+                        >
                             <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 pb-28">
                                 <div className="space-y-1">
                                     <label
@@ -223,7 +241,10 @@ const NewRecipe = () => {
                             <div className="shrink-0 border-t border-gray-200 text-sm p-4 flex justify-end gap-3">
                                 <button
                                     type="button"
-                                    className="font-jua text-sage-400 border border-sage-300 bg-surface hover:bg-sage-100 px-5 py-2.5 rounded-xl transition-colors"
+                                    className="
+                                        font-jua text-sage-400 border border-sage-300
+                                        bg-surface hover:bg-sage-100 px-5 py-2.5
+                                        rounded-xl transition-colors"
                                     onClick={() =>
                                         shouldConfirmCancel
                                             ? setShowCancelModal(true)
@@ -234,7 +255,9 @@ const NewRecipe = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="font-jua bg-blush-200 hover:bg-blush-400 px-5 py-2.5 rounded-xl text-white transition-colors"
+                                    className="
+                                        font-jua bg-blush-200 hover:bg-blush-400
+                                        px-5 py-2.5 rounded-xl text-white transition-colors"
                                 >
                                     Save recipe
                                 </button>
