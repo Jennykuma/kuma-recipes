@@ -1,10 +1,10 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { recipe as recipeApi } from '../api';
+import { recipe as recipeApi } from '../../api';
 import type {
     UpdateRecipeBody,
     Recipe,
     RecipeListItem,
-} from '../../../api/src/services/recipes/recipes.types';
+} from '../../../../api/src/services/recipes/recipes.types';
 
 const useUpdateRecipe = (id: string) => {
     const queryClient = useQueryClient();

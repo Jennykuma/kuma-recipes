@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useCreateTag, useDeleteTag, useTagsQuery } from '../hooks';
 import { type RecipeFormValues } from '../types/recipeForm';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
-import { X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 const Tags = () => {
     const { control, setValue } = useFormContext<RecipeFormValues>();
@@ -105,7 +105,9 @@ const Tags = () => {
 
     const hasExactMatch = useMemo(
         () =>
-            options.some((tag) => tag.name.toLowerCase() === query.trim().toLowerCase()),
+            options.some(
+                (tag: Tag) => tag.name.toLowerCase() === query.trim().toLowerCase()
+            ),
         [options, query]
     );
 
@@ -133,7 +135,9 @@ const Tags = () => {
                         }}
                     >
                         {tag.name}
-                        <span className="text-gray-400">x</span>
+                        <span className="text-gray-400">
+                            <X className="w-2 h-2" />
+                        </span>
                     </button>
                 ))}
                 <input
@@ -170,7 +174,8 @@ const Tags = () => {
                             className="w-full text-left px-3 py-2 text-xs text-blush-400 hover:bg-blush-50"
                             onClick={createTagFromQuery}
                         >
-                            + Create &quot;{query.trim()}&quot;
+                            <Plus className="w-3 h-3 mr-1 mb-0.5 inline" /> Create &quot;
+                            {query.trim()}&quot;
                         </button>
                     )}
                     {options.map((tag: Tag) => {
