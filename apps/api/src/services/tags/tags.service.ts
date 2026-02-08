@@ -56,3 +56,7 @@ export async function createOrGetTag(name: string) {
         },
     });
 }
+
+export async function deleteTag(id: string) {
+    await prisma.tag.delete({ where: { id } });
+}

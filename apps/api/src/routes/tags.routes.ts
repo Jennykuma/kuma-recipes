@@ -1,5 +1,5 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
-import { listTags, createOrGetTag } from '../services/tags/tags.service';
+import { listTags, createOrGetTag, deleteTag } from '../services/tags/tags.service';
 import { type CreateTagBody } from '../services/tags/tags.types';
 
 const tagsRoutes: FastifyPluginAsync = async (fastify) => {
@@ -15,6 +15,13 @@ const tagsRoutes: FastifyPluginAsync = async (fastify) => {
         const body = (request.body as { tag?: CreateTagBody }).tag ?? request.body;
         const tag = await createOrGetTag(body.name);
         reply.code(201).send({ tag });
+    });
+
+    // DELETE /tags/:id
+    fastify.delete('/:id', async (request, reply) => {
+        const { id } = request.params as { id: string };
+        await deleteTag(id);
+        reply.code(204).send();
     });
 };
 
