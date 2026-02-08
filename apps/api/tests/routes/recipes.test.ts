@@ -2,12 +2,17 @@ import { FastifyInstance } from 'fastify';
 import { buildApp } from '../../src/app';
 import { vi } from 'vitest';
 
-vi.mock('../../src/services/recipes.service', () => ({
+vi.mock('../../src/services/recipes/recipes.service', () => ({
+    createNewRecipe: vi.fn(),
     listRecipes: vi.fn(),
     recipeDetails: vi.fn(),
 }));
 
-import { listRecipes, recipeDetails } from '../../src/services/recipes/recipes.service';
+import {
+    createNewRecipe,
+    listRecipes,
+    recipeDetails,
+} from '../../src/services/recipes/recipes.service';
 
 describe('recipes routes', () => {
     let app: FastifyInstance;
@@ -24,11 +29,19 @@ describe('recipes routes', () => {
     });
 
     test('POST /recipes should create a recipe', async () => {
+        const mockedCreateNewRecipe = vi.mocked(createNewRecipe);
+        mockedCreateNewRecipe.mockResolvedValue({
+            id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+            title: 'Matcha Cookies',
+            tags: [],
+        } as any);
+
         const res = await app.inject({
             method: 'POST',
             url: '/recipes',
             payload: {
                 title: 'Matcha Cookies',
+                tagIds: ['0f15302d-3bb6-4f73-b16c-dddfbd39bd44'],
             },
         });
 
@@ -95,7 +108,6 @@ describe('recipes routes', () => {
         });
 
         expect(res.statusCode).toBe(200);
-        console.log('res.json(): ', res.json());
         expect(res.json()).toEqual({
             recipe: {
                 id: id,

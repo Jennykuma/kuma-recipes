@@ -48,6 +48,7 @@ const NewRecipe = () => {
     const showStepsError = formState.isSubmitted && !stepsValid;
 
     const onSubmit = async (data: RecipeFormValues) => {
+        console.log('Submitting recipe with data:', data);
         const normalizedIngredients = data.ingredients
             .map((i) => i.ingredient.trim())
             .filter((ingredient) => ingredient !== '');
