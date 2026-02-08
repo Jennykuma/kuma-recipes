@@ -92,13 +92,17 @@ const StepsTable = () => {
                             }
                         />
                         {fields.length !== 1 && (
-                            <CircleMinus
+                            <button
                                 type="button"
-                                className="w-4 h-4 ml-2 -translate-y-[1px] cursor-pointer
-                                           text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
+                                className="ml-2 -translate-y-[1px]"
                                 aria-label="Remove step"
                                 onClick={() => removeAndFocus(index)}
-                            />
+                            >
+                                <CircleMinus
+                                    className="w-4 h-4 text-red-300 hover:text-red-500 opacity-80 hover:opacity-100"
+                                    aria-hidden="true"
+                                />
+                            </button>
                         )}
                     </div>
                 );

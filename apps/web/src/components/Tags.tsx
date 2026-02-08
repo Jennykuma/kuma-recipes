@@ -1,19 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useCreateTag, useDeleteTag, useTagsQuery } from '../hooks';
+import useCreateTag from '../hooks/tags/useCreateTag';
+import useDeleteTag from '../hooks/tags/useDeleteTag';
+import useTagsQuery from '../hooks/tags/useTagsQuery';
 import { type RecipeFormValues } from '../types/recipeForm';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
 import { Plus, X } from 'lucide-react';
 
+const EMPTY_SELECTED_IDS: string[] = [];
+
 const Tags = () => {
     const { control, setValue } = useFormContext<RecipeFormValues>();
     const watchedTagIds = useWatch({ control, name: 'tagIds' });
-    const selectedIds = useMemo(() => watchedTagIds ?? [], [watchedTagIds]);
+    const selectedIds = watchedTagIds ?? EMPTY_SELECTED_IDS;
+    const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
-    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
+    const selectedTagCacheRef = useRef<Map<string, Tag>>(new Map());
 
     const { data: options = [], isLoading } = useTagsQuery(debouncedQuery);
     const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
@@ -41,40 +46,25 @@ const Tags = () => {
         };
     }, [query]);
 
-    const selectedIdsKey = useMemo(() => selectedIds.join('|'), [selectedIds]);
-
-    useEffect(() => {
-        setSelectedTags((prev) => {
-            const map = new Map<string, Tag>();
-            prev.forEach((tag) => map.set(tag.id, tag));
-            options.forEach((tag) => {
-                if (selectedIds.includes(tag.id)) {
-                    map.set(tag.id, tag);
-                }
-            });
-
-            const next = Array.from(map.values()).filter((tag) =>
-                selectedIds.includes(tag.id)
-            );
-
-            const same =
-                prev.length === next.length &&
-                prev.every(
-                    (tag, index) =>
-                        tag.id === next[index]?.id && tag.name === next[index]?.name
-                );
-
-            return same ? prev : next;
+    const selectedTags = useMemo(() => {
+        options.forEach((tag) => {
+            if (selectedIdSet.has(tag.id)) {
+                selectedTagCacheRef.current.set(tag.id, tag);
+            }
         });
-    }, [options, selectedIdsKey]);
+
+        return selectedIds
+            .map((id) => selectedTagCacheRef.current.get(id))
+            .filter((tag): tag is Tag => Boolean(tag));
+    }, [options, selectedIds, selectedIdSet]);
 
     const selectTag = (tag: Tag) => {
-        if (selectedIds.includes(tag.id)) return;
+        if (selectedIdSet.has(tag.id)) return;
         setValue('tagIds', [...selectedIds, tag.id], {
             shouldDirty: true,
             shouldTouch: true,
         });
-        setSelectedTags((prev) => [...prev, tag]);
+        selectedTagCacheRef.current.set(tag.id, tag);
         setQuery('');
     };
 
@@ -84,7 +74,6 @@ const Tags = () => {
             selectedIds.filter((tagId) => tagId !== id),
             { shouldDirty: true, shouldTouch: true }
         );
-        setSelectedTags((prev) => prev.filter((tag) => tag.id !== id));
     };
 
     const handleDeleteTag = async (id: string) => {
@@ -141,6 +130,7 @@ const Tags = () => {
                     </button>
                 ))}
                 <input
+                    id="tags-input"
                     type="text"
                     className="flex-1 min-w-[120px] border-0 bg-transparent text-sm focus:outline-none"
                     placeholder="Add tags..."
@@ -179,7 +169,7 @@ const Tags = () => {
                         </button>
                     )}
                     {options.map((tag: Tag) => {
-                        const isSelected = selectedIds.includes(tag.id);
+                        const isSelected = selectedIdSet.has(tag.id);
                         return (
                             <div
                                 key={tag.id}

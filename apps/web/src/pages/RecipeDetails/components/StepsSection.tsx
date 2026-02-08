@@ -53,10 +53,17 @@ const StepsSection = ({
                     Steps
                 </span>
                 {!isEditing && (
-                    <Pencil
-                        className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                    <button
+                        type="button"
                         onClick={onEdit}
-                    />
+                        aria-label="Edit steps"
+                        className="inline-flex items-center"
+                    >
+                        <Pencil
+                            className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                            aria-hidden="true"
+                        />
+                    </button>
                 )}
             </div>
 

@@ -47,7 +47,14 @@ const EditableTitle = ({
     return (
         <span className="flex w-full items-baseline gap-1">
             <h1 className="text-lg font-bold">{title}</h1>
-            <Pencil className="w-3 h-4 pt-1 cursor-pointer link-blush" onClick={onEdit} />
+            <button
+                type="button"
+                onClick={onEdit}
+                aria-label="Edit title"
+                className="inline-flex items-center"
+            >
+                <Pencil className="w-3 h-4 pt-1 cursor-pointer link-blush" aria-hidden="true" />
+            </button>
         </span>
     );
 };

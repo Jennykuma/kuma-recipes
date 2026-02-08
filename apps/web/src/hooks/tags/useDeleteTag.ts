@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { tags as tagsApi } from '../../api';
+import tagsApi from '../../api/tags';
 import type { Tag } from '../../../../api/src/services/tags/tags.types';
 
 const useDeleteTag = () => {

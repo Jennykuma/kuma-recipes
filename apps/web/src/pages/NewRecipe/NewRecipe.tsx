@@ -187,7 +187,7 @@ const NewRecipe = () => {
 
                             <div className="space-y-1">
                                 <label
-                                    htmlFor="notes"
+                                    htmlFor="tags-input"
                                     className="block text-sm text-left font-semibold"
                                 >
                                     Tags

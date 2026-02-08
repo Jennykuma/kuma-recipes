@@ -79,10 +79,17 @@ const EditableSource = ({
                             {sourceText || '—'}
                         </span>
                     )}
-                    <Pencil
-                        className="w-3 h-4 pt-1 cursor-pointer link-blush shrink-0"
+                    <button
+                        type="button"
                         onClick={onEdit}
-                    />
+                        aria-label="Edit source"
+                        className="inline-flex items-center shrink-0"
+                    >
+                        <Pencil
+                            className="w-3 h-4 pt-1 cursor-pointer link-blush shrink-0"
+                            aria-hidden="true"
+                        />
+                    </button>
                 </div>
             )}
         </span>
