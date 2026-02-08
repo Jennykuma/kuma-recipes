@@ -1,5 +1,7 @@
-export { default as useDeleteRecipe } from './useDeleteRecipe';
-export { default as useRecipeDetails } from './useRecipeDetails';
-export { default as useRecipes } from './useRecipes';
-export { default as useUpdateRecipe } from './useUpdateRecipe';
-export { useTags, useCreateTag, useDeleteTag } from './useTags';
+export { default as useDeleteRecipe } from './recipes/useDeleteRecipe';
+export { default as useRecipeDetails } from './recipes/useRecipeDetails';
+export { default as useRecipes } from './recipes/useRecipes';
+export { default as useUpdateRecipe } from './recipes/useUpdateRecipe';
+export { default as useTagsQuery } from './tags/useTagsQuery';
+export { default as useCreateTag } from './tags/useCreateTag';
+export { default as useDeleteTag } from './tags/useDeleteTag';

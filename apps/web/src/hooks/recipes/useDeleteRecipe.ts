@@ -1,5 +1,5 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { recipe as recipeApi } from '../api';
+import { recipe as recipeApi } from '../../api';
 
 const useDeleteRecipe = (id: string) => {
     const queryClient = useQueryClient();

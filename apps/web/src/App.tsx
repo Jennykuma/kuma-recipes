@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { RecipeListItem } from '../../api/src/services/recipes/recipes.types';
-import useRecipes from './hooks/useRecipes';
+import useRecipes from './hooks/recipes/useRecipes';
 import RecipeCard from './components/RecipeCard';
 import './App.css';
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useCreateTag, useDeleteTag, useTags } from '../hooks';
+import { useCreateTag, useDeleteTag, useTagsQuery } from '../hooks';
 import { type RecipeFormValues } from '../types/recipeForm';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
 import { X } from 'lucide-react';
@@ -15,7 +15,7 @@ const Tags = () => {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const { data: options = [], isLoading } = useTags(debouncedQuery);
+    const { data: options = [], isLoading } = useTagsQuery(debouncedQuery);
     const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
     const { mutateAsync: deleteTag } = useDeleteTag();
 
