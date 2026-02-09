@@ -1,0 +1,108 @@
+import { useEffect } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { Pencil, Tag as TagIcon } from 'lucide-react';
+import Tags from '../../../components/Tags';
+import type { Tag } from '../../../../../api/src/services/tags/tags.types';
+
+type TagsSectionProps = {
+    tags?: Tag[];
+    isEditing: boolean;
+    onEdit: () => void;
+    onSave: (tagIds: string[]) => void;
+    onCancel: () => void;
+};
+
+type TagsFormValues = {
+    tagIds: string[];
+};
+
+const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionProps) => {
+    const form = useForm<TagsFormValues>({
+        defaultValues: {
+            tagIds: tags?.map((tag) => tag.id) ?? [],
+        },
+    });
+    const selectedTagIds = useWatch({ control: form.control, name: 'tagIds' }) ?? [];
+
+    useEffect(() => {
+        form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
+    }, [tags, form]);
+
+    const handleCancel = () => {
+        form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
+        onCancel();
+    };
+
+    const handleSave = () => {
+        onSave(selectedTagIds);
+    };
+
+    return (
+        <div className="w-full">
+            <div className="flex flex-row items-baseline gap-1 mb-1">
+                <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                    <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                    Tags
+                </span>
+                {!isEditing && (
+                    <button
+                        type="button"
+                        onClick={onEdit}
+                        aria-label="Edit tags"
+                        className="inline-flex items-center"
+                    >
+                        <Pencil
+                            className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                            aria-hidden="true"
+                        />
+                    </button>
+                )}
+            </div>
+
+            {isEditing ? (
+                <FormProvider {...form}>
+                    <form
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            handleSave();
+                        }}
+                    >
+                        <Tags autoFocusInput />
+                        <div className="mt-1 flex gap-2 justify-end">
+                            <button
+                                className="font-jua text-xs text-gray-400 hover:text-gray-500"
+                                type="button"
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                type="submit"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </FormProvider>
+            ) : tags?.length ? (
+                <div className="flex flex-wrap gap-1.5">
+                    {tags.map((tag: Tag) => (
+                        <span
+                            key={tag.id}
+                            className="px-2.5 py-1 rounded-full text-[11px] bg-sage-50 text-gray-700"
+                        >
+                            {tag.name}
+                        </span>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-xs text-gray-600">
+                    Add tags to categorize your recipe.
+                </p>
+            )}
+        </div>
+    );
+};
+
+export default TagsSection;

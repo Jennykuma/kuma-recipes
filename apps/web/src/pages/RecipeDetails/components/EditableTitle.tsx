@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
 
 type EditableTitleProps = {
@@ -19,10 +20,19 @@ const EditableTitle = ({
     onSave,
     onCancel,
 }: EditableTitleProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (!isEditing) return;
+        inputRef.current?.focus();
+        inputRef.current?.select();
+    }, [isEditing]);
+
     if (isEditing) {
         return (
             <span className="flex w-full items-baseline gap-2">
                 <input
+                    ref={inputRef}
                     className="text-lg w-full max-w-125 font-bold border-b border-gray-300 bg-transparent focus:outline-none"
                     value={draftValue ?? ''}
                     onChange={(e) => onChange(e.target.value)}

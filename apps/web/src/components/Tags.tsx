@@ -3,14 +3,20 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import useCreateTag from '../hooks/tags/useCreateTag';
 import useDeleteTag from '../hooks/tags/useDeleteTag';
 import useTagsQuery from '../hooks/tags/useTagsQuery';
-import { type RecipeFormValues } from '../types/recipeForm';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
 import { Plus, X } from 'lucide-react';
 
 const EMPTY_SELECTED_IDS: string[] = [];
+type TagsFormValues = {
+    tagIds: string[];
+};
 
-const Tags = () => {
-    const { control, setValue } = useFormContext<RecipeFormValues>();
+type TagsProps = {
+    autoFocusInput?: boolean;
+};
+
+const Tags = ({ autoFocusInput = false }: TagsProps) => {
+    const { control, setValue } = useFormContext<TagsFormValues>();
     const watchedTagIds = useWatch({ control, name: 'tagIds' });
     const selectedIds = watchedTagIds ?? EMPTY_SELECTED_IDS;
     const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -18,6 +24,7 @@ const Tags = () => {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const selectedTagCacheRef = useRef<Map<string, Tag>>(new Map());
 
     const { data: options = [], isLoading } = useTagsQuery(debouncedQuery);
@@ -45,6 +52,12 @@ const Tags = () => {
             window.clearTimeout(id);
         };
     }, [query]);
+
+    useEffect(() => {
+        if (!autoFocusInput) return;
+        setDropdownOpen(true);
+        inputRef.current?.focus();
+    }, [autoFocusInput]);
 
     const selectedTags = useMemo(() => {
         options.forEach((tag) => {
@@ -101,7 +114,7 @@ const Tags = () => {
     );
 
     return (
-        <div ref={containerRef} className="w-full">
+        <div ref={containerRef} className="relative w-full">
             <div
                 className="min-h-[38px] w-full rounded-md border border-gray-200 bg-white px-2 py-1 flex flex-wrap gap-1 items-center"
                 role="button"
@@ -130,6 +143,7 @@ const Tags = () => {
                     </button>
                 ))}
                 <input
+                    ref={inputRef}
                     id="tags-input"
                     type="text"
                     className="flex-1 min-w-[120px] border-0 bg-transparent text-sm focus:outline-none"
@@ -149,7 +163,7 @@ const Tags = () => {
             </div>
 
             {dropdownOpen && (
-                <div className="mt-2 max-h-64 overflow-auto rounded-md border border-gray-100 bg-white shadow-sm">
+                <div className="absolute left-0 right-0 top-full z-30 max-h-64 overflow-auto rounded-md border border-gray-100 bg-white shadow-sm">
                     {(isLoading || isCreating) && (
                         <div className="px-3 py-2 text-xs text-gray-400">Loading...</div>
                     )}

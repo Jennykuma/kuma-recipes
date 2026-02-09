@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
 
 type EditableSourceProps = {
@@ -8,6 +9,7 @@ type EditableSourceProps = {
     onChange: (value: string) => void;
     onSave: () => void;
     onCancel: () => void;
+    hideLabel?: boolean;
 };
 
 const EditableSource = ({
@@ -18,7 +20,16 @@ const EditableSource = ({
     onChange,
     onSave,
     onCancel,
+    hideLabel = false,
 }: EditableSourceProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (!isEditing) return;
+        inputRef.current?.focus();
+        inputRef.current?.select();
+    }, [isEditing]);
+
     const sourceText = source?.trim() ?? '';
     const sourceLink = (() => {
         if (!sourceText) return null;
@@ -38,12 +49,15 @@ const EditableSource = ({
 
     return (
         <span className="flex items-baseline gap-2 w-full">
-            <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full shrink-0">
-                Source
-            </span>
+            {!hideLabel && (
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full shrink-0">
+                    Source
+                </span>
+            )}
             {isEditing ? (
                 <div className="flex w-full items-baseline gap-2">
                     <input
+                        ref={inputRef}
                         className="w-full max-w-125 border-b border-gray-300 bg-transparent focus:outline-none"
                         value={draftValue ?? ''}
                         onChange={(e) => onChange(e.target.value)}

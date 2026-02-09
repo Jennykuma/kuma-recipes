@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Link2, RotateCcw, Star } from 'lucide-react';
 import { useRecipeDetails, useDeleteRecipe, useUpdateRecipe } from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
 import Rating from '../../components/Rating';
@@ -12,6 +13,7 @@ import StepsSection from './components/StepsSection';
 import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
 import PhotosSection from './components/PhotosSection';
+import TagsSection from './components/TagsSection';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
@@ -77,6 +79,19 @@ const RecipeDetails = () => {
         setEditingField(null);
     };
 
+    const handleTagsSave = async (tagIds: string[]) => {
+        try {
+            await updateRecipeAsync({ tagIds });
+            setEditingField(null);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleTagsCancel = () => {
+        setEditingField(null);
+    };
+
     const handleSave = async (field: keyof Recipe) => {
         const value = draft[field] ?? recipe?.[field];
         if (value === undefined) return;
@@ -135,29 +150,80 @@ const RecipeDetails = () => {
             ) : null}
 
             <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="text-sm flex flex-col space-y-3 items-start md:col-span-2">
-                    <Rating
-                        value={recipe?.rating}
-                        onChange={handleChangeRating}
-                        className="justify-end"
-                    />
-                    <RemakeToggle
-                        checked={recipe?.remake}
-                        onToggle={handleToggleRemake}
-                    />
+                <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 md:col-span-2">
+                    <div className="w-full flex flex-col gap-4 text-sm">
+                        <TagsSection
+                            tags={recipe?.tags}
+                            isEditing={editingField === 'tags'}
+                            onEdit={() => setEditingField('tags')}
+                            onSave={handleTagsSave}
+                            onCancel={handleTagsCancel}
+                        />
 
-                    <EditableSource
-                        source={recipe?.source}
-                        isEditing={editingField === 'source'}
-                        draftValue={draft.source}
-                        onEdit={() => {
-                            setDraft({ ...draft, source: recipe?.source ?? '' });
-                            setEditingField('source');
-                        }}
-                        onChange={(value) => setDraft({ ...draft, source: value })}
-                        onSave={() => handleSave('source')}
-                        onCancel={() => handleCancel('source')}
-                    />
+                        <div className="h-px w-full bg-gray-100" />
+
+                        <div className="flex items-center gap-4">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                                <Star
+                                    className="h-3 w-3 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                                Rating
+                            </span>
+                            <Rating
+                                value={recipe?.rating}
+                                onChange={handleChangeRating}
+                                className="justify-start"
+                            />
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                                <RotateCcw
+                                    className="h-3 w-3 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                                Remake
+                            </span>
+                            <RemakeToggle
+                                checked={recipe?.remake}
+                                onToggle={handleToggleRemake}
+                                label="Would remake"
+                            />
+                        </div>
+
+                        <div className="h-px w-full bg-gray-100" />
+
+                        <div className="flex items-center gap-4">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                                <Link2
+                                    className="h-3 w-3 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                                Source
+                            </span>
+                            <div className="min-w-0 flex-1">
+                                <EditableSource
+                                    source={recipe?.source}
+                                    isEditing={editingField === 'source'}
+                                    draftValue={draft.source}
+                                    hideLabel
+                                    onEdit={() => {
+                                        setDraft({
+                                            ...draft,
+                                            source: recipe?.source ?? '',
+                                        });
+                                        setEditingField('source');
+                                    }}
+                                    onChange={(value) =>
+                                        setDraft({ ...draft, source: value })
+                                    }
+                                    onSave={() => handleSave('source')}
+                                    onCancel={() => handleCancel('source')}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
