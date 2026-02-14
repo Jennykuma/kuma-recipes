@@ -117,8 +117,9 @@ const RecipeDetails = () => {
 
     return (
         <div className="p-8">
-            <BackButton to="/" />
-            <header className="flex items-center justify-between mb-1">
+            <div className="mx-auto w-full max-w-7xl">
+                <BackButton to="/" />
+                <header className="flex items-center justify-between mb-1">
                 <EditableTitle
                     title={recipe?.title}
                     isEditing={editingField === 'title'}
@@ -141,123 +142,124 @@ const RecipeDetails = () => {
                 >
                     Delete
                 </button>
-            </header>
-            {showDeleteModal ? (
-                <DeleteModal
-                    title={recipe?.title}
-                    onClose={() => setShowDeleteModal(false)}
-                    onConfirm={handleDelete}
-                />
-            ) : null}
+                </header>
+                {showDeleteModal ? (
+                    <DeleteModal
+                        title={recipe?.title}
+                        onClose={() => setShowDeleteModal(false)}
+                        onConfirm={handleDelete}
+                    />
+                ) : null}
 
-            <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 md:col-span-2">
-                    <div className="w-full flex flex-col gap-4 text-sm">
-                        <TagsSection
-                            tags={recipe?.tags}
-                            isEditing={editingField === 'tags'}
-                            onEdit={() => setEditingField('tags')}
-                            onSave={handleTagsSave}
-                            onCancel={handleTagsCancel}
-                        />
-
-                        <div className="h-px w-full bg-gray-100" />
-
-                        <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
-                                <Star
-                                    className="h-3 w-3 text-gray-400"
-                                    aria-hidden="true"
-                                />
-                                Rating
-                            </span>
-                            <Rating
-                                value={recipe?.rating}
-                                onChange={handleChangeRating}
-                                className="justify-start"
+                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 md:col-span-2">
+                        <div className="w-full flex flex-col gap-4 text-sm">
+                            <TagsSection
+                                tags={recipe?.tags}
+                                isEditing={editingField === 'tags'}
+                                onEdit={() => setEditingField('tags')}
+                                onSave={handleTagsSave}
+                                onCancel={handleTagsCancel}
                             />
-                        </div>
 
-                        <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
-                                <RotateCcw
-                                    className="h-3 w-3 text-gray-400"
-                                    aria-hidden="true"
-                                />
-                                Remake
-                            </span>
-                            <RemakeToggle
-                                checked={recipe?.remake}
-                                onToggle={handleToggleRemake}
-                                label="Would remake"
-                            />
-                        </div>
+                            <div className="h-px w-full bg-gray-100" />
 
-                        <div className="h-px w-full bg-gray-100" />
+                            <div className="flex items-center gap-4">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                    <Star
+                                        className="h-3 w-3 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                    Rating
+                                </span>
+                                <Rating
+                                    value={recipe?.rating}
+                                    onChange={handleChangeRating}
+                                    className="justify-start"
+                                />
+                            </div>
 
-                        <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
-                                <Link2
-                                    className="h-3 w-3 text-gray-400"
-                                    aria-hidden="true"
+                            <div className="flex items-center gap-4">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                    <RotateCcw
+                                        className="h-3 w-3 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                    Remake
+                                </span>
+                                <RemakeToggle
+                                    checked={recipe?.remake}
+                                    onToggle={handleToggleRemake}
+                                    label="Would remake"
                                 />
-                                Source
-                            </span>
-                            <div className="min-w-0 flex-1">
-                                <EditableSource
-                                    source={recipe?.source}
-                                    isEditing={editingField === 'source'}
-                                    draftValue={draft.source}
-                                    hideLabel
-                                    onEdit={() => {
-                                        setDraft({
-                                            ...draft,
-                                            source: recipe?.source ?? '',
-                                        });
-                                        setEditingField('source');
-                                    }}
-                                    onChange={(value) =>
-                                        setDraft({ ...draft, source: value })
-                                    }
-                                    onSave={() => handleSave('source')}
-                                    onCancel={() => handleCancel('source')}
-                                />
+                            </div>
+
+                            <div className="h-px w-full bg-gray-100" />
+
+                            <div className="flex items-center gap-4">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                    <Link2
+                                        className="h-3 w-3 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                    Source
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                    <EditableSource
+                                        source={recipe?.source}
+                                        isEditing={editingField === 'source'}
+                                        draftValue={draft.source}
+                                        hideLabel
+                                        onEdit={() => {
+                                            setDraft({
+                                                ...draft,
+                                                source: recipe?.source ?? '',
+                                            });
+                                            setEditingField('source');
+                                        }}
+                                        onChange={(value) =>
+                                            setDraft({ ...draft, source: value })
+                                        }
+                                        onSave={() => handleSave('source')}
+                                        onCancel={() => handleCancel('source')}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
-                    <IngredientsSection
-                        ingredients={recipe?.ingredients}
-                        isEditing={editingField === 'ingredients'}
-                        onEdit={() => setEditingField('ingredients')}
-                        onSave={handleIngredientsSave}
-                        onCancel={handleIngredientsCancel}
-                    />
-                    <NotesSection
-                        notes={recipe?.notes}
-                        isEditing={editingField === 'notes'}
-                        draftValue={draft.notes}
-                        onEdit={() => {
-                            setDraft({ ...draft, notes: recipe?.notes ?? '' });
-                            setEditingField('notes');
-                        }}
-                        onChange={(value) => setDraft({ ...draft, notes: value })}
-                        onSave={() => handleSave('notes')}
-                        onCancel={() => handleCancel('notes')}
-                    />
-                </div>
+                    <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
+                        <IngredientsSection
+                            ingredients={recipe?.ingredients}
+                            isEditing={editingField === 'ingredients'}
+                            onEdit={() => setEditingField('ingredients')}
+                            onSave={handleIngredientsSave}
+                            onCancel={handleIngredientsCancel}
+                        />
+                        <NotesSection
+                            notes={recipe?.notes}
+                            isEditing={editingField === 'notes'}
+                            draftValue={draft.notes}
+                            onEdit={() => {
+                                setDraft({ ...draft, notes: recipe?.notes ?? '' });
+                                setEditingField('notes');
+                            }}
+                            onChange={(value) => setDraft({ ...draft, notes: value })}
+                            onSave={() => handleSave('notes')}
+                            onCancel={() => handleCancel('notes')}
+                        />
+                    </div>
 
-                <div className="order-2 md:order-none md:col-start-2 flex flex-col gap-3">
-                    <StepsSection
-                        steps={recipe?.steps}
-                        isEditing={editingField === 'steps'}
-                        onEdit={() => setEditingField('steps')}
-                        onSave={handleStepsSave}
-                        onCancel={handleStepsCancel}
-                    />
-                    <PhotosSection />
+                    <div className="order-2 md:order-none md:col-start-2 flex flex-col gap-3">
+                        <StepsSection
+                            steps={recipe?.steps}
+                            isEditing={editingField === 'steps'}
+                            onEdit={() => setEditingField('steps')}
+                            onSave={handleStepsSave}
+                            onCancel={handleStepsCancel}
+                        />
+                        <PhotosSection />
+                    </div>
                 </div>
             </div>
         </div>

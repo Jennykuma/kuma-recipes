@@ -71,18 +71,19 @@ const NewRecipe = () => {
     };
 
     return (
-        <div className="h-dvh flex flex-col p-6 box-border space-y-2">
-            <BackButton
-                onClick={() =>
-                    shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
-                }
-            />
-            <header className="shrink-0 text-lg text-left font-bold">
-                Create new recipe
-            </header>
-            <FormProvider {...methods}>
-                <form onSubmit={handleSubmit(onSubmit)} className="flex-1 min-h-0">
-                    <div className="h-full md:flex gap-8 min-h-0 items-stretch">
+        <div className="h-dvh p-6 box-border">
+            <div className="mx-auto flex h-full w-full max-w-7xl flex-col space-y-2">
+                <BackButton
+                    onClick={() =>
+                        shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
+                    }
+                />
+                <header className="shrink-0 text-lg text-left font-bold">
+                    Create new recipe
+                </header>
+                <FormProvider {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex-1 min-h-0">
+                        <div className="h-full md:flex gap-8 min-h-0 items-stretch">
                         <div
                             className="
                             md:sticky top-6 w-full md:w-1/3 self-start
@@ -264,15 +265,16 @@ const NewRecipe = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </FormProvider>
-            {shouldConfirmCancel && showCancelModal && (
-                <CancelModal
-                    onClose={() => setShowCancelModal(false)}
-                    onDiscard={() => handleDiscard()}
-                />
-            )}
+                        </div>
+                    </form>
+                </FormProvider>
+                {shouldConfirmCancel && showCancelModal && (
+                    <CancelModal
+                        onClose={() => setShowCancelModal(false)}
+                        onDiscard={() => handleDiscard()}
+                    />
+                )}
+            </div>
         </div>
     );
 };

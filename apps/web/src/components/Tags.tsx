@@ -21,6 +21,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const selectedIds = watchedTagIds ?? EMPTY_SELECTED_IDS;
     const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [dropdownMaxHeight, setDropdownMaxHeight] = useState(256);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,29 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
         setDropdownOpen(true);
         inputRef.current?.focus();
     }, [autoFocusInput]);
+
+    useEffect(() => {
+        if (!dropdownOpen) return;
+
+        const updateDropdownMaxHeight = () => {
+            const containerRect = containerRef.current?.getBoundingClientRect();
+            if (!containerRect) return;
+
+            const viewportHeight = window.innerHeight;
+            const spaceBelow = viewportHeight - containerRect.bottom - 8;
+            const clampedMaxHeight = Math.max(120, Math.min(256, spaceBelow));
+            setDropdownMaxHeight(clampedMaxHeight);
+        };
+
+        updateDropdownMaxHeight();
+        window.addEventListener('resize', updateDropdownMaxHeight);
+        window.addEventListener('scroll', updateDropdownMaxHeight, true);
+
+        return () => {
+            window.removeEventListener('resize', updateDropdownMaxHeight);
+            window.removeEventListener('scroll', updateDropdownMaxHeight, true);
+        };
+    }, [dropdownOpen]);
 
     const selectedTags = useMemo(() => {
         options.forEach((tag) => {
@@ -163,7 +187,10 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
             </div>
 
             {dropdownOpen && (
-                <div className="absolute left-0 right-0 top-full z-30 max-h-64 overflow-auto rounded-md border border-gray-100 bg-white shadow-sm">
+                <div
+                    className="absolute left-0 right-0 top-full z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm"
+                    style={{ maxHeight: `${dropdownMaxHeight}px` }}
+                >
                     {(isLoading || isCreating) && (
                         <div className="px-3 py-2 text-xs text-gray-400">Loading...</div>
                     )}
