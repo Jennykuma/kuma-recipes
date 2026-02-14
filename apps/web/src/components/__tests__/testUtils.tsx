@@ -9,7 +9,7 @@ const baseDefaults: RecipeFormValues = {
     notes: '',
     rating: 0,
     remake: false,
-    tags: [],
+    tagIds: [],
     ingredients: [{ ingredient: '' }],
     steps: [{ step: '' }],
 };

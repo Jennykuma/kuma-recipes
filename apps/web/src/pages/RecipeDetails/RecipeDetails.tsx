@@ -136,7 +136,8 @@ const RecipeDetails = () => {
                     className="
                         font-jua text-sm text-red-500
                         ml-2 px-3 py-1.5 rounded-xl
-                        bg-red-50 hover:bg-red-100"
+                        bg-red-50 hover:bg-red-100
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
                 >
                     Delete
                 </button>
@@ -163,7 +164,7 @@ const RecipeDetails = () => {
                         <div className="h-px w-full bg-gray-100" />
 
                         <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
                                 <Star
                                     className="h-3 w-3 text-gray-400"
                                     aria-hidden="true"
@@ -178,7 +179,7 @@ const RecipeDetails = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
                                 <RotateCcw
                                     className="h-3 w-3 text-gray-400"
                                     aria-hidden="true"
@@ -195,7 +196,7 @@ const RecipeDetails = () => {
                         <div className="h-px w-full bg-gray-100" />
 
                         <div className="flex items-center gap-4">
-                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500">
+                            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
                                 <Link2
                                     className="h-3 w-3 text-gray-400"
                                     aria-hidden="true"

@@ -40,7 +40,7 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
     return (
         <div className="w-full">
             <div className="flex flex-row items-baseline gap-1 mb-1">
-                <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs uppercase tracking-wide text-gray-600 rounded-full">
                     <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
                     Tags
                 </span>
@@ -49,7 +49,7 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
                         type="button"
                         onClick={onEdit}
                         aria-label="Edit tags"
-                        className="inline-flex items-center"
+                        className="inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
                     >
                         <Pencil
                             className="w-3 h-4 pt-1 cursor-pointer link-blush"
@@ -70,14 +70,14 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
                         <Tags autoFocusInput />
                         <div className="mt-1 flex gap-2 justify-end">
                             <button
-                                className="font-jua text-xs text-gray-400 hover:text-gray-500"
+                                className="font-jua text-xs text-gray-400 hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
                                 type="button"
                                 onClick={handleCancel}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
                                 type="submit"
                             >
                                 Save

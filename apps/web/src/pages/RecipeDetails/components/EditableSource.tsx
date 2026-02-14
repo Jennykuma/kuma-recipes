@@ -50,7 +50,7 @@ const EditableSource = ({
     return (
         <span className="flex items-baseline gap-2 w-full">
             {!hideLabel && (
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full shrink-0">
+                <span className="text-xs uppercase tracking-wide text-gray-600 rounded-full shrink-0">
                     Source
                 </span>
             )}
@@ -58,19 +58,28 @@ const EditableSource = ({
                 <div className="flex w-full items-baseline gap-2">
                     <input
                         ref={inputRef}
-                        className="w-full max-w-125 border-b border-gray-300 bg-transparent focus:outline-none"
+                        className="w-full max-w-125 border-b border-gray-300 bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm"
                         value={draftValue ?? ''}
                         onChange={(e) => onChange(e.target.value)}
-                        onBlur={onSave}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                onSave();
+                            }
+                            if (event.key === 'Escape') {
+                                event.preventDefault();
+                                onCancel();
+                            }
+                        }}
                     />
                     <button
-                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0"
+                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
                         onClick={onSave}
                     >
                         Save
                     </button>
                     <button
-                        className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0"
+                        className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
                         onClick={onCancel}
                     >
                         Cancel
@@ -97,7 +106,7 @@ const EditableSource = ({
                         type="button"
                         onClick={onEdit}
                         aria-label="Edit source"
-                        className="inline-flex items-center shrink-0"
+                        className="inline-flex items-center shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
                     >
                         <Pencil
                             className="w-3 h-4 pt-1 cursor-pointer link-blush shrink-0"

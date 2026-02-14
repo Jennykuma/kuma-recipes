@@ -9,10 +9,10 @@ const IngredientsTable = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
-    const { control, register, setFocus } = useFormContext<RecipeFormValues>();
+    const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
     const ingredientTableRows = useWatch({ control, name: 'ingredients' });
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove, replace } = useFieldArray({
         control,
         name: 'ingredients',
     });
@@ -28,6 +28,11 @@ const IngredientsTable = () => {
             const stillInside = containerRef.current?.contains(el);
 
             if (!stillInside) {
+                const currentRows = getValues('ingredients');
+                const nonEmptyRows = currentRows.filter(
+                    (row) => row.ingredient.trim() !== ''
+                );
+                replace(nonEmptyRows.length ? nonEmptyRows : [{ ingredient: '' }]);
                 setActiveIndex(null);
             }
         });

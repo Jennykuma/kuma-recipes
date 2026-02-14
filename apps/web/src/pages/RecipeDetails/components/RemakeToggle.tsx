@@ -1,20 +1,32 @@
+import { useId } from 'react';
+
 type RemakeToggleProps = {
     checked?: boolean;
     onToggle: () => void;
     label?: string;
 };
 
-const RemakeToggle = ({ checked, onToggle, label = 'Would remake' }: RemakeToggleProps) => {
+const RemakeToggle = ({
+    checked,
+    onToggle,
+    label = 'Would remake',
+}: RemakeToggleProps) => {
+    const remakeId = useId();
+
     return (
-        <span className="flex items-center gap-2 text-xs text-gray-500">
+        <label
+            htmlFor={remakeId}
+            className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer whitespace-nowrap"
+        >
             <input
+                id={remakeId}
                 type="checkbox"
                 checked={checked ?? false}
                 onChange={onToggle}
-                className="h-4 w-4 accent-blush-200 border border-gray-300/70"
+                className="h-4 w-4 accent-blush-200 border border-gray-300/70 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
             />
             {label}
-        </span>
+        </label>
     );
 };
 
