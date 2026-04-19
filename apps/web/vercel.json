@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/kuma-recipes/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/kuma-recipes/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}

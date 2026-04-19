@@ -4,6 +4,7 @@ import type {
     NewRecipeBody,
     UpdateRecipeBody,
 } from '../../../api/src/services/recipes/recipes.types';
+import { buildApiUrl } from './client';
 
 type GetRecipeDetailsResponse = {
     recipe: Recipe;
@@ -24,7 +25,7 @@ const recipe = {
     },
 
     async getRecipes(): Promise<RecipeListItem[]> {
-        const response = await fetch('/api/recipes');
+        const response = await fetch(buildApiUrl('/recipes'));
         if (!response.ok) {
             throw await this.parseError(response, 'Failed to fetch recipes');
         }
@@ -33,7 +34,7 @@ const recipe = {
     },
 
     async getRecipeDetails(id: string): Promise<Recipe> {
-        const response = await fetch(`/api/recipes/${id}`);
+        const response = await fetch(buildApiUrl(`/recipes/${id}`));
         if (!response.ok) {
             throw await this.parseError(response, 'Failed to fetch recipe details');
         }
@@ -42,7 +43,7 @@ const recipe = {
     },
 
     async updateRecipe(id: string, updatedRecipe: UpdateRecipeBody): Promise<any> {
-        const response = await fetch(`/api/recipes/${id}`, {
+        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ const recipe = {
     },
 
     async createRecipe(recipe: NewRecipeBody): Promise<any> {
-        const response = await fetch(`/api/recipes`, {
+        const response = await fetch(buildApiUrl('/recipes'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ const recipe = {
     },
 
     async deleteRecipe(id: string): Promise<any> {
-        const response = await fetch(`/api/recipes/${id}`, {
+        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
             method: 'DELETE',
         });
 

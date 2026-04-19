@@ -1,4 +1,5 @@
 import type { Tag } from '../../../api/src/services/tags/tags.types';
+import { buildApiUrl } from './client';
 
 type ListTagsResponse = {
     tags: Tag[];
@@ -10,13 +11,14 @@ type CreateTagResponse = {
 
 const tags = {
     async listTags(query: string): Promise<Tag[]> {
-        const response = await fetch(`/api/tags?query=${encodeURIComponent(query)}`);
+        const url = buildApiUrl('/tags');
+        const response = await fetch(`${url}?query=${encodeURIComponent(query)}`);
         const data: ListTagsResponse = await response.json();
         return data.tags ?? [];
     },
 
     async createTag(name: string): Promise<Tag> {
-        const response = await fetch('/api/tags', {
+        const response = await fetch(buildApiUrl('/tags'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name }),
@@ -26,7 +28,7 @@ const tags = {
     },
 
     async deleteTag(id: string): Promise<void> {
-        const response = await fetch(`/api/tags/${encodeURIComponent(id)}`, {
+        const response = await fetch(buildApiUrl(`/tags/${encodeURIComponent(id)}`), {
             method: 'DELETE',
         });
 
