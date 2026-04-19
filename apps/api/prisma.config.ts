@@ -9,6 +9,8 @@ export default defineConfig({
         path: 'prisma/migrations',
     },
     datasource: {
-        url: process.env['DATABASE_URL'],
+        // Prisma 7 reads datasource URLs from config.
+        // Prefer DIRECT_URL for migrate/introspection, fallback to DATABASE_URL.
+        url: process.env['DIRECT_URL'] || process.env['DATABASE_URL'],
     },
 });
