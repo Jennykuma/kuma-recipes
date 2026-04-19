@@ -1,4 +1,4 @@
-import { type Tag } from '../tags/tags.types';
+import { type Tag } from '../tags/tags.types.js';
 
 export type Recipe = {
     id: string;

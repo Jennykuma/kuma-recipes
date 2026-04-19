@@ -1,5 +1,5 @@
 import type { IncomingHttpHeaders, IncomingMessage, ServerResponse } from 'node:http';
-import { buildApp } from '../../api/src/app';
+import { buildApp } from '../../api/src/app.js';
 
 let appPromise: ReturnType<typeof initApp> | null = null;
 
@@ -66,7 +66,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     res.statusCode = response.statusCode;
 
     for (const [key, value] of Object.entries(response.headers)) {
-        if (value !== undefined) {
+        if (typeof value === 'string' || typeof value === 'number' || Array.isArray(value)) {
             res.setHeader(key, value);
         }
     }

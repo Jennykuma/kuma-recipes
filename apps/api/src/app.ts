@@ -1,6 +1,6 @@
 import fastify from 'fastify';
-import recipesRoutes from './routes/recipes.routes';
-import tagsRoutes from './routes/tags.routes';
+import recipesRoutes from './routes/recipes.routes.js';
+import tagsRoutes from './routes/tags.routes.js';
 
 export function buildApp() {
     const app = fastify({ logger: true });

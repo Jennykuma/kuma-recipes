@@ -1,9 +1,9 @@
-import { prisma } from '../../prisma';
+import { prisma } from '../../prisma.js';
 import {
     RecipeListItem,
     NewRecipeBody,
     UpdateRecipeBody,
-} from '../recipes/recipes.types';
+} from '../recipes/recipes.types.js';
 
 export async function listRecipes(tagSlug?: string): Promise<RecipeListItem[]> {
     const recipes = await prisma.recipe.findMany({

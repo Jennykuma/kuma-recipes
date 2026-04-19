@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma';
+import { prisma } from '../../prisma.js';
 
 function normalizeTag(input: string) {
     const name = input.trim();

@@ -5,11 +5,11 @@ import {
     createNewRecipe,
     deleteRecipe,
     updateRecipe,
-} from '../services/recipes/recipes.service';
+} from '../services/recipes/recipes.service.js';
 import {
     type NewRecipeBody,
     type UpdateRecipeBody,
-} from '../services/recipes/recipes.types';
+} from '../services/recipes/recipes.types.js';
 
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /recipes

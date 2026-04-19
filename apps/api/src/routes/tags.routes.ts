@@ -1,6 +1,6 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
-import { listTags, createOrGetTag, deleteTag } from '../services/tags/tags.service';
-import { type CreateTagBody } from '../services/tags/tags.types';
+import { listTags, createOrGetTag, deleteTag } from '../services/tags/tags.service.js';
+import { type CreateTagBody } from '../services/tags/tags.types.js';
 
 const tagsRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /tags?query=ma
