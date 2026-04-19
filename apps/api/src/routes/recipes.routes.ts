@@ -1,12 +1,5 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
 import {
-    recipeDetails,
-    listRecipes,
-    createNewRecipe,
-    deleteRecipe,
-    updateRecipe,
-} from '../services/recipes/recipes.service.js';
-import {
     type NewRecipeBody,
     type UpdateRecipeBody,
 } from '../services/recipes/recipes.types.js';
@@ -14,12 +7,14 @@ import {
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /recipes
     fastify.get('/', async (_, reply: FastifyReply) => {
+        const { listRecipes } = await import('../services/recipes/recipes.service.js');
         const recipes = await listRecipes();
         reply.send({ recipes });
     });
 
     // GET /recipes/:id
     fastify.get('/:id', async (request, reply) => {
+        const { recipeDetails } = await import('../services/recipes/recipes.service.js');
         const params = request.params as { id: string };
         const recipe = await recipeDetails(params.id);
         reply.send({ recipe });
@@ -27,6 +22,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
     // POST /recipes
     fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
+        const { createNewRecipe } = await import('../services/recipes/recipes.service.js');
         const body = (request.body as { recipe?: NewRecipeBody }).recipe ?? request.body;
 
         const {
@@ -54,6 +50,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
     // PATCH /recipes/:id
     fastify.patch<{ Body: UpdateRecipeBody }>('/:id', async (request, reply) => {
+        const { updateRecipe } = await import('../services/recipes/recipes.service.js');
         const params = request.params as { id: string };
         const result = await updateRecipe(params.id, request.body);
         reply.code(200).send(result);
@@ -61,6 +58,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
     // DELETE /recipes/:id
     fastify.delete('/:id', async (request, reply) => {
+        const { deleteRecipe } = await import('../services/recipes/recipes.service.js');
         const params = request.params as { id: string };
         await deleteRecipe(params.id);
         reply.code(204);
