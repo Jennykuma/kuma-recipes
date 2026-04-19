@@ -14,14 +14,29 @@ type GetRecipesResponse = {
 };
 
 const recipe = {
+    async parseError(response: Response, fallbackMessage: string): Promise<Error> {
+        try {
+            const error = await response.json();
+            return new Error(error.message ?? fallbackMessage);
+        } catch {
+            return new Error(fallbackMessage);
+        }
+    },
+
     async getRecipes(): Promise<RecipeListItem[]> {
         const response = await fetch('/api/recipes');
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to fetch recipes');
+        }
         const data: GetRecipesResponse = await response.json();
         return data.recipes;
     },
 
     async getRecipeDetails(id: string): Promise<Recipe> {
         const response = await fetch(`/api/recipes/${id}`);
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to fetch recipe details');
+        }
         const data: GetRecipeDetailsResponse = await response.json();
         return data.recipe;
     },
@@ -34,6 +49,9 @@ const recipe = {
             },
             body: JSON.stringify(updatedRecipe),
         });
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to update recipe');
+        }
         return response.json();
     },
 
@@ -47,8 +65,7 @@ const recipe = {
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message ?? 'Failed to create recipe');
+            throw await this.parseError(response, 'Failed to create recipe');
         }
 
         return response.json();
@@ -60,8 +77,7 @@ const recipe = {
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message ?? 'Failed to delete recipe');
+            throw await this.parseError(response, 'Failed to delete recipe');
         }
     },
 };

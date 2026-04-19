@@ -3,7 +3,7 @@ import recipesRoutes from './routes/recipes.routes';
 import tagsRoutes from './routes/tags.routes';
 
 export function buildApp() {
-    const app = fastify();
+    const app = fastify({ logger: true });
 
     app.register(recipesRoutes, { prefix: '/recipes' });
     app.register(tagsRoutes, { prefix: '/tags' });
