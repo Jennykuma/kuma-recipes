@@ -98,7 +98,6 @@ Configure the web app with these env vars at build/deploy time:
 
 ```
 VITE_BASE_PATH=/kuma-recipes/
-VITE_API_BASE_URL=/api
 VITE_CLERK_PUBLISHABLE_KEY=pk_live_...
 ```
 
@@ -111,8 +110,11 @@ CLERK_SECRET_KEY=sk_live_...
 Notes:
 
 - `VITE_BASE_PATH` ensures built assets and React Router work under `/kuma-recipes`.
-- Keep `VITE_API_BASE_URL=/api` only if your production host proxies `/api` to the API service.
-- If API is hosted elsewhere, set `VITE_API_BASE_URL` to the full API origin (for example `https://api.jennyle.dev`).
+- If `VITE_API_BASE_URL` is not set, the app defaults to `${VITE_BASE_PATH}api`.
+  - Example: with `VITE_BASE_PATH=/kuma-recipes/`, API requests go to `/kuma-recipes/api/*`.
+- Set `VITE_API_BASE_URL` only if you need an override.
+  - Use `/api` only if your production host proxies `/api/*` to the API service.
+  - If API is hosted elsewhere, set a full API origin (for example `https://api.jennyle.dev`).
 
 ### Vercel setup
 
@@ -123,7 +125,6 @@ Vercel allows a production domain to be attached to only one project. For `jenny
 
 ```
 VITE_BASE_PATH=/kuma-recipes/
-VITE_API_BASE_URL=/api
 ```
 
 - This repo includes [apps/web/vercel.json](/Users/jenny/Documents/projects/kuma-recipes/apps/web/vercel.json) for SPA fallback under `/kuma-recipes/*`.
