@@ -8,7 +8,14 @@ if (!connectionString) {
     throw new Error('DATABASE_URL is required');
 }
 
-const parsedConnectionString = new URL(connectionString);
+let parsedConnectionString: URL;
+try {
+    parsedConnectionString = new URL(connectionString);
+} catch {
+    throw new Error(
+        'DATABASE_URL is not a valid URL. Use a full Postgres connection string (postgres:// or postgresql://).'
+    );
+}
 const hostname = parsedConnectionString.hostname.toLowerCase();
 const isSupabaseHost =
     hostname.endsWith('.supabase.co') || hostname.endsWith('.supabase.com');
