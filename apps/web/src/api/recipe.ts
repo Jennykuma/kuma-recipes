@@ -24,8 +24,10 @@ const recipe = {
         }
     },
 
-    async getRecipes(): Promise<RecipeListItem[]> {
-        const response = await fetch(buildApiUrl('/recipes'));
+    async getRecipes(token?: string): Promise<RecipeListItem[]> {
+        const response = await fetch(buildApiUrl('/recipes'), {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (!response.ok) {
             throw await this.parseError(response, 'Failed to fetch recipes');
         }
@@ -33,8 +35,10 @@ const recipe = {
         return data.recipes;
     },
 
-    async getRecipeDetails(id: string): Promise<Recipe> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}`));
+    async getRecipeDetails(id: string, token?: string): Promise<Recipe> {
+        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (!response.ok) {
             throw await this.parseError(response, 'Failed to fetch recipe details');
         }
@@ -42,11 +46,16 @@ const recipe = {
         return data.recipe;
     },
 
-    async updateRecipe(id: string, updatedRecipe: UpdateRecipeBody): Promise<any> {
+    async updateRecipe(
+        id: string,
+        updatedRecipe: UpdateRecipeBody,
+        token?: string
+    ): Promise<any> {
         const response = await fetch(buildApiUrl(`/recipes/${id}`), {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
             },
             body: JSON.stringify(updatedRecipe),
         });
@@ -56,11 +65,12 @@ const recipe = {
         return response.json();
     },
 
-    async createRecipe(recipe: NewRecipeBody): Promise<any> {
+    async createRecipe(recipe: NewRecipeBody, token?: string): Promise<any> {
         const response = await fetch(buildApiUrl('/recipes'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
             },
             body: JSON.stringify(recipe),
         });
@@ -72,9 +82,10 @@ const recipe = {
         return response.json();
     },
 
-    async deleteRecipe(id: string): Promise<any> {
+    async deleteRecipe(id: string, token?: string): Promise<any> {
         const response = await fetch(buildApiUrl(`/recipes/${id}`), {
             method: 'DELETE',
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
 
         if (!response.ok) {

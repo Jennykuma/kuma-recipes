@@ -5,13 +5,17 @@ import type {
     Recipe,
     RecipeListItem,
 } from '../../../../api/src/services/recipes/recipes.types';
+import { useAuth } from '@clerk/clerk-react';
 
 const useUpdateRecipe = (id: string) => {
     const queryClient = useQueryClient();
+    const { getToken } = useAuth();
 
     return useMutation({
-        mutationFn: (updatedRecipe: UpdateRecipeBody) =>
-            recipeApi.updateRecipe(id, updatedRecipe),
+        mutationFn: async (updatedRecipe: UpdateRecipeBody) => {
+            const token = await getToken();
+            return recipeApi.updateRecipe(id, updatedRecipe, token ?? undefined);
+        },
         onMutate: async (updatedRecipe) => {
             // cancel any outgoing refetches
             await queryClient.cancelQueries({ queryKey: ['recipe', id] });

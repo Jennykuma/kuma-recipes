@@ -30,16 +30,33 @@ Create `apps/api/.env` with:
 
 ```
 DATABASE_URL=postgresql://app:app@127.0.0.1:5433/app_dev
+DIRECT_URL=postgresql://app:app@127.0.0.1:5433/app_dev
+CLERK_SECRET_KEY=sk_test_...
 ```
 
-4. Generate Prisma client and run migrations
+4. Configure the web app auth env
+
+Create `apps/web/.env` with:
+
+```
+VITE_API_BASE_URL=/api
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
+```
+
+Optional (for subpath deploys):
+
+```
+VITE_BASE_PATH=/
+```
+
+5. Generate Prisma client and run migrations
 
 ```
 pnpm --filter api exec prisma generate
 pnpm --filter api exec prisma migrate dev
 ```
 
-5. Run the dev servers
+6. Run the dev servers
 
 ```
 pnpm dev
@@ -65,6 +82,16 @@ pnpm dev:web
 pnpm --filter api prisma db seed
 ```
 
+## Authentication (Clerk)
+
+- The web app uses Clerk for sign-in/sign-up (`/sign-in`, `/sign-up`).
+- The frontend sends a Clerk bearer token on API requests.
+- The API verifies the token using `CLERK_SECRET_KEY`.
+- Data is scoped per authenticated user (`Recipe.userId`, `Tag.userId`).
+
+If `CLERK_SECRET_KEY` is missing in the API environment, auth-protected endpoints will return `500`.
+If the token is missing/invalid, auth-protected endpoints will return `401`.
+
 ## Deploy to `jennyle.dev/kuma-recipes`
 
 Configure the web app with these env vars at build/deploy time:
@@ -72,6 +99,13 @@ Configure the web app with these env vars at build/deploy time:
 ```
 VITE_BASE_PATH=/kuma-recipes/
 VITE_API_BASE_URL=/api
+VITE_CLERK_PUBLISHABLE_KEY=pk_live_...
+```
+
+And configure the API runtime with:
+
+```
+CLERK_SECRET_KEY=sk_live_...
 ```
 
 Notes:

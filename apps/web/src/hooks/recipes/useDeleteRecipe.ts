@@ -1,13 +1,16 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
+import { useAuth } from '@clerk/clerk-react';
 
 const useDeleteRecipe = (id: string) => {
     const queryClient = useQueryClient();
+    const { getToken } = useAuth();
 
     return useMutation({
-        mutationFn: () => {
+        mutationFn: async () => {
             if (!id) throw new Error('Missing recipe id');
-            return recipeApi.deleteRecipe(id);
+            const token = await getToken();
+            return recipeApi.deleteRecipe(id, token ?? undefined);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['recipes'] });

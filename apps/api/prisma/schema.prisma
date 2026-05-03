@@ -15,6 +15,7 @@ datasource db {
 
 model Recipe {
   id          String   @id @default(uuid())
+  userId      String
   title       String
   ingredients String[]
   notes       String?
@@ -25,12 +26,18 @@ model Recipe {
   tags        Tag[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([userId, createdAt])
 }
 
 model Tag {
   id        String   @id @default(uuid())
+  userId    String
   name      String
-  slug      String   @unique // normalized unique key for lookups + URL filters
+  slug      String // normalized unique key for lookups + URL filters
   recipes   Recipe[]
   createdAt DateTime @default(now())
+
+  @@unique([userId, slug])
+  @@index([userId, name])
 }

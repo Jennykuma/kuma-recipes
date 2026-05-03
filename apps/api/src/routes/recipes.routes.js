@@ -1,13 +1,7 @@
-import { FastifyPluginAsync, FastifyReply } from 'fastify';
-import {
-    type NewRecipeBody,
-    type UpdateRecipeBody,
-} from '../services/recipes/recipes.types.js';
 import { requireUser } from '../auth/require-user.js';
-
-const recipesRoutes: FastifyPluginAsync = async (fastify) => {
+const recipesRoutes = async (fastify) => {
     // GET /recipes
-    fastify.get('/', async (request, reply: FastifyReply) => {
+    fastify.get('/', async (request, reply) => {
         const userId = await requireUser(request, reply);
         if (!userId) {
             return;
@@ -16,7 +10,6 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         const recipes = await listRecipes(userId);
         reply.send({ recipes });
     });
-
     // GET /recipes/:id
     fastify.get('/:id', async (request, reply) => {
         const userId = await requireUser(request, reply);
@@ -24,7 +17,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             return;
         }
         const { recipeDetails } = await import('../services/recipes/recipes.service.js');
-        const params = request.params as { id: string };
+        const params = request.params;
         const recipe = await recipeDetails(params.id, userId);
         if (!recipe) {
             reply.code(404).send({ message: 'Recipe not found' });
@@ -32,48 +25,42 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         }
         reply.send({ recipe });
     });
-
     // POST /recipes
-    fastify.post<{ Body: NewRecipeBody }>('/', async (request, reply) => {
+    fastify.post('/', async (request, reply) => {
         const userId = await requireUser(request, reply);
         if (!userId) {
             return;
         }
-        const { createNewRecipe } =
-            await import('../services/recipes/recipes.service.js');
-        const body = (request.body as { recipe?: NewRecipeBody }).recipe ?? request.body;
-
+        const { createNewRecipe } = await import('../services/recipes/recipes.service.js');
+        const body = request.body.recipe ?? request.body;
         const { title, ingredients, notes, rating, remake, steps, tagIds, source } = body;
         try {
-            const result = await createNewRecipe(
-                {
-                    title,
-                    ingredients,
-                    notes,
-                    rating,
-                    remake,
-                    steps,
-                    tagIds,
-                    source,
-                },
-                userId
-            );
+            const result = await createNewRecipe({
+                title,
+                ingredients,
+                notes,
+                rating,
+                remake,
+                steps,
+                tagIds,
+                source,
+            }, userId);
             reply.code(201).send(result);
-        } catch (error) {
+        }
+        catch (error) {
             reply
                 .code(400)
-                .send({ message: (error as Error).message || 'Invalid recipe payload' });
+                .send({ message: error.message || 'Invalid recipe payload' });
         }
     });
-
     // PATCH /recipes/:id
-    fastify.patch<{ Body: UpdateRecipeBody }>('/:id', async (request, reply) => {
+    fastify.patch('/:id', async (request, reply) => {
         const userId = await requireUser(request, reply);
         if (!userId) {
             return;
         }
         const { updateRecipe } = await import('../services/recipes/recipes.service.js');
-        const params = request.params as { id: string };
+        const params = request.params;
         try {
             const result = await updateRecipe(params.id, request.body, userId);
             if (!result) {
@@ -81,13 +68,13 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
                 return;
             }
             reply.code(200).send(result);
-        } catch (error) {
+        }
+        catch (error) {
             reply
                 .code(400)
-                .send({ message: (error as Error).message || 'Invalid recipe payload' });
+                .send({ message: error.message || 'Invalid recipe payload' });
         }
     });
-
     // DELETE /recipes/:id
     fastify.delete('/:id', async (request, reply) => {
         const userId = await requireUser(request, reply);
@@ -95,7 +82,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             return;
         }
         const { deleteRecipe } = await import('../services/recipes/recipes.service.js');
-        const params = request.params as { id: string };
+        const params = request.params;
         const deleted = await deleteRecipe(params.id, userId);
         if (!deleted) {
             reply.code(404).send({ message: 'Recipe not found' });
@@ -104,5 +91,4 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
         reply.code(204).send();
     });
 };
-
 export default recipesRoutes;

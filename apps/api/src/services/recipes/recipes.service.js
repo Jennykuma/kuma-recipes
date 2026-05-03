@@ -1,13 +1,7 @@
 import { prisma } from '../../prisma.js';
-import {
-    RecipeListItem,
-    NewRecipeBody,
-    UpdateRecipeBody,
-} from '../recipes/recipes.types.js';
-
-async function resolveOwnedTagIds(userId: string, tagIds: string[] = []) {
-    if (!tagIds.length) return [];
-
+async function resolveOwnedTagIds(userId, tagIds = []) {
+    if (!tagIds.length)
+        return [];
     const ownedTags = await prisma.tag.findMany({
         where: {
             userId,
@@ -15,18 +9,12 @@ async function resolveOwnedTagIds(userId: string, tagIds: string[] = []) {
         },
         select: { id: true },
     });
-
     if (ownedTags.length !== tagIds.length) {
         throw new Error('One or more tags do not belong to this user');
     }
-
     return ownedTags.map((tag) => tag.id);
 }
-
-export async function listRecipes(
-    userId: string,
-    tagSlug?: string
-): Promise<RecipeListItem[]> {
+export async function listRecipes(userId, tagSlug) {
     const recipes = await prisma.recipe.findMany({
         where: {
             userId,
@@ -35,23 +23,19 @@ export async function listRecipes(
         orderBy: { createdAt: 'desc' },
         include: { tags: true },
     });
-
     return recipes.map((recipe) => ({
         ...recipe,
         rating: recipe.rating ?? 0, // Provide a default value if rating is null
     }));
 }
-
-export async function recipeDetails(recipeId: string, userId: string): Promise<any> {
+export async function recipeDetails(recipeId, userId) {
     return prisma.recipe.findFirst({
         where: { id: recipeId, userId },
         include: { tags: true },
     });
 }
-
-export async function createNewRecipe(recipeParams: NewRecipeBody, userId: string) {
-    const { title, ingredients, notes, rating, remake, steps, tagIds, source } =
-        recipeParams;
+export async function createNewRecipe(recipeParams, userId) {
+    const { title, ingredients, notes, rating, remake, steps, tagIds, source } = recipeParams;
     const ownedTagIds = await resolveOwnedTagIds(userId, tagIds);
     const normalizedSource = source?.trim();
     return prisma.recipe.create({
@@ -64,7 +48,6 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
             rating: rating ?? null,
             remake: remake ?? false,
             source: normalizedSource ? normalizedSource : null,
-
             // connect tags
             ...(ownedTagIds.length
                 ? { tags: { connect: ownedTagIds.map((id) => ({ id })) } }
@@ -73,15 +56,9 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
         include: { tags: true },
     });
 }
-
-export async function updateRecipe(
-    recipeId: string,
-    updatedRecipe: UpdateRecipeBody,
-    userId: string
-) {
+export async function updateRecipe(recipeId, updatedRecipe, userId) {
     const { tagIds, ...rest } = updatedRecipe;
     const ownedTagIds = tagIds ? await resolveOwnedTagIds(userId, tagIds) : null;
-
     const updated = await prisma.recipe.updateMany({
         where: { id: recipeId, userId },
         data: {
@@ -89,15 +66,12 @@ export async function updateRecipe(
             ...(ownedTagIds ? { tags: { set: ownedTagIds.map((id) => ({ id })) } } : {}),
         },
     });
-
     if (updated.count === 0) {
         return null;
     }
-
     return recipeDetails(recipeId, userId);
 }
-
-export async function deleteRecipe(recipeId: string, userId: string): Promise<boolean> {
+export async function deleteRecipe(recipeId, userId) {
     const deleted = await prisma.recipe.deleteMany({
         where: { id: recipeId, userId },
     });

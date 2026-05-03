@@ -1,48 +1,35 @@
-import { FastifyInstance } from 'fastify';
 import { buildApp } from '../../src/app';
 import { vi } from 'vitest';
-
 vi.mock('@clerk/backend', () => ({
     verifyToken: vi.fn(),
 }));
-
 vi.mock('../../src/services/recipes/recipes.service', () => ({
     createNewRecipe: vi.fn(),
     listRecipes: vi.fn(),
     recipeDetails: vi.fn(),
 }));
-
-import {
-    createNewRecipe,
-    listRecipes,
-    recipeDetails,
-} from '../../src/services/recipes/recipes.service';
+import { createNewRecipe, listRecipes, recipeDetails, } from '../../src/services/recipes/recipes.service';
 import { verifyToken } from '@clerk/backend';
-
 describe('recipes routes', () => {
-    let app: FastifyInstance;
+    let app;
     const authHeaders = { authorization: 'Bearer test-token' };
-
     beforeEach(async () => {
-        vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
+        vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' });
         app = buildApp();
         await app.ready();
     });
-
     afterEach(async () => {
         if (app) {
             await app.close();
         }
     });
-
     test('POST /recipes should create a recipe', async () => {
         const mockedCreateNewRecipe = vi.mocked(createNewRecipe);
         mockedCreateNewRecipe.mockResolvedValue({
             id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
             title: 'Matcha Cookies',
             tags: [],
-        } as any);
-
+        });
         const res = await app.inject({
             method: 'POST',
             url: '/recipes',
@@ -52,13 +39,11 @@ describe('recipes routes', () => {
                 tagIds: ['0f15302d-3bb6-4f73-b16c-dddfbd39bd44'],
             },
         });
-
         expect(res.statusCode).toBe(201);
         expect(res.json()).toMatchObject({
             title: 'Matcha Cookies',
         });
     });
-
     test('GET /recipes -> returns mocked recipes', async () => {
         const mockedListRecipes = vi.mocked(listRecipes);
         mockedListRecipes.mockResolvedValue([
@@ -73,13 +58,11 @@ describe('recipes routes', () => {
                 rating: 5,
             },
         ]);
-
         const res = await app.inject({
             method: 'GET',
             url: '/recipes',
             headers: authHeaders,
         });
-
         expect(res.statusCode).toBe(200);
         expect(res.json()).toEqual({
             recipes: [
@@ -96,7 +79,6 @@ describe('recipes routes', () => {
             ],
         });
     });
-
     test('GET /recipes/:id -> returns mocked recipe details', async () => {
         const id = 'ceada500-2341-42c5-869b-f231869a94aa';
         const mockedRecipeDetails = vi.mocked(recipeDetails);
@@ -110,13 +92,11 @@ describe('recipes routes', () => {
             steps: null,
             tags: [],
         });
-
         const res = await app.inject({
             method: 'GET',
             url: `/recipes/${id}`,
             headers: authHeaders,
         });
-
         expect(res.statusCode).toBe(200);
         expect(res.json()).toEqual({
             recipe: {
@@ -131,13 +111,11 @@ describe('recipes routes', () => {
             },
         });
     });
-
     test('GET /recipes should require bearer auth', async () => {
         const res = await app.inject({
             method: 'GET',
             url: '/recipes',
         });
-
         expect(res.statusCode).toBe(401);
         expect(res.json()).toEqual({
             message: 'Missing bearer token',

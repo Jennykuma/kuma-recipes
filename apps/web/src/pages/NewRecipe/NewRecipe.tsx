@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
@@ -12,6 +13,7 @@ import Tags from '../../components/Tags';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
+    const { getToken } = useAuth();
     const [showCancelModal, setShowCancelModal] = useState(false);
 
     // method also returns register, handleSubmit, control, setFocus, watch, etc
@@ -61,7 +63,8 @@ const NewRecipe = () => {
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
-        const response = await recipeApi.createRecipe(payload);
+        const token = await getToken();
+        const response = await recipeApi.createRecipe(payload, token ?? undefined);
         navigate(`/recipes/${response.id}`);
     };
 
