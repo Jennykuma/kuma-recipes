@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/kuma-recipes/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
       "source": "/kuma-recipes/assets/:path*",
       "destination": "/assets/:path*"
     },

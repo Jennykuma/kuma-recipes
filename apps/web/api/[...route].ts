@@ -49,8 +49,8 @@ async function readRequestBody(req: IncomingMessage): Promise<string | undefined
 
 function toFastifyUrl(req: IncomingMessage): string {
     const requestUrl = req.url || '/';
-
-    return requestUrl.replace(/^\/api(?=\/|$)/, '') || '/';
+    const withoutBasePath = requestUrl.replace(/^\/kuma-recipes(?=\/|$)/, '');
+    return withoutBasePath.replace(/^\/api(?=\/|$)/, '') || '/';
 }
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
