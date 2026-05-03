@@ -9,6 +9,9 @@ import './App.css';
 
 const queryClient = new QueryClient();
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+const configuredBasePath =
+    import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL.replace(/\/$/, '');
+const appRedirectPath = configuredBasePath;
 
 if (!clerkPublishableKey) {
     throw new Error(
@@ -18,7 +21,13 @@ if (!clerkPublishableKey) {
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <ClerkProvider publishableKey={clerkPublishableKey}>
+        <ClerkProvider
+            publishableKey={clerkPublishableKey}
+            signInForceRedirectUrl={appRedirectPath}
+            signUpForceRedirectUrl={appRedirectPath}
+            signInFallbackRedirectUrl={appRedirectPath}
+            signUpFallbackRedirectUrl={appRedirectPath}
+        >
             <QueryClientProvider client={queryClient}>
                 <RouterProvider router={router} />
                 {/* <ReactQueryDevtools buttonPosition="bottom-left" /> */}

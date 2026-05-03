@@ -5,7 +5,6 @@ export default function SignUpPage() {
         <main className="auth-page">
             <div className="auth-shell">
                 <SignUp
-                    forceRedirectUrl="/kuma-recipes"
                     appearance={{
                         variables: {
                             colorPrimary: '#E97F97',
