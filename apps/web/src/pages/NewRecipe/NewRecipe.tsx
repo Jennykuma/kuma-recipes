@@ -64,7 +64,11 @@ const NewRecipe = () => {
             steps: normalizedSteps,
         };
         const token = await getToken();
-        const response = await recipeApi.createRecipe(payload, token ?? undefined);
+        if (!token) {
+            throw new Error('Missing auth token');
+        }
+
+        const response = await recipeApi.createRecipe(payload, token);
         navigate(`/recipes/${response.id}`);
     };
 
