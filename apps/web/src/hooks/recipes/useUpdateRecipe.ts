@@ -14,7 +14,11 @@ const useUpdateRecipe = (id: string) => {
     return useMutation({
         mutationFn: async (updatedRecipe: UpdateRecipeBody) => {
             const token = await getToken();
-            return recipeApi.updateRecipe(id, updatedRecipe, token ?? undefined);
+            if (!token) {
+                throw new Error('Missing auth token');
+            }
+
+            return recipeApi.updateRecipe(id, updatedRecipe, token);
         },
         onMutate: async (updatedRecipe) => {
             // cancel any outgoing refetches

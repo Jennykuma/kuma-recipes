@@ -10,7 +10,11 @@ const useDeleteRecipe = (id: string) => {
         mutationFn: async () => {
             if (!id) throw new Error('Missing recipe id');
             const token = await getToken();
-            return recipeApi.deleteRecipe(id, token ?? undefined);
+            if (!token) {
+                throw new Error('Missing auth token');
+            }
+
+            return recipeApi.deleteRecipe(id, token);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['recipes'] });

@@ -10,7 +10,11 @@ const useCreateTag = () => {
     return useMutation({
         mutationFn: async (name: string) => {
             const token = await getToken();
-            return tagsApi.createTag(name, token ?? undefined);
+            if (!token) {
+                throw new Error('Missing auth token');
+            }
+
+            return tagsApi.createTag(name, token);
         },
         onSuccess: (tag: Tag) => {
             queryClient.setQueriesData<Tag[]>({ queryKey: ['tags'] }, (existing = []) => {

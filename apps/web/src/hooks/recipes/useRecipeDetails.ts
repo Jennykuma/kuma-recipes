@@ -4,7 +4,7 @@ import { recipe as recipeApi } from '../../api';
 import { useAuth } from '@clerk/clerk-react';
 
 const useRecipeDetails = (id: string) => {
-    const { getToken } = useAuth();
+    const { getToken, isLoaded, isSignedIn } = useAuth();
 
     const {
         data: recipe,
@@ -12,9 +12,14 @@ const useRecipeDetails = (id: string) => {
         error,
     } = useQuery<Recipe>({
         queryKey: ['recipe', id],
+        enabled: Boolean(id) && isLoaded && isSignedIn,
         queryFn: async () => {
             const token = await getToken();
-            return recipeApi.getRecipeDetails(id, token ?? undefined);
+            if (!token) {
+                throw new Error('Missing auth token');
+            }
+
+            return recipeApi.getRecipeDetails(id, token);
         },
     });
 

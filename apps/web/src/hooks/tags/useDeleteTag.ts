@@ -10,7 +10,11 @@ const useDeleteTag = () => {
     return useMutation({
         mutationFn: async (id: string) => {
             const token = await getToken();
-            return tagsApi.deleteTag(id, token ?? undefined);
+            if (!token) {
+                throw new Error('Missing auth token');
+            }
+
+            return tagsApi.deleteTag(id, token);
         },
         onSuccess: (_, id) => {
             queryClient.setQueriesData<Tag[]>({ queryKey: ['tags'] }, (existing = []) =>
