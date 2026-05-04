@@ -81,18 +81,22 @@ export async function updateRecipe(
 ) {
     const { tagIds, ...rest } = updatedRecipe;
     const ownedTagIds = tagIds ? await resolveOwnedTagIds(userId, tagIds) : null;
-
-    const updated = await prisma.recipe.updateMany({
+    const recipe = await prisma.recipe.findFirst({
         where: { id: recipeId, userId },
+        select: { id: true },
+    });
+
+    if (!recipe) {
+        return null;
+    }
+
+    await prisma.recipe.update({
+        where: { id: recipeId },
         data: {
             ...rest,
             ...(ownedTagIds ? { tags: { set: ownedTagIds.map((id) => ({ id })) } } : {}),
         },
     });
-
-    if (updated.count === 0) {
-        return null;
-    }
 
     return recipeDetails(recipeId, userId);
 }
