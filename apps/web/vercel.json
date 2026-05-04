@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/kuma-recipes/api/(.*)",
-      "destination": "/api/$1"
+      "destination": "/api/proxy?route=$1"
     },
     {
       "source": "/kuma-recipes/assets/(.*)",
