@@ -24,7 +24,9 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                 flex flex-col w-full max-w-[26rem]
                 gap-4 p-4 bg-white border border-gray-200
                 rounded-xl shadow-md shadow-gray-100
-                hover:shadow-none cursor-pointer"
+                hover:shadow-none cursor-pointer
+                dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+                dark:shadow-none dark:hover:border-gray-600"
             to={`/recipes/${id}`}
         >
             <div className="flex items-center gap-4">
@@ -43,7 +45,7 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                                 <span
                                     key={tag.id}
                                     title={tag.name}
-                                    className="inline-flex h-6 min-w-0 max-w-24 items-center rounded-full bg-sage-50 px-2.5 text-xs leading-none text-gray-700"
+                                    className="inline-flex h-6 min-w-0 max-w-24 items-center rounded-full bg-sage-50 px-2.5 text-xs leading-none text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                                 >
                                     <span className="min-w-0 truncate">{tag.name}</span>
                                 </span>
@@ -54,7 +56,7 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                                         aria-label={`${hiddenTags.length} more tags: ${hiddenTags
                                             .map((tag) => tag.name)
                                             .join(', ')}`}
-                                        className="inline-flex h-6 items-center rounded-full bg-sage-100 px-2.5 text-xs leading-none text-gray-700"
+                                        className="inline-flex h-6 items-center rounded-full bg-sage-100 px-2.5 text-xs leading-none text-gray-700 dark:bg-sage-300/25 dark:text-sage-100"
                                     >
                                         +{hiddenTags.length}
                                     </span>
@@ -64,7 +66,8 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                                             w-52 -translate-x-1/2 rounded-lg border border-sage-200
                                             bg-white px-3 py-2 text-left text-xs text-gray-700 break-words
                                             opacity-0 shadow-lg shadow-gray-100 transition-opacity
-                                            group-hover:opacity-100"
+                                            group-hover:opacity-100
+                                            dark:border-gray-700 dark:bg-[#333333] dark:text-gray-100 dark:shadow-none"
                                     >
                                         {hiddenTags.map((tag) => tag.name).join(', ')}
                                     </div>
@@ -73,7 +76,7 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                         </div>
                     )}
                 </div>
-                <div className="h-24 w-24 shrink-0 rounded-xl bg-gray-100 md:h-28 md:w-28"></div>
+                <div className="h-24 w-24 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-700 md:h-28 md:w-28"></div>
             </div>
         </Link>
     );

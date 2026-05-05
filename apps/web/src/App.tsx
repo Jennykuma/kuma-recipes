@@ -25,7 +25,7 @@ const App = () => {
     if (error) return <div>Error...</div>;
 
     return (
-        <div className="p-6">
+        <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <header className="flex justify-between">
                 <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
                     Kuma Recipes 🧸
@@ -39,7 +39,9 @@ const App = () => {
                     border border-blush-200 bg-white
                     px-4 py-2 rounded-xl
                     hover:bg-blush-200 hover:text-white
-                    transition-colors"
+                    transition-colors
+                    dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300
+                    dark:hover:bg-blush-400 dark:hover:text-white"
                     to={`/recipes/new`}
                 >
                     Add recipe
@@ -57,9 +59,12 @@ const App = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="
-                        border border-blush-200 w-full
+                        border border-blush-200 w-full bg-white text-gray-800
                         pl-10 pr-9 py-1 rounded-xl text-sm
                         outline-none focus:border-blush-300 focus:ring-2 focus:ring-blush-100
+                        placeholder:text-gray-400
+                        dark:border-blush-300/70 dark:bg-[#2a2a2a] dark:text-gray-100
+                        dark:placeholder:text-gray-400 dark:focus:ring-blush-400/20
                         "
                     />
                     {searchTerm && (

@@ -20,14 +20,14 @@ const NotesSection = ({
     if (isEditing) {
         return (
             <div className="flex flex-col w-full min-w-0">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
                     Notes
                 </span>
                 <textarea
                     className="
                         flex-1 max-w-125 p-2 rounded-md text-xs
                         resize-none bg-white border border-gray-200
-                        rounded-sm placeholder:text-xs"
+                        rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
                     rows={4}
                     value={draftValue ?? ''}
                     onChange={(e) => onChange(e.target.value)}
@@ -60,7 +60,7 @@ const NotesSection = ({
             <span
                 className="
                     text-[10px] uppercase tracking-wide
-                    text-gray-500 rounded-full"
+                    text-gray-500 rounded-full dark:text-gray-300"
             >
                 Notes
             </span>
@@ -68,7 +68,7 @@ const NotesSection = ({
                 className="
                     flex-1 max-w-125 p-2 rounded-md text-xs
                     resize-none bg-white border border-gray-200
-                    rounded-sm placeholder:text-xs"
+                    rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
                 rows={4}
                 value={notes ?? ''}
                 onClick={onEdit}

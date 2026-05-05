@@ -155,7 +155,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     return (
         <div ref={containerRef} className="relative w-full">
             <div
-                className="min-h-[38px] w-full rounded-md border border-gray-200 bg-white px-2 py-1 flex flex-wrap gap-1 items-center"
+                className="min-h-[38px] w-full rounded-md border border-gray-200 bg-white px-2 py-1 flex flex-wrap gap-1 items-center dark:border-gray-700 dark:bg-[#2a2a2a]"
                 role="button"
                 tabIndex={0}
                 onClick={() => setDropdownOpen(true)}
@@ -169,7 +169,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     <button
                         key={tag.id}
                         type="button"
-                        className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700"
+                        className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                         onClick={(event) => {
                             event.stopPropagation();
                             removeTag(tag.id);
@@ -188,7 +188,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     aria-describedby={
                         hasReachedTagNameLimit ? 'tags-input-limit-message' : undefined
                     }
-                    className="flex-1 min-w-[120px] border-0 bg-transparent text-sm focus:outline-none"
+                    className="flex-1 min-w-[120px] border-0 bg-transparent text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none dark:text-gray-100"
                     placeholder="Add tags..."
                     value={query}
                     onFocus={() => setDropdownOpen(true)}
@@ -207,7 +207,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
 
             {dropdownOpen && (
                 <div
-                    className="absolute left-0 right-0 top-full z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm"
+                    className="absolute left-0 right-0 top-full z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none"
                     style={{ maxHeight: `${dropdownMaxHeight}px` }}
                 >
                     {hasReachedTagNameLimit && (
@@ -229,7 +229,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     {!isLoading && query.trim() !== '' && !hasExactMatch && (
                         <button
                             type="button"
-                            className="w-full text-left px-3 py-2 text-xs text-blush-400 hover:bg-blush-50"
+                            className="w-full text-left px-3 py-2 text-xs text-blush-400 hover:bg-blush-50 dark:text-blush-300 dark:hover:bg-blush-400/10"
                             onClick={createTagFromQuery}
                         >
                             <Plus className="w-3 h-3 mr-1 mb-0.5 inline" /> Create &quot;
@@ -241,7 +241,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                         return (
                             <div
                                 key={tag.id}
-                                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+                                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between dark:text-gray-100 dark:hover:bg-blush-400/10"
                             >
                                 <button
                                     type="button"

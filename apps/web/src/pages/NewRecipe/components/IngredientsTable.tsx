@@ -90,10 +90,10 @@ const IngredientsTable = () => {
                         />
                         <input
                             className={classNames(
-                                'w-full text-sm pl-1 rounded-md border w-100 transition-colors focus:outline-none',
+                                'w-full text-sm pl-1 rounded-md border w-100 transition-colors focus:outline-none dark:bg-[#252525] dark:text-gray-100',
                                 activeIndex === index
-                                    ? 'border-sage-300'
-                                    : 'border-gray-200'
+                                    ? 'border-sage-300 dark:border-sage-300'
+                                    : 'border-gray-200 dark:border-gray-600'
                             )}
                             {...register(`ingredients.${index}.ingredient`)}
                             onFocus={() => setActiveIndex(index)}
@@ -132,7 +132,11 @@ const IngredientsTable = () => {
                            border border-blush-200 bg-white
                            px-2.5 py-1.5 rounded-full
                            hover:bg-blush-200 hover:text-white
-                           transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                           transition-colors disabled:cursor-not-allowed
+                           dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300
+                           dark:hover:bg-blush-400 dark:hover:text-white
+                           disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400
+                           dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500"
                 onClick={() => {
                     if (isAddDisabled) return;
                     append({ ingredient: '' }, { shouldFocus: true });

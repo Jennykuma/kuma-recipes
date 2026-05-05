@@ -58,7 +58,7 @@ const EditableSource = ({
                 <div className="flex w-full items-baseline gap-2">
                     <input
                         ref={inputRef}
-                        className="w-full max-w-125 border-b border-gray-300 bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm"
+                        className="w-full max-w-125 border-b border-gray-300 bg-transparent text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm dark:border-gray-600 dark:text-gray-100"
                         value={draftValue ?? ''}
                         onChange={(e) => onChange(e.target.value)}
                         onKeyDown={(event) => {
@@ -98,7 +98,7 @@ const EditableSource = ({
                             {sourceText}
                         </a>
                     ) : (
-                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full">
+                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full dark:text-gray-200">
                             {sourceText || '—'}
                         </span>
                     )}

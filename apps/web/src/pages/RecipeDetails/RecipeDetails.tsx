@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link2, RotateCcw, Star } from 'lucide-react';
+import { Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
 import { useRecipeDetails, useDeleteRecipe, useUpdateRecipe } from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
 import Rating from '../../components/Rating';
@@ -138,7 +138,7 @@ const RecipeDetails = () => {
     };
 
     return (
-        <div className="p-8">
+        <div className="min-h-screen bg-white p-8 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto w-full max-w-7xl">
                 <BackButton to="/" />
                 <header className="flex items-center justify-between mb-1">
@@ -164,12 +164,14 @@ const RecipeDetails = () => {
                     <button
                         onClick={() => setShowDeleteModal(true)}
                         className="
-                        font-jua text-sm text-red-500
-                        ml-2 px-3 py-1.5 rounded-xl
-                        bg-red-50 hover:bg-red-100
-                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+                        ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
+                        text-red-500 hover:bg-red-50 hover:text-red-600
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
+                        dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
+                        aria-label="Delete recipe"
+                        title="Delete recipe"
                     >
-                        Delete
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </button>
                 </header>
                 {showDeleteModal ? (
@@ -181,7 +183,7 @@ const RecipeDetails = () => {
                 ) : null}
 
                 <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 md:col-span-2">
+                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none md:col-span-2">
                         <div className="w-full flex flex-col gap-4 text-sm">
                             <TagsSection
                                 tags={recipe?.tags}
@@ -191,10 +193,10 @@ const RecipeDetails = () => {
                                 onCancel={handleTagsCancel}
                             />
 
-                            <div className="h-px w-full bg-gray-100" />
+                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <Star
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -209,7 +211,7 @@ const RecipeDetails = () => {
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <RotateCcw
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -223,10 +225,10 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="h-px w-full bg-gray-100" />
+                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <Link2
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"

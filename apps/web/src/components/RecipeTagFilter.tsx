@@ -88,9 +88,12 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
                     onFocus={() => setDropdownOpen(true)}
                     onChange={(event) => updateQuery(event.target.value)}
                     className="
-                    border border-blush-200 w-full
+                    border border-blush-200 w-full bg-white text-gray-800
                     pl-10 pr-16 py-1 rounded-xl text-sm
                     outline-none focus:border-blush-300 focus:ring-2 focus:ring-blush-100
+                    placeholder:text-gray-400
+                    dark:border-blush-300/70 dark:bg-[#2a2a2a] dark:text-gray-100
+                    dark:placeholder:text-gray-400 dark:focus:ring-blush-400/20
                     "
                 />
                 <button
@@ -127,7 +130,7 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
                         <button
                             key={tag.id}
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700 hover:bg-sage-100"
+                            className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700 hover:bg-sage-100 dark:bg-sage-300/20 dark:text-sage-100 dark:hover:bg-sage-300/30"
                             onClick={() => removeTag(tag.id)}
                         >
                             {tag.name}
@@ -138,11 +141,11 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
             )}
 
             {dropdownOpen && (
-                <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-64 overflow-y-auto rounded-xl border border-blush-100 bg-white shadow-sm">
+                <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-64 overflow-y-auto rounded-xl border border-blush-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none">
                     {hasSelectedTags && (
                         <button
                             type="button"
-                            className="w-full px-3 py-2 text-left text-xs text-blush-500 hover:bg-blush-50"
+                            className="w-full px-3 py-2 text-left text-xs text-blush-500 hover:bg-blush-50 dark:text-blush-300 dark:hover:bg-blush-400/10"
                             onClick={clearTags}
                         >
                             All tags
@@ -159,7 +162,7 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
                     {tagOptions.map((tag) => (
                         <label
                             key={tag.id}
-                            className="flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left text-sm text-gray-700 hover:bg-blush-50"
+                            className="flex w-full cursor-pointer items-center justify-between px-3 py-2 text-left text-sm text-gray-700 hover:bg-blush-50 dark:text-gray-100 dark:hover:bg-blush-400/10"
                         >
                             <span className="flex min-w-0 items-center gap-2">
                                 <input

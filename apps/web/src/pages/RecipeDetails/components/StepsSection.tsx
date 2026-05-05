@@ -54,7 +54,7 @@ const StepsSection = ({
     return (
         <div className="w-full max-w-150">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
                     Steps
                 </span>
                 {!isEditing && (
@@ -98,11 +98,11 @@ const StepsSection = ({
                 <ul>
                     {steps?.map((step) => {
                         return (
-                            <li key={step} className="ml-4 list-decimal text-sm/7">
+                            <li key={step} className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100">
                                 {step}
                                 <input
                                     type="checkbox"
-                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70"
+                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
                                 />
                             </li>
                         );
