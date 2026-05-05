@@ -12,7 +12,7 @@ const StepsTable = () => {
     const { control, register, setFocus } = useFormContext<RecipeFormValues>();
     const stepTableRows = useWatch({ control, name: 'steps' });
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, insert, remove } = useFieldArray({
         control,
         name: 'steps',
         rules: {
@@ -45,7 +45,13 @@ const StepsTable = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             if (step === '') return;
-            append({ step: '' }, { shouldFocus: true });
+            const nextIndex = index + 1;
+            insert(nextIndex, { step: '' });
+
+            requestAnimationFrame(() => {
+                setFocus(`steps.${nextIndex}.step`);
+                setActiveIndex(nextIndex);
+            });
         }
 
         if (step === '' && event.key === 'Backspace') {

@@ -12,7 +12,7 @@ const IngredientsTable = () => {
     const { control, register, setFocus, getValues } = useFormContext<RecipeFormValues>();
     const ingredientTableRows = useWatch({ control, name: 'ingredients' });
 
-    const { fields, append, remove, replace } = useFieldArray({
+    const { fields, append, insert, remove, replace } = useFieldArray({
         control,
         name: 'ingredients',
         rules: {
@@ -51,7 +51,13 @@ const IngredientsTable = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             if (ingredient === '') return;
-            append({ ingredient: '' }, { shouldFocus: true });
+            const nextIndex = index + 1;
+            insert(nextIndex, { ingredient: '' });
+
+            requestAnimationFrame(() => {
+                setFocus(`ingredients.${nextIndex}.ingredient`);
+                setActiveIndex(nextIndex);
+            });
         }
 
         if (ingredient === '' && event.key === 'Backspace') {
