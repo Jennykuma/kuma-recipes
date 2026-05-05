@@ -63,12 +63,11 @@ describe('App recipe search', () => {
         );
 
         await user.click(screen.getByLabelText(/search recipes by tag/i));
-        await user.click(screen.getByRole('checkbox', { name: /dessert/i }));
-        await user.click(screen.getByRole('checkbox', { name: /quick/i }));
+        await user.click(screen.getByRole('button', { name: /dessert/i }));
+        await user.click(screen.getByRole('button', { name: /quick/i }));
 
-        expect(screen.getByRole('checkbox', { name: /dessert/i })).toBeChecked();
-        expect(screen.getByRole('checkbox', { name: /quick/i })).toBeChecked();
-        expect(screen.getAllByRole('checkbox', { checked: true })).toHaveLength(2);
+        expect(screen.getAllByText(/^selected$/)).toHaveLength(2);
+        expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
         expect(mockUseRecipes).toHaveBeenLastCalledWith(['dessert', 'quick']);
     });
 });
