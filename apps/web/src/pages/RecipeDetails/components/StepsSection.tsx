@@ -121,7 +121,11 @@ const StepsSection = ({
                                 key={step}
                                 className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100"
                             >
-                                {stepComplete ? <s>{step}</s> : step}
+                                {stepComplete ? (
+                                    <s className="text-gray-500">{step}</s>
+                                ) : (
+                                    step
+                                )}
                                 <input
                                     type="checkbox"
                                     checked={stepComplete}
