@@ -46,12 +46,15 @@ async function readRequestBody(req: IncomingMessage): Promise<string | undefined
     return Buffer.concat(chunks).toString('utf8');
 }
 
-function toFastifyUrl(req: IncomingMessage): string {
+export function toFastifyUrl(req: IncomingMessage): string {
     const origin = `https://${req.headers.host || 'localhost'}`;
     const url = new URL(req.url || '/', origin);
     const route = (url.searchParams.get('route') || '').replace(/^\/+/, '');
     const path = `/${route}`;
-    return path === '/' ? '/' : path;
+    url.searchParams.delete('route');
+
+    const queryString = url.searchParams.toString();
+    return `${path === '/' ? '/' : path}${queryString ? `?${queryString}` : ''}`;
 }
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
