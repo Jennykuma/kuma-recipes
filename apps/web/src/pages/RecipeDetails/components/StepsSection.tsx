@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
@@ -19,15 +19,19 @@ const StepsSection = ({
     onSave,
     onCancel,
 }: StepsSectionProps) => {
+    const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+
     const form = useForm<StepsForm>({
         defaultValues: {
             steps: (steps ?? ['']).map((step) => ({ step })),
         },
     });
+
     const watchedSteps = useWatch({
         control: form.control,
         name: 'steps',
     });
+
     const canSave = watchedSteps.some((stepRow) => stepRow.step.trim() !== '');
 
     useEffect(() => {
@@ -49,6 +53,20 @@ const StepsSection = ({
             steps: (steps ?? ['']).map((step) => ({ step })),
         });
         onCancel();
+    };
+
+    const toggleStep = (step: string) => {
+        setCompletedSteps((prev) => {
+            const next = new Set(prev);
+
+            if (next.has(step)) {
+                next.delete(step);
+            } else {
+                next.add(step);
+            }
+
+            return next;
+        });
     };
 
     return (
@@ -97,12 +115,18 @@ const StepsSection = ({
             ) : (
                 <ul>
                     {steps?.map((step) => {
+                        const stepComplete = completedSteps.has(step);
                         return (
-                            <li key={step} className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100">
-                                {step}
+                            <li
+                                key={step}
+                                className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100"
+                            >
+                                {stepComplete ? <s>{step}</s> : step}
                                 <input
                                     type="checkbox"
+                                    checked={stepComplete}
                                     className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
+                                    onChange={() => toggleStep(step)}
                                 />
                             </li>
                         );
