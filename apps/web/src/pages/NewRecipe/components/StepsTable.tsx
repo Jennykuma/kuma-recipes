@@ -15,6 +15,11 @@ const StepsTable = () => {
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'steps',
+        rules: {
+            validate: (items) =>
+                items.some((item) => item.step.trim() !== '') ||
+                'At least one step is required',
+        },
     });
 
     const lastStep = stepTableRows?.[stepTableRows.length - 1]?.step ?? '';

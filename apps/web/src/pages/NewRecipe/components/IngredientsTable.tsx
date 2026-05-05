@@ -15,6 +15,11 @@ const IngredientsTable = () => {
     const { fields, append, remove, replace } = useFieldArray({
         control,
         name: 'ingredients',
+        rules: {
+            validate: (items) =>
+                items.some((item) => item.ingredient.trim() !== '') ||
+                'At least one ingredient is required',
+        },
     });
 
     const lastIngredient =
