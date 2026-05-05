@@ -34,12 +34,16 @@ function normalizeTitle(title: string) {
 
 export async function listRecipes(
     userId: string,
-    tagSlug?: string
+    tagSlugs: string[] = []
 ): Promise<RecipeListItem[]> {
+    const tagFilters = tagSlugs.map((slug) => ({
+        tags: { some: { slug, userId } },
+    }));
+
     const recipes = await prisma.recipe.findMany({
         where: {
             userId,
-            ...(tagSlug ? { tags: { some: { slug: tagSlug, userId } } } : {}),
+            ...(tagFilters.length ? { AND: tagFilters } : {}),
         },
         orderBy: { createdAt: 'desc' },
         include: { tags: true },

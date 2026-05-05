@@ -24,8 +24,12 @@ const recipe = {
         }
     },
 
-    async getRecipes(token?: string): Promise<RecipeListItem[]> {
-        const response = await fetch(buildApiUrl('/recipes'), {
+    async getRecipes(token?: string, tagSlugs: string[] = []): Promise<RecipeListItem[]> {
+        const params = new URLSearchParams();
+        tagSlugs.forEach((tagSlug) => params.append('tag', tagSlug));
+        const queryString = params.size > 0 ? `?${params.toString()}` : '';
+
+        const response = await fetch(`${buildApiUrl('/recipes')}${queryString}`, {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
         if (!response.ok) {

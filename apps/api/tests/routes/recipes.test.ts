@@ -24,6 +24,8 @@ describe('recipes routes', () => {
     const authHeaders = { authorization: 'Bearer test-token' };
 
     beforeEach(async () => {
+        process.env.CLERK_SECRET_KEY = 'test-secret';
+        vi.clearAllMocks();
         vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
         app = buildApp();
         await app.ready();
@@ -81,6 +83,7 @@ describe('recipes routes', () => {
         });
 
         expect(res.statusCode).toBe(200);
+        expect(mockedListRecipes).toHaveBeenCalledWith('test-user-1', []);
         expect(res.json()).toEqual({
             recipes: [
                 {
@@ -92,6 +95,38 @@ describe('recipes routes', () => {
                     id: 'ceada500-2341-42c5-869b-f231869a94aa',
                     title: 'Salt Bread',
                     rating: 5,
+                },
+            ],
+        });
+    });
+
+    test('GET /recipes forwards tag filters', async () => {
+        const mockedListRecipes = vi.mocked(listRecipes);
+        mockedListRecipes.mockResolvedValue([
+            {
+                id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+                title: 'Matcha Cookies',
+                rating: 4,
+            },
+        ]);
+
+        const res = await app.inject({
+            method: 'GET',
+            url: '/recipes?tag=matcha&tag=dessert',
+            headers: authHeaders,
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(mockedListRecipes).toHaveBeenCalledWith('test-user-1', [
+            'matcha',
+            'dessert',
+        ]);
+        expect(res.json()).toEqual({
+            recipes: [
+                {
+                    id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+                    title: 'Matcha Cookies',
+                    rating: 4,
                 },
             ],
         });

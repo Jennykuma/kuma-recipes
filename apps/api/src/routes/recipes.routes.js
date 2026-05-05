@@ -1,4 +1,15 @@
 import { requireUser } from '../auth/require-user.js';
+function parseTagFilters(tagQuery) {
+    const queryValues = Array.isArray(tagQuery) ? tagQuery : tagQuery ? [tagQuery] : [];
+    return [
+        ...new Set(
+            queryValues
+                .flatMap((value) => value.split(','))
+                .map((value) => value.trim())
+                .filter(Boolean)
+        ),
+    ];
+}
 const recipesRoutes = async (fastify) => {
     // GET /recipes
     fastify.get('/', async (request, reply) => {
@@ -7,7 +18,8 @@ const recipesRoutes = async (fastify) => {
             return;
         }
         const { listRecipes } = await import('../services/recipes/recipes.service.js');
-        const recipes = await listRecipes(userId);
+        const { tag } = request.query;
+        const recipes = await listRecipes(userId, parseTagFilters(tag));
         reply.send({ recipes });
     });
     // GET /recipes/:id
@@ -31,26 +43,27 @@ const recipesRoutes = async (fastify) => {
         if (!userId) {
             return;
         }
-        const { createNewRecipe } = await import('../services/recipes/recipes.service.js');
+        const { createNewRecipe } =
+            await import('../services/recipes/recipes.service.js');
         const body = request.body.recipe ?? request.body;
         const { title, ingredients, notes, rating, remake, steps, tagIds, source } = body;
         try {
-            const result = await createNewRecipe({
-                title,
-                ingredients,
-                notes,
-                rating,
-                remake,
-                steps,
-                tagIds,
-                source,
-            }, userId);
+            const result = await createNewRecipe(
+                {
+                    title,
+                    ingredients,
+                    notes,
+                    rating,
+                    remake,
+                    steps,
+                    tagIds,
+                    source,
+                },
+                userId
+            );
             reply.code(201).send(result);
-        }
-        catch (error) {
-            reply
-                .code(400)
-                .send({ message: error.message || 'Invalid recipe payload' });
+        } catch (error) {
+            reply.code(400).send({ message: error.message || 'Invalid recipe payload' });
         }
     });
     // PATCH /recipes/:id
@@ -68,11 +81,8 @@ const recipesRoutes = async (fastify) => {
                 return;
             }
             reply.code(200).send(result);
-        }
-        catch (error) {
-            reply
-                .code(400)
-                .send({ message: error.message || 'Invalid recipe payload' });
+        } catch (error) {
+            reply.code(400).send({ message: error.message || 'Invalid recipe payload' });
         }
     });
     // DELETE /recipes/:id

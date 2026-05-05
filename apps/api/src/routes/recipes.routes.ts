@@ -5,6 +5,19 @@ import {
 } from '../services/recipes/recipes.types.js';
 import { requireUser } from '../auth/require-user.js';
 
+function parseTagFilters(tagQuery?: string | string[]) {
+    const queryValues = Array.isArray(tagQuery) ? tagQuery : tagQuery ? [tagQuery] : [];
+
+    return [
+        ...new Set(
+            queryValues
+                .flatMap((value) => value.split(','))
+                .map((value) => value.trim())
+                .filter(Boolean)
+        ),
+    ];
+}
+
 const recipesRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /recipes
     fastify.get('/', async (request, reply: FastifyReply) => {
@@ -13,7 +26,8 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             return;
         }
         const { listRecipes } = await import('../services/recipes/recipes.service.js');
-        const recipes = await listRecipes(userId);
+        const { tag } = request.query as { tag?: string | string[] };
+        const recipes = await listRecipes(userId, parseTagFilters(tag));
         reply.send({ recipes });
     });
 

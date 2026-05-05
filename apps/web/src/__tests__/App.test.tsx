@@ -3,15 +3,16 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import useRecipes from '../hooks/recipes/useRecipes';
+import useTagsQuery from '../hooks/tags/useTagsQuery';
 
 vi.mock('../hooks/recipes/useRecipes');
+vi.mock('../hooks/tags/useTagsQuery');
 
 const mockUseRecipes = vi.mocked(useRecipes);
+const mockUseTagsQuery = vi.mocked(useTagsQuery);
 
 describe('App recipe search', () => {
-    it('clears the search input and restores filtered recipes', async () => {
-        const user = userEvent.setup();
-
+    beforeEach(() => {
         mockUseRecipes.mockReturnValue({
             recipes: [
                 { id: '1', title: 'Chocolate Cake', rating: 5 },
@@ -20,6 +21,17 @@ describe('App recipe search', () => {
             isLoading: false,
             error: null,
         });
+        mockUseTagsQuery.mockReturnValue({
+            data: [
+                { id: 'tag-1', name: 'Dessert', slug: 'dessert', count: 1 },
+                { id: 'tag-2', name: 'Quick', slug: 'quick', count: 1 },
+            ],
+            isLoading: false,
+        } as unknown as ReturnType<typeof useTagsQuery>);
+    });
+
+    it('clears the search input and restores filtered recipes', async () => {
+        const user = userEvent.setup();
 
         render(
             <MemoryRouter>
@@ -39,5 +51,24 @@ describe('App recipe search', () => {
         expect(searchInput).toHaveValue('');
         expect(screen.getByText('Chocolate Cake')).toBeInTheDocument();
         expect(screen.getByText('Miso Soup')).toBeInTheDocument();
+    });
+
+    it('selects multiple tag filters', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <MemoryRouter>
+                <App />
+            </MemoryRouter>
+        );
+
+        await user.click(screen.getByLabelText(/search recipes by tag/i));
+        await user.click(screen.getByRole('checkbox', { name: /dessert/i }));
+        await user.click(screen.getByRole('checkbox', { name: /quick/i }));
+
+        expect(screen.getByRole('checkbox', { name: /dessert/i })).toBeChecked();
+        expect(screen.getByRole('checkbox', { name: /quick/i })).toBeChecked();
+        expect(screen.getAllByRole('checkbox', { checked: true })).toHaveLength(2);
+        expect(mockUseRecipes).toHaveBeenLastCalledWith(['dessert', 'quick']);
     });
 });

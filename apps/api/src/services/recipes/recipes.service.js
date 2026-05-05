@@ -1,7 +1,6 @@
 import { prisma } from '../../prisma.js';
 async function resolveOwnedTagIds(userId, tagIds = []) {
-    if (!tagIds.length)
-        return [];
+    if (!tagIds.length) return [];
     const ownedTags = await prisma.tag.findMany({
         where: {
             userId,
@@ -14,11 +13,14 @@ async function resolveOwnedTagIds(userId, tagIds = []) {
     }
     return ownedTags.map((tag) => tag.id);
 }
-export async function listRecipes(userId, tagSlug) {
+export async function listRecipes(userId, tagSlugs = []) {
+    const tagFilters = tagSlugs.map((slug) => ({
+        tags: { some: { slug, userId } },
+    }));
     const recipes = await prisma.recipe.findMany({
         where: {
             userId,
-            ...(tagSlug ? { tags: { some: { slug: tagSlug, userId } } } : {}),
+            ...(tagFilters.length ? { AND: tagFilters } : {}),
         },
         orderBy: { createdAt: 'desc' },
         include: { tags: true },
@@ -35,7 +37,8 @@ export async function recipeDetails(recipeId, userId) {
     });
 }
 export async function createNewRecipe(recipeParams, userId) {
-    const { title, ingredients, notes, rating, remake, steps, tagIds, source } = recipeParams;
+    const { title, ingredients, notes, rating, remake, steps, tagIds, source } =
+        recipeParams;
     const ownedTagIds = await resolveOwnedTagIds(userId, tagIds);
     const normalizedSource = source?.trim();
     return prisma.recipe.create({
