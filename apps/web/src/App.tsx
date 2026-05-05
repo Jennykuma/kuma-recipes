@@ -89,6 +89,7 @@ const App = () => {
                         key={recipe.id}
                         id={recipe.id}
                         rating={recipe.rating}
+                        tags={recipe.tags}
                         title={recipe.title}
                     />
                 ))}
