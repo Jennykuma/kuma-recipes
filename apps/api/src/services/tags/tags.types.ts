@@ -1,3 +1,5 @@
+export const TAG_NAME_MAX_LENGTH = 24;
+
 export type Tag = {
     id: string;
     name: string;

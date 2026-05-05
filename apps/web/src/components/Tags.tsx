@@ -7,6 +7,7 @@ import type { Tag } from '../../../api/src/services/tags/tags.types';
 import { Plus, X } from 'lucide-react';
 
 const EMPTY_SELECTED_IDS: string[] = [];
+const TAG_NAME_MAX_LENGTH = 24;
 type TagsFormValues = {
     tagIds: string[];
 };
@@ -24,6 +25,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const [dropdownMaxHeight, setDropdownMaxHeight] = useState(256);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
+    const [showTagNameLimitMessage, setShowTagNameLimitMessage] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const selectedTagCacheRef = useRef<Map<string, Tag>>(new Map());
@@ -31,6 +33,8 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const { data: options = [], isLoading } = useTagsQuery(debouncedQuery);
     const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
     const { mutateAsync: deleteTag } = useDeleteTag();
+    const hasReachedTagNameLimit =
+        showTagNameLimitMessage || query.length >= TAG_NAME_MAX_LENGTH;
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -113,6 +117,12 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
         );
     };
 
+    const updateQuery = (value: string) => {
+        const nextQuery = value.slice(0, TAG_NAME_MAX_LENGTH);
+        setQuery(nextQuery);
+        setShowTagNameLimitMessage(value.length >= TAG_NAME_MAX_LENGTH);
+    };
+
     const handleDeleteTag = async (id: string) => {
         await deleteTag(id);
         removeTag(id);
@@ -121,11 +131,16 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const createTagFromQuery = async () => {
         const name = query.trim();
         if (!name) return;
+        if (name.length > TAG_NAME_MAX_LENGTH) {
+            setShowTagNameLimitMessage(true);
+            return;
+        }
         try {
             const tag = await createTag(name);
             if (tag) selectTag(tag);
         } finally {
             setQuery('');
+            setShowTagNameLimitMessage(false);
         }
     };
 
@@ -170,11 +185,15 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     ref={inputRef}
                     id="tags-input"
                     type="text"
+                    aria-describedby={
+                        hasReachedTagNameLimit ? 'tags-input-limit-message' : undefined
+                    }
                     className="flex-1 min-w-[120px] border-0 bg-transparent text-sm focus:outline-none"
                     placeholder="Add tags..."
                     value={query}
                     onFocus={() => setDropdownOpen(true)}
-                    onChange={(event) => setQuery(event.target.value)}
+                    maxLength={TAG_NAME_MAX_LENGTH}
+                    onChange={(event) => updateQuery(event.target.value)}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {
                             event.preventDefault();
@@ -191,6 +210,14 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     className="absolute left-0 right-0 top-full z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm"
                     style={{ maxHeight: `${dropdownMaxHeight}px` }}
                 >
+                    {hasReachedTagNameLimit && (
+                        <div
+                            id="tags-input-limit-message"
+                            className="px-3 py-2 text-xs text-blush-500"
+                        >
+                            Tag names can be up to {TAG_NAME_MAX_LENGTH} characters.
+                        </div>
+                    )}
                     {(isLoading || isCreating) && (
                         <div className="px-3 py-2 text-xs text-gray-400">Loading...</div>
                     )}

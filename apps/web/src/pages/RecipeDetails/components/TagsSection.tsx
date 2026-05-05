@@ -90,7 +90,7 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
                     {tags.map((tag: Tag) => (
                         <span
                             key={tag.id}
-                            className="px-2.5 py-1 rounded-full text-[11px] bg-sage-50 text-gray-700"
+                            className="inline-flex h-6 items-center rounded-full bg-sage-50 px-2.5 text-xs text-gray-700"
                         >
                             {tag.name}
                         </span>

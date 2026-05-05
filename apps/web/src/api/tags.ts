@@ -7,6 +7,7 @@ type ListTagsResponse = {
 
 type CreateTagResponse = {
     tag: Tag;
+    message?: string;
 };
 
 const tags = {
@@ -29,6 +30,9 @@ const tags = {
             body: JSON.stringify({ name }),
         });
         const data: CreateTagResponse = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message ?? 'Failed to create tag');
+        }
         return data.tag;
     },
 
