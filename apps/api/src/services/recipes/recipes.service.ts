@@ -23,6 +23,15 @@ async function resolveOwnedTagIds(userId: string, tagIds: string[] = []) {
     return ownedTags.map((tag) => tag.id);
 }
 
+function normalizeTitle(title: string) {
+    const normalizedTitle = title.trim();
+    if (!normalizedTitle) {
+        throw new Error('Title is required');
+    }
+
+    return normalizedTitle;
+}
+
 export async function listRecipes(
     userId: string,
     tagSlug?: string
@@ -53,11 +62,12 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
     const { title, ingredients, notes, rating, remake, steps, tagIds, source } =
         recipeParams;
     const ownedTagIds = await resolveOwnedTagIds(userId, tagIds);
+    const normalizedTitle = normalizeTitle(title);
     const normalizedSource = source?.trim();
     return prisma.recipe.create({
         data: {
             userId,
-            title,
+            title: normalizedTitle,
             ingredients: ingredients || [],
             steps: steps || [],
             notes: notes ?? null,
@@ -81,6 +91,8 @@ export async function updateRecipe(
 ) {
     const { tagIds, ...rest } = updatedRecipe;
     const ownedTagIds = tagIds ? await resolveOwnedTagIds(userId, tagIds) : null;
+    const normalizedTitle =
+        rest.title === undefined ? undefined : normalizeTitle(rest.title);
     const recipe = await prisma.recipe.findFirst({
         where: { id: recipeId, userId },
         select: { id: true },
@@ -94,6 +106,7 @@ export async function updateRecipe(
         where: { id: recipeId },
         data: {
             ...rest,
+            ...(normalizedTitle !== undefined ? { title: normalizedTitle } : {}),
             ...(ownedTagIds ? { tags: { set: ownedTagIds.map((id) => ({ id })) } } : {}),
         },
     });

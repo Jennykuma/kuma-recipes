@@ -27,6 +27,7 @@ const RecipeDetails = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
     const [draft, setDraft] = useState<Partial<Recipe>>({});
+    const [titleError, setTitleError] = useState<string | null>(null);
 
     const handleChangeRating = (rating: number) => {
         if (!recipe) {
@@ -44,6 +45,9 @@ const RecipeDetails = () => {
             delete next[field];
             return next;
         });
+        if (field === 'title') {
+            setTitleError(null);
+        }
         setEditingField(null);
     };
 
@@ -92,6 +96,24 @@ const RecipeDetails = () => {
         setEditingField(null);
     };
 
+    const handleTitleSave = async () => {
+        const title = (draft.title ?? recipe?.title ?? '').trim();
+        if (!title) {
+            setTitleError('Title is required');
+            return;
+        }
+
+        try {
+            await updateRecipeAsync({ title });
+            setDraft((prev) => ({ ...prev, title }));
+            setTitleError(null);
+            setEditingField(null);
+        } catch (err) {
+            console.error(err);
+            handleCancel('title');
+        }
+    };
+
     const handleSave = async (field: keyof Recipe) => {
         const value = draft[field] ?? recipe?.[field];
         if (value === undefined) return;
@@ -120,28 +142,35 @@ const RecipeDetails = () => {
             <div className="mx-auto w-full max-w-7xl">
                 <BackButton to="/" />
                 <header className="flex items-center justify-between mb-1">
-                <EditableTitle
-                    title={recipe?.title}
-                    isEditing={editingField === 'title'}
-                    draftValue={draft.title}
-                    onEdit={() => {
-                        setDraft({ ...draft, title: recipe?.title ?? '' });
-                        setEditingField('title');
-                    }}
-                    onChange={(value) => setDraft({ ...draft, title: value })}
-                    onSave={() => handleSave('title')}
-                    onCancel={() => handleCancel('title')}
-                />
-                <button
-                    onClick={() => setShowDeleteModal(true)}
-                    className="
+                    <EditableTitle
+                        title={recipe?.title}
+                        isEditing={editingField === 'title'}
+                        draftValue={draft.title}
+                        error={titleError ?? undefined}
+                        onEdit={() => {
+                            setDraft({ ...draft, title: recipe?.title ?? '' });
+                            setTitleError(null);
+                            setEditingField('title');
+                        }}
+                        onChange={(value) => {
+                            setDraft({ ...draft, title: value });
+                            if (value.trim()) {
+                                setTitleError(null);
+                            }
+                        }}
+                        onSave={handleTitleSave}
+                        onCancel={() => handleCancel('title')}
+                    />
+                    <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="
                         font-jua text-sm text-red-500
                         ml-2 px-3 py-1.5 rounded-xl
                         bg-red-50 hover:bg-red-100
                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
-                >
-                    Delete
-                </button>
+                    >
+                        Delete
+                    </button>
                 </header>
                 {showDeleteModal ? (
                     <DeleteModal
