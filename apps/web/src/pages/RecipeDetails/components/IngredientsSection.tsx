@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
 import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -24,6 +24,13 @@ const IngredientsSection = ({
             ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
         },
     });
+    const watchedIngredients = useWatch({
+        control: form.control,
+        name: 'ingredients',
+    });
+    const canSave = watchedIngredients.some(
+        (ingredientRow) => ingredientRow.ingredient.trim() !== ''
+    );
 
     useEffect(() => {
         form.reset({
@@ -80,8 +87,9 @@ const IngredientsSection = ({
                                 Cancel
                             </button>
                             <button
-                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
                                 type="submit"
+                                disabled={!canSave}
                             >
                                 Save
                             </button>

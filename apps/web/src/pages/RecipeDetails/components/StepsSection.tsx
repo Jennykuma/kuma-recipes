@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
 import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -24,6 +24,11 @@ const StepsSection = ({
             steps: (steps ?? ['']).map((step) => ({ step })),
         },
     });
+    const watchedSteps = useWatch({
+        control: form.control,
+        name: 'steps',
+    });
+    const canSave = watchedSteps.some((stepRow) => stepRow.step.trim() !== '');
 
     useEffect(() => {
         form.reset({
@@ -80,8 +85,9 @@ const StepsSection = ({
                                 Cancel
                             </button>
                             <button
-                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
                                 type="submit"
+                                disabled={!canSave}
                             >
                                 Save
                             </button>
