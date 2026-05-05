@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-    useForm,
-    FormProvider,
-    Controller,
-} from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import IngredientsTable from './components/IngredientsTable';
@@ -181,7 +177,7 @@ const NewRecipe = () => {
                                         w-full p-2 rounded-md text-xs resize-none
                                         border border-gray-200 rounded-sm placeholder:text-xs
                                         focus:border-sage-300 focus:outline-none"
-                                        rows={4}
+                                        rows={7}
                                         placeholder="e.g. too sweet, bake 2 min longer next time"
                                         {...register('notes')}
                                     ></textarea>
