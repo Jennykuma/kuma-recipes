@@ -28,7 +28,7 @@ function normalizeHeaders(headers: IncomingHttpHeaders): Record<string, string> 
     return normalized;
 }
 
-async function readRequestBody(req: IncomingMessage): Promise<string | undefined> {
+async function readRequestBody(req: IncomingMessage): Promise<Buffer | undefined> {
     if (req.method === 'GET' || req.method === 'HEAD') {
         return undefined;
     }
@@ -43,7 +43,7 @@ async function readRequestBody(req: IncomingMessage): Promise<string | undefined
         return undefined;
     }
 
-    return Buffer.concat(chunks).toString('utf8');
+    return Buffer.concat(chunks);
 }
 
 export function toFastifyUrl(req: IncomingMessage): string {
@@ -69,7 +69,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     res.statusCode = response.statusCode;
 
     for (const [key, value] of Object.entries(response.headers)) {
-        if (typeof value === 'string' || typeof value === 'number' || Array.isArray(value)) {
+        if (
+            typeof value === 'string' ||
+            typeof value === 'number' ||
+            Array.isArray(value)
+        ) {
             res.setHeader(key, value);
         }
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
@@ -7,14 +7,19 @@ import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
 import { recipe as recipeApi } from '../../api';
 import { type RecipeFormValues } from '../../types/recipeForm';
+import { useUploadRecipePhoto } from '../../hooks';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
+import RecipePhotoPicker from '../../components/RecipePhotoPicker';
+import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
     const { getToken } = useAuth();
+    const { mutateAsync: uploadRecipePhoto } = useUploadRecipePhoto();
     const [showCancelModal, setShowCancelModal] = useState(false);
+    const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
 
     // method also returns register, handleSubmit, control, setFocus, watch, etc
     const methods = useForm<RecipeFormValues>({
@@ -29,12 +34,26 @@ const NewRecipe = () => {
             steps: [{ step: '' }],
         },
     });
-    const { register, handleSubmit, control, formState, reset } = methods;
+    const { register, handleSubmit, control, formState, reset, watch } = methods;
     const { errors } = formState;
     const shouldConfirmCancel = formState.isDirty;
+    const selectedPhoto = watch('photo');
+
+    useEffect(() => {
+        const file = selectedPhoto?.[0];
+        if (!file) {
+            setPhotoPreviewUrl(null);
+            return;
+        }
+
+        const previewUrl = URL.createObjectURL(file);
+        setPhotoPreviewUrl(previewUrl);
+
+        return () => URL.revokeObjectURL(previewUrl);
+    }, [selectedPhoto]);
 
     const onSubmit = async (data: RecipeFormValues) => {
-        console.log('Submitting recipe with data:', data);
+        const { photo, ...recipeFields } = data;
         const normalizedIngredients = data.ingredients
             .map((i) => i.ingredient.trim())
             .filter((ingredient) => ingredient !== '');
@@ -43,7 +62,7 @@ const NewRecipe = () => {
             .filter((step) => step !== '');
 
         const payload = {
-            ...data,
+            ...recipeFields,
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
@@ -52,8 +71,12 @@ const NewRecipe = () => {
             throw new Error('Missing auth token');
         }
 
-        const response = await recipeApi.createRecipe(payload, token);
-        navigate(`/recipes/${response.id}`);
+        const createdRecipe = await recipeApi.createRecipe(payload, token);
+        const photoFile = photo?.[0];
+        if (photoFile) {
+            await uploadRecipePhoto({ recipeId: createdRecipe.id, photo: photoFile });
+        }
+        navigate(`/recipes/${createdRecipe.id}`);
     };
 
     const handleDiscard = () => {
@@ -81,6 +104,30 @@ const NewRecipe = () => {
                             p-6 space-y-6 border border-sage-300/50
                             rounded-md shadow-sm shadow-gray-100"
                             >
+                                <div className="space-y-2">
+                                    <span className="block text-sm text-left font-semibold">
+                                        Photo
+                                    </span>
+                                    <RecipePhotoPicker
+                                        alt="Selected recipe"
+                                        imageUrl={photoPreviewUrl}
+                                        inputProps={{
+                                            id: 'photo',
+                                            ...register('photo', {
+                                                validate: (files) => {
+                                                    const file = files?.[0];
+                                                    if (!file) return true;
+                                                    return (
+                                                        file.size <=
+                                                            MAX_SOURCE_PHOTO_SIZE ||
+                                                        'Photo must be 15 MB or smaller'
+                                                    );
+                                                },
+                                            }),
+                                        }}
+                                        error={errors.photo?.message}
+                                    />
+                                </div>
                                 <div className="space-y-1">
                                     <label
                                         htmlFor="title"

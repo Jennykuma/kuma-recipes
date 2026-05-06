@@ -2,6 +2,7 @@ export { default as useDeleteRecipe } from './recipes/useDeleteRecipe';
 export { default as useRecipeDetails } from './recipes/useRecipeDetails';
 export { default as useRecipes } from './recipes/useRecipes';
 export { default as useUpdateRecipe } from './recipes/useUpdateRecipe';
+export { default as useUploadRecipePhoto } from './recipes/useUploadRecipePhoto';
 export { default as useTagsQuery } from './tags/useTagsQuery';
 export { default as useCreateTag } from './tags/useCreateTag';
 export { default as useDeleteTag } from './tags/useDeleteTag';

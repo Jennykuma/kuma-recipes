@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
-import { useRecipeDetails, useDeleteRecipe, useUpdateRecipe } from '../../hooks';
+import {
+    useRecipeDetails,
+    useDeleteRecipe,
+    useUpdateRecipe,
+    useUploadRecipePhoto,
+} from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
+import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
 import DeleteModal from './components/DeleteModal';
@@ -12,17 +18,23 @@ import IngredientsSection from './components/IngredientsSection';
 import StepsSection from './components/StepsSection';
 import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
-import PhotosSection from './components/PhotosSection';
 import TagsSection from './components/TagsSection';
+import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const recipeId = id ?? '';
     const { recipe } = useRecipeDetails(recipeId);
+    const detailImageUrl = getRecipePhotoUrl(recipe?.imagePath);
     const { mutate: updateRecipe, mutateAsync: updateRecipeAsync } =
         useUpdateRecipe(recipeId);
     const { mutate: deleteRecipe } = useDeleteRecipe(recipeId);
+    const {
+        mutate: uploadRecipePhoto,
+        isPending: isUploadingPhoto,
+        error: uploadPhotoError,
+    } = useUploadRecipePhoto();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
@@ -137,6 +149,11 @@ const RecipeDetails = () => {
         }
     };
 
+    const handlePhotoUpload = (photo: File) => {
+        if (!recipeId) return;
+        uploadRecipePhoto({ recipeId, photo });
+    };
+
     return (
         <div className="min-h-screen bg-white p-8 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto w-full max-w-7xl">
@@ -182,9 +199,18 @@ const RecipeDetails = () => {
                     />
                 ) : null}
 
-                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none md:col-span-2">
-                        <div className="w-full flex flex-col gap-4 text-sm">
+                <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
+                    <RecipePhotoPicker
+                        alt={recipe?.title ?? 'Recipe photo'}
+                        imageUrl={detailImageUrl}
+                        error={uploadPhotoError?.message}
+                        isUploading={isUploadingPhoto}
+                        onFileSelect={handlePhotoUpload}
+                        resetAfterChange
+                        tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
+                    />
+                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
+                        <div className="flex h-full w-full flex-col gap-4 text-sm">
                             <TagsSection
                                 tags={recipe?.tags}
                                 isEditing={editingField === 'tags'}
@@ -258,7 +284,9 @@ const RecipeDetails = () => {
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
                         <IngredientsSection
                             ingredients={recipe?.ingredients}
@@ -289,7 +317,6 @@ const RecipeDetails = () => {
                             onSave={handleStepsSave}
                             onCancel={handleStepsCancel}
                         />
-                        <PhotosSection />
                     </div>
                 </div>
             </div>

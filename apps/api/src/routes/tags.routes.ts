@@ -1,6 +1,6 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
-import { type CreateTagBody } from '../services/tags/tags.types.js';
-import { requireUser } from '../auth/require-user.js';
+import { type CreateTagBody } from '../services/tags/tags.types';
+import { requireUser } from '../auth/require-user';
 
 const tagsRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /tags?query=ma

@@ -12,11 +12,16 @@ vi.mock('../../src/services/recipes/recipes.service', () => ({
     recipeDetails: vi.fn(),
 }));
 
+vi.mock('../../src/services/recipes/recipe-photos.service', () => ({
+    uploadRecipePhoto: vi.fn(),
+}));
+
 import {
     createNewRecipe,
     listRecipes,
     recipeDetails,
 } from '../../src/services/recipes/recipes.service';
+import { uploadRecipePhoto } from '../../src/services/recipes/recipe-photos.service';
 import { verifyToken } from '@clerk/backend';
 
 describe('recipes routes', () => {
@@ -176,6 +181,48 @@ describe('recipes routes', () => {
         expect(res.statusCode).toBe(401);
         expect(res.json()).toEqual({
             message: 'Missing bearer token',
+        });
+    });
+
+    test('POST /recipes/:id/photo accepts multipart image uploads', async () => {
+        const id = '6fd3f0c5-c098-4804-89ad-299a25d5373a';
+        const boundary = '----kuma-recipes-test-boundary';
+        const mockedUploadRecipePhoto = vi.mocked(uploadRecipePhoto);
+        mockedUploadRecipePhoto.mockResolvedValue({
+            imagePath: `test-user-1/${id}.png`,
+        });
+
+        const payload = Buffer.from(
+            [
+                `--${boundary}`,
+                'Content-Disposition: form-data; name="photo"; filename="photo.png"',
+                'Content-Type: image/png',
+                '',
+                'fake image bytes',
+                `--${boundary}--`,
+                '',
+            ].join('\r\n')
+        );
+
+        const res = await app.inject({
+            method: 'POST',
+            url: `/recipes/${id}/photo`,
+            headers: {
+                ...authHeaders,
+                'content-type': `multipart/form-data; boundary=${boundary}`,
+            },
+            payload,
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.json()).toEqual({ imagePath: `test-user-1/${id}.png` });
+        expect(mockedUploadRecipePhoto).toHaveBeenCalledWith({
+            recipeId: id,
+            userId: 'test-user-1',
+            file: expect.objectContaining({
+                filename: 'photo.png',
+                mimetype: 'image/png',
+            }),
         });
     });
 });

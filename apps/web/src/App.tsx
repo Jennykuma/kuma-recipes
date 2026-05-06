@@ -96,6 +96,7 @@ const App = () => {
                         rating={recipe.rating}
                         tags={recipe.tags}
                         title={recipe.title}
+                        imagePath={recipe.imagePath}
                     />
                 ))}
             </div>

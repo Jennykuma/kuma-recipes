@@ -10,6 +10,7 @@ export type Recipe = {
     tags: Tag[];
     title: string;
     source: string;
+    imagePath?: string | null;
     createdAt: string;
     updatedAt: string;
 };
@@ -19,6 +20,7 @@ export type RecipeListItem = {
     rating: number;
     title: string;
     tags?: Tag[];
+    imagePath?: string | null;
 };
 
 export type NewRecipeBody = {
@@ -30,6 +32,7 @@ export type NewRecipeBody = {
     steps?: string[];
     tagIds?: string[];
     source?: string;
+    imagePath?: string | null;
 };
 
 export type UpdateRecipeBody = Partial<{
@@ -41,6 +44,7 @@ export type UpdateRecipeBody = Partial<{
     steps: string[];
     tagIds?: string[];
     rating: number;
+    imagePath: string | null;
 }>;
 
 export type IngredientsForm = {

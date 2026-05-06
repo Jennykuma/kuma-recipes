@@ -96,6 +96,29 @@ const recipe = {
             throw await this.parseError(response, 'Failed to delete recipe');
         }
     },
+
+    async uploadRecipePhoto(
+        id: string,
+        photo: File,
+        token?: string
+    ): Promise<{ imagePath: string }> {
+        const formData = new FormData();
+        formData.append('photo', photo);
+
+        const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
+            method: 'POST',
+            headers: {
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to upload recipe photo');
+        }
+
+        return response.json();
+    },
 };
 
 export default recipe;

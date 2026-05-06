@@ -1,5 +1,6 @@
 import Rating from './Rating';
 import { Link } from 'react-router-dom';
+import { getRecipePhotoUrl } from '../api/supabaseStorage';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
 
 interface RecipeCardProps {
@@ -7,14 +8,16 @@ interface RecipeCardProps {
     rating?: number;
     tags?: Tag[];
     title: string;
+    imagePath?: string | null;
 }
 
 const VISIBLE_TAG_COUNT = 2;
 
-const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
+const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps) => {
     const visibleTags = tags.slice(0, VISIBLE_TAG_COUNT);
     const hiddenTags = tags.slice(VISIBLE_TAG_COUNT);
     const tagListLabel = tags.map((tag) => tag.name).join(', ');
+    const imageUrl = getRecipePhotoUrl(imagePath);
 
     return (
         <Link
@@ -76,7 +79,16 @@ const RecipeCard = ({ id, rating, tags = [], title }: RecipeCardProps) => {
                         </div>
                     )}
                 </div>
-                <div className="h-24 w-24 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-700 md:h-28 md:w-28"></div>
+                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-700 md:h-28 md:w-28">
+                    {imageUrl ? (
+                        <img
+                            src={imageUrl}
+                            alt={title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                        />
+                    ) : null}
+                </div>
             </div>
         </Link>
     );
