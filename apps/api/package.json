@@ -7,7 +7,9 @@
     "scripts": {
         "test": "vitest --config vitest.config.ts --root .",
         "test:watch": "vitest --watch",
-        "dev": "tsx watch src/index.ts"
+        "dev": "tsx watch src/index.ts",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate:deploy": "prisma migrate deploy"
     },
     "keywords": [],
     "author": "",

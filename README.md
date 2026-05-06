@@ -82,6 +82,12 @@ pnpm dev:web
 pnpm --filter api prisma db seed
 ```
 
+- Apply pending migrations to a deployed database:
+
+```
+pnpm --filter api prisma:migrate:deploy
+```
+
 ## Authentication (Clerk)
 
 - The web app uses Clerk for sign-in/sign-up (`/sign-in`, `/sign-up`).
@@ -104,6 +110,7 @@ VITE_CLERK_PUBLISHABLE_KEY=pk_live_...
 And configure the API runtime with:
 
 ```
+DATABASE_URL=postgresql://...
 CLERK_SECRET_KEY=sk_live_...
 ```
 
@@ -115,6 +122,8 @@ Notes:
 - Set `VITE_API_BASE_URL` only if you need an override.
   - Use `/api` only if your production host proxies `/api/*` to the API service.
   - If API is hosted elsewhere, set a full API origin (for example `https://api.jennyle.dev`).
+- Run `pnpm --filter api prisma:migrate:deploy` with the production `DATABASE_URL`
+  whenever a deploy includes new files under `apps/api/prisma/migrations`.
 
 ### Vercel setup
 
