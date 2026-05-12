@@ -18,8 +18,8 @@
       "destination": "/assets/$1"
     },
     {
-      "source": "/kuma-recipes/(.*\\.(svg|png|jpg|jpeg|gif|webp|ico|txt|xml|json|webmanifest|woff|woff2|ttf|otf))",
-      "destination": "/$1"
+      "source": "/kuma-recipes/favicon.png",
+      "destination": "/favicon.png"
     },
     {
       "source": "/kuma-recipes/(.*)",
