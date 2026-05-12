@@ -34,9 +34,7 @@ if (shouldConfigureSsl) {
 
 const pool = new Pool({
     connectionString: parsedConnectionString.toString(),
-    ssl: shouldConfigureSsl
-        ? { rejectUnauthorized: !allowInvalidSslCerts }
-        : undefined,
+    ssl: shouldConfigureSsl ? { rejectUnauthorized: !allowInvalidSslCerts } : undefined,
 });
 const adapter = new PrismaPg(pool);
 

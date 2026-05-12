@@ -4,8 +4,9 @@
         "moduleResolution": "node",
         "target": "ES2023",
         "strict": true,
+        "noEmit": true,
         "esModuleInterop": true,
-        "ignoreDeprecations": "6.0",
+        "ignoreDeprecations": "5.0",
         "types": ["vitest/globals", "node"]
     }
 }

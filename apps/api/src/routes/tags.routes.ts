@@ -1,6 +1,6 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
-import { type CreateTagBody } from '../services/tags/tags.types.js';
-import { requireUser } from '../auth/require-user.js';
+import { type CreateTagBody } from '../services/tags/tags.types';
+import { requireUser } from '../auth/require-user';
 
 const tagsRoutes: FastifyPluginAsync = async (fastify) => {
     // GET /tags?query=ma
@@ -23,8 +23,14 @@ const tagsRoutes: FastifyPluginAsync = async (fastify) => {
         }
         const { createOrGetTag } = await import('../services/tags/tags.service.js');
         const body = (request.body as { tag?: CreateTagBody }).tag ?? request.body;
-        const tag = await createOrGetTag(body.name, userId);
-        reply.code(201).send({ tag });
+        try {
+            const tag = await createOrGetTag(body.name, userId);
+            reply.code(201).send({ tag });
+        } catch (error) {
+            reply.code(400).send({
+                message: (error as Error).message || 'Invalid tag payload',
+            });
+        }
     });
 
     // DELETE /tags/:id

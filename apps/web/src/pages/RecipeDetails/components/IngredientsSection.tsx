@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
 import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -24,6 +24,13 @@ const IngredientsSection = ({
             ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
         },
     });
+    const watchedIngredients = useWatch({
+        control: form.control,
+        name: 'ingredients',
+    });
+    const canSave = watchedIngredients.some(
+        (ingredientRow) => ingredientRow.ingredient.trim() !== ''
+    );
 
     useEffect(() => {
         form.reset({
@@ -49,7 +56,7 @@ const IngredientsSection = ({
     return (
         <div className="w-full max-w-125">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
                     Ingredients
                 </span>
                 {!isEditing && (
@@ -80,8 +87,9 @@ const IngredientsSection = ({
                                 Cancel
                             </button>
                             <button
-                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
                                 type="submit"
+                                disabled={!canSave}
                             >
                                 Save
                             </button>
@@ -94,12 +102,12 @@ const IngredientsSection = ({
                         return (
                             <li
                                 key={ingredient}
-                                className="ml-4 list-disc max-w-2xl text-sm/6"
+                                className="ml-4 list-disc max-w-2xl text-sm/6 text-gray-800 dark:text-gray-100"
                             >
                                 {ingredient}
                                 <input
                                     type="checkbox"
-                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70"
+                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
                                 />
                             </li>
                         );

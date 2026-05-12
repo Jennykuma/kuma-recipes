@@ -34,6 +34,33 @@ describe('IngredientTable', () => {
         expect(screen.getAllByRole('textbox')).toHaveLength(2);
     });
 
+    it('inserts a row after the focused ingredient on Enter', async () => {
+        const user = userEvent.setup();
+        renderWithForm(<IngredientsTable />, {
+            defaultValues: {
+                ingredients: [
+                    { ingredient: 'A' },
+                    { ingredient: 'B' },
+                    { ingredient: 'C' },
+                ],
+            },
+        });
+
+        const inputs = screen.getAllByRole('textbox');
+        await user.click(inputs[1]);
+        await user.keyboard('{Enter}');
+
+        const updatedInputs = screen.getAllByRole('textbox');
+        expect(updatedInputs).toHaveLength(4);
+        expect(updatedInputs.map((input) => (input as HTMLInputElement).value)).toEqual([
+            'A',
+            'B',
+            '',
+            'C',
+        ]);
+        expect(updatedInputs[2]).toHaveFocus();
+    });
+
     it('removes an empty row on Backspace and focuses the previous row', async () => {
         const user = userEvent.setup();
 

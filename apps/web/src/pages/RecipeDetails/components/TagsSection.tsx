@@ -40,7 +40,7 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
     return (
         <div className="w-full">
             <div className="flex flex-row items-baseline gap-1 mb-1">
-                <span className="inline-flex items-center gap-1 text-xs uppercase tracking-wide text-gray-600 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
                     Tags
                 </span>
@@ -90,14 +90,14 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
                     {tags.map((tag: Tag) => (
                         <span
                             key={tag.id}
-                            className="px-2.5 py-1 rounded-full text-[11px] bg-sage-50 text-gray-700"
+                            className="inline-flex h-6 items-center rounded-full bg-sage-50 px-2.5 text-xs text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                         >
                             {tag.name}
                         </span>
                     ))}
                 </div>
             ) : (
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-gray-600 dark:text-gray-300">
                     Add tags to categorize your recipe.
                 </p>
             )}

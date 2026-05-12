@@ -23,6 +23,7 @@ model Recipe {
   remake      Boolean? @default(false)
   steps       String[]
   source      String?
+  imagePath   String?
   tags        Tag[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

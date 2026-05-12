@@ -1,4 +1,5 @@
 import { prisma } from '../../prisma.js';
+import { TAG_NAME_MAX_LENGTH } from './tags.types.js';
 
 function normalizeTag(input: string) {
     const name = input.trim();
@@ -46,6 +47,10 @@ export async function createOrGetTag(name: string, userId: string) {
 
     if (!displayName || !slug) {
         throw new Error('Tag name cannot be empty');
+    }
+
+    if (displayName.length > TAG_NAME_MAX_LENGTH) {
+        throw new Error(`Tag name must be ${TAG_NAME_MAX_LENGTH} characters or less`);
     }
 
     return prisma.tag.upsert({

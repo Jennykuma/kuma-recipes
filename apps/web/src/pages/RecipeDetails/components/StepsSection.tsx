@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
 import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -19,11 +19,20 @@ const StepsSection = ({
     onSave,
     onCancel,
 }: StepsSectionProps) => {
+    const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+
     const form = useForm<StepsForm>({
         defaultValues: {
             steps: (steps ?? ['']).map((step) => ({ step })),
         },
     });
+
+    const watchedSteps = useWatch({
+        control: form.control,
+        name: 'steps',
+    });
+
+    const canSave = watchedSteps.some((stepRow) => stepRow.step.trim() !== '');
 
     useEffect(() => {
         form.reset({
@@ -46,10 +55,24 @@ const StepsSection = ({
         onCancel();
     };
 
+    const toggleStep = (step: string) => {
+        setCompletedSteps((prev) => {
+            const next = new Set(prev);
+
+            if (next.has(step)) {
+                next.delete(step);
+            } else {
+                next.add(step);
+            }
+
+            return next;
+        });
+    };
+
     return (
         <div className="w-full max-w-150">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full">
+                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
                     Steps
                 </span>
                 {!isEditing && (
@@ -80,8 +103,9 @@ const StepsSection = ({
                                 Cancel
                             </button>
                             <button
-                                className="font-jua text-xs text-blush-400 hover:text-blush-500"
+                                className="font-jua text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
                                 type="submit"
+                                disabled={!canSave}
                             >
                                 Save
                             </button>
@@ -91,12 +115,22 @@ const StepsSection = ({
             ) : (
                 <ul>
                     {steps?.map((step) => {
+                        const stepComplete = completedSteps.has(step);
                         return (
-                            <li key={step} className="ml-4 list-decimal text-sm/7">
-                                {step}
+                            <li
+                                key={step}
+                                className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100"
+                            >
+                                {stepComplete ? (
+                                    <s className="text-gray-500">{step}</s>
+                                ) : (
+                                    step
+                                )}
                                 <input
                                     type="checkbox"
-                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70"
+                                    checked={stepComplete}
+                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
+                                    onChange={() => toggleStep(step)}
                                 />
                             </li>
                         );

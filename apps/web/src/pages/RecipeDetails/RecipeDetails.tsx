@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link2, RotateCcw, Star } from 'lucide-react';
-import { useRecipeDetails, useDeleteRecipe, useUpdateRecipe } from '../../hooks';
+import { Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
+import {
+    useRecipeDetails,
+    useDeleteRecipe,
+    useUpdateRecipe,
+    useUploadRecipePhoto,
+} from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
+import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
 import DeleteModal from './components/DeleteModal';
@@ -12,21 +18,28 @@ import IngredientsSection from './components/IngredientsSection';
 import StepsSection from './components/StepsSection';
 import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
-import PhotosSection from './components/PhotosSection';
 import TagsSection from './components/TagsSection';
+import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const recipeId = id ?? '';
     const { recipe } = useRecipeDetails(recipeId);
+    const detailImageUrl = getRecipePhotoUrl(recipe?.imagePath);
     const { mutate: updateRecipe, mutateAsync: updateRecipeAsync } =
         useUpdateRecipe(recipeId);
     const { mutate: deleteRecipe } = useDeleteRecipe(recipeId);
+    const {
+        mutate: uploadRecipePhoto,
+        isPending: isUploadingPhoto,
+        error: uploadPhotoError,
+    } = useUploadRecipePhoto();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
     const [draft, setDraft] = useState<Partial<Recipe>>({});
+    const [titleError, setTitleError] = useState<string | null>(null);
 
     const handleChangeRating = (rating: number) => {
         if (!recipe) {
@@ -44,6 +57,9 @@ const RecipeDetails = () => {
             delete next[field];
             return next;
         });
+        if (field === 'title') {
+            setTitleError(null);
+        }
         setEditingField(null);
     };
 
@@ -92,6 +108,24 @@ const RecipeDetails = () => {
         setEditingField(null);
     };
 
+    const handleTitleSave = async () => {
+        const title = (draft.title ?? recipe?.title ?? '').trim();
+        if (!title) {
+            setTitleError('Title is required');
+            return;
+        }
+
+        try {
+            await updateRecipeAsync({ title });
+            setDraft((prev) => ({ ...prev, title }));
+            setTitleError(null);
+            setEditingField(null);
+        } catch (err) {
+            console.error(err);
+            handleCancel('title');
+        }
+    };
+
     const handleSave = async (field: keyof Recipe) => {
         const value = draft[field] ?? recipe?.[field];
         if (value === undefined) return;
@@ -115,33 +149,47 @@ const RecipeDetails = () => {
         }
     };
 
+    const handlePhotoUpload = (photo: File) => {
+        if (!recipeId) return;
+        uploadRecipePhoto({ recipeId, photo });
+    };
+
     return (
-        <div className="p-8">
+        <div className="min-h-screen bg-white p-8 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto w-full max-w-7xl">
                 <BackButton to="/" />
                 <header className="flex items-center justify-between mb-1">
-                <EditableTitle
-                    title={recipe?.title}
-                    isEditing={editingField === 'title'}
-                    draftValue={draft.title}
-                    onEdit={() => {
-                        setDraft({ ...draft, title: recipe?.title ?? '' });
-                        setEditingField('title');
-                    }}
-                    onChange={(value) => setDraft({ ...draft, title: value })}
-                    onSave={() => handleSave('title')}
-                    onCancel={() => handleCancel('title')}
-                />
-                <button
-                    onClick={() => setShowDeleteModal(true)}
-                    className="
-                        font-jua text-sm text-red-500
-                        ml-2 px-3 py-1.5 rounded-xl
-                        bg-red-50 hover:bg-red-100
-                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
-                >
-                    Delete
-                </button>
+                    <EditableTitle
+                        title={recipe?.title}
+                        isEditing={editingField === 'title'}
+                        draftValue={draft.title}
+                        error={titleError ?? undefined}
+                        onEdit={() => {
+                            setDraft({ ...draft, title: recipe?.title ?? '' });
+                            setTitleError(null);
+                            setEditingField('title');
+                        }}
+                        onChange={(value) => {
+                            setDraft({ ...draft, title: value });
+                            if (value.trim()) {
+                                setTitleError(null);
+                            }
+                        }}
+                        onSave={handleTitleSave}
+                        onCancel={() => handleCancel('title')}
+                    />
+                    <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="
+                        ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
+                        text-red-500 hover:bg-red-50 hover:text-red-600
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
+                        dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
+                        aria-label="Delete recipe"
+                        title="Delete recipe"
+                    >
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                    </button>
                 </header>
                 {showDeleteModal ? (
                     <DeleteModal
@@ -151,9 +199,18 @@ const RecipeDetails = () => {
                     />
                 ) : null}
 
-                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 md:col-span-2">
-                        <div className="w-full flex flex-col gap-4 text-sm">
+                <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
+                    <RecipePhotoPicker
+                        alt={recipe?.title ?? 'Recipe photo'}
+                        imageUrl={detailImageUrl}
+                        error={uploadPhotoError?.message}
+                        isUploading={isUploadingPhoto}
+                        onFileSelect={handlePhotoUpload}
+                        resetAfterChange
+                        tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
+                    />
+                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
+                        <div className="flex h-full w-full flex-col gap-4 text-sm">
                             <TagsSection
                                 tags={recipe?.tags}
                                 isEditing={editingField === 'tags'}
@@ -162,10 +219,10 @@ const RecipeDetails = () => {
                                 onCancel={handleTagsCancel}
                             />
 
-                            <div className="h-px w-full bg-gray-100" />
+                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <Star
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -180,7 +237,7 @@ const RecipeDetails = () => {
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <RotateCcw
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -194,10 +251,10 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="h-px w-full bg-gray-100" />
+                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
 
                             <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <Link2
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -227,7 +284,9 @@ const RecipeDetails = () => {
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
                         <IngredientsSection
                             ingredients={recipe?.ingredients}
@@ -258,7 +317,6 @@ const RecipeDetails = () => {
                             onSave={handleStepsSave}
                             onCancel={handleStepsCancel}
                         />
-                        <PhotosSection />
                     </div>
                 </div>
             </div>

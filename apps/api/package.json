@@ -2,7 +2,7 @@
     "name": "api",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "src/index.ts",
     "type": "module",
     "scripts": {
         "test": "vitest --config vitest.config.ts --root .",
@@ -15,15 +15,19 @@
     "packageManager": "pnpm@10.27.0",
     "dependencies": {
         "@clerk/backend": "^3.4.4",
+        "@fastify/multipart": "^10.0.0",
         "@prisma/adapter-pg": "^7.2.0",
         "@prisma/client": "^7.2.0",
+        "@supabase/supabase-js": "^2.105.3",
         "dotenv": "^17.2.3",
         "fastify": "^5.6.2",
-        "pg": "^8.16.3"
+        "pg": "^8.16.3",
+        "ws": "^8.19.0"
     },
     "devDependencies": {
         "@types/node": "catalog:",
         "@types/pg": "catalog:",
+        "@types/ws": "^8.18.1",
         "prisma": "^7.2.0",
         "tsx": "^4.21.0",
         "typescript": "~5.9.3",

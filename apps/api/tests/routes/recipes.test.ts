@@ -12,11 +12,16 @@ vi.mock('../../src/services/recipes/recipes.service', () => ({
     recipeDetails: vi.fn(),
 }));
 
+vi.mock('../../src/services/recipes/recipe-photos.service', () => ({
+    uploadRecipePhoto: vi.fn(),
+}));
+
 import {
     createNewRecipe,
     listRecipes,
     recipeDetails,
 } from '../../src/services/recipes/recipes.service';
+import { uploadRecipePhoto } from '../../src/services/recipes/recipe-photos.service';
 import { verifyToken } from '@clerk/backend';
 
 describe('recipes routes', () => {
@@ -24,6 +29,8 @@ describe('recipes routes', () => {
     const authHeaders = { authorization: 'Bearer test-token' };
 
     beforeEach(async () => {
+        process.env.CLERK_SECRET_KEY = 'test-secret';
+        vi.clearAllMocks();
         vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
         app = buildApp();
         await app.ready();
@@ -81,6 +88,7 @@ describe('recipes routes', () => {
         });
 
         expect(res.statusCode).toBe(200);
+        expect(mockedListRecipes).toHaveBeenCalledWith('test-user-1', []);
         expect(res.json()).toEqual({
             recipes: [
                 {
@@ -92,6 +100,38 @@ describe('recipes routes', () => {
                     id: 'ceada500-2341-42c5-869b-f231869a94aa',
                     title: 'Salt Bread',
                     rating: 5,
+                },
+            ],
+        });
+    });
+
+    test('GET /recipes forwards tag filters', async () => {
+        const mockedListRecipes = vi.mocked(listRecipes);
+        mockedListRecipes.mockResolvedValue([
+            {
+                id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+                title: 'Matcha Cookies',
+                rating: 4,
+            },
+        ]);
+
+        const res = await app.inject({
+            method: 'GET',
+            url: '/recipes?tag=matcha&tag=dessert',
+            headers: authHeaders,
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(mockedListRecipes).toHaveBeenCalledWith('test-user-1', [
+            'matcha',
+            'dessert',
+        ]);
+        expect(res.json()).toEqual({
+            recipes: [
+                {
+                    id: '6fd3f0c5-c098-4804-89ad-299a25d5373a',
+                    title: 'Matcha Cookies',
+                    rating: 4,
                 },
             ],
         });
@@ -141,6 +181,48 @@ describe('recipes routes', () => {
         expect(res.statusCode).toBe(401);
         expect(res.json()).toEqual({
             message: 'Missing bearer token',
+        });
+    });
+
+    test('POST /recipes/:id/photo accepts multipart image uploads', async () => {
+        const id = '6fd3f0c5-c098-4804-89ad-299a25d5373a';
+        const boundary = '----kuma-recipes-test-boundary';
+        const mockedUploadRecipePhoto = vi.mocked(uploadRecipePhoto);
+        mockedUploadRecipePhoto.mockResolvedValue({
+            imagePath: `test-user-1/${id}.png`,
+        });
+
+        const payload = Buffer.from(
+            [
+                `--${boundary}`,
+                'Content-Disposition: form-data; name="photo"; filename="photo.png"',
+                'Content-Type: image/png',
+                '',
+                'fake image bytes',
+                `--${boundary}--`,
+                '',
+            ].join('\r\n')
+        );
+
+        const res = await app.inject({
+            method: 'POST',
+            url: `/recipes/${id}/photo`,
+            headers: {
+                ...authHeaders,
+                'content-type': `multipart/form-data; boundary=${boundary}`,
+            },
+            payload,
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.json()).toEqual({ imagePath: `test-user-1/${id}.png` });
+        expect(mockedUploadRecipePhoto).toHaveBeenCalledWith({
+            recipeId: id,
+            userId: 'test-user-1',
+            file: expect.objectContaining({
+                filename: 'photo.png',
+                mimetype: 'image/png',
+            }),
         });
     });
 });

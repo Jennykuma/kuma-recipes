@@ -16,7 +16,7 @@ const RemakeToggle = ({
     return (
         <label
             htmlFor={remakeId}
-            className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer whitespace-nowrap"
+            className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer whitespace-nowrap dark:text-gray-200"
         >
             <input
                 id={remakeId}

@@ -24,8 +24,12 @@ const recipe = {
         }
     },
 
-    async getRecipes(token?: string): Promise<RecipeListItem[]> {
-        const response = await fetch(buildApiUrl('/recipes'), {
+    async getRecipes(token?: string, tagSlugs: string[] = []): Promise<RecipeListItem[]> {
+        const params = new URLSearchParams();
+        tagSlugs.forEach((tagSlug) => params.append('tag', tagSlug));
+        const queryString = params.size > 0 ? `?${params.toString()}` : '';
+
+        const response = await fetch(`${buildApiUrl('/recipes')}${queryString}`, {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
         if (!response.ok) {
@@ -91,6 +95,29 @@ const recipe = {
         if (!response.ok) {
             throw await this.parseError(response, 'Failed to delete recipe');
         }
+    },
+
+    async uploadRecipePhoto(
+        id: string,
+        photo: File,
+        token?: string
+    ): Promise<{ imagePath: string }> {
+        const formData = new FormData();
+        formData.append('photo', photo);
+
+        const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
+            method: 'POST',
+            headers: {
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to upload recipe photo');
+        }
+
+        return response.json();
     },
 };
 

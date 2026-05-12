@@ -7,4 +7,5 @@ export type RecipeFormValues = {
     tagIds: string[];
     ingredients: { ingredient: string }[];
     steps: { step: string }[];
+    photo?: FileList;
 };
