@@ -1,5 +1,6 @@
 import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useEffect, useMemo } from 'react';
+import { getSignInPath } from '../../utils/basePath';
 
 const DEFAULT_IDLE_MINUTES = 60 * 24 * 7; // 7 days
 const ACTIVITY_STORAGE_PREFIX = 'kuma:last-activity:';
@@ -11,19 +12,11 @@ function getIdleTimeoutMs(): number {
     return minutes * 60 * 1000;
 }
 
-function getBasePath(): string {
-    const base = import.meta.env.BASE_URL || '/';
-    return base === '/' ? '/' : base.replace(/\/$/, '');
-}
-
 export default function useIdleLogout() {
     const { isLoaded, isSignedIn, userId } = useAuth();
     const clerk = useClerk();
     const idleTimeoutMs = useMemo(() => getIdleTimeoutMs(), []);
-    const signInPath = useMemo(() => {
-        const basePath = getBasePath();
-        return basePath === '/' ? '/sign-in' : `${basePath}/sign-in`;
-    }, []);
+    const signInPath = useMemo(() => getSignInPath(), []);
 
     useEffect(() => {
         if (!isLoaded || !isSignedIn || !userId) return;
