@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CalendarPlus, Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
+import { CalendarPlus, Link2, RotateCcw, Star, Trash2, PieChart } from 'lucide-react';
 import {
     useRecipeDetails,
     useDeleteRecipe,
@@ -20,6 +20,7 @@ import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
 import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
+import EditableYield from './components/EditableYield';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
@@ -235,7 +236,32 @@ const RecipeDetails = () => {
                                     <span>Unknown</span>
                                 )}
                             </div>
-
+                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                                    <PieChart
+                                        className="h-3 w-3 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                    Yield
+                                </span>
+                                <EditableYield
+                                    recipeYield={recipe?.yield}
+                                    isEditing={editingField === 'yield'}
+                                    draftValue={draft.yield}
+                                    onEdit={() => {
+                                        setDraft({
+                                            ...draft,
+                                            yield: recipe?.yield ?? '',
+                                        });
+                                        setEditingField('yield');
+                                    }}
+                                    onChange={(value) =>
+                                        setDraft({ ...draft, yield: value })
+                                    }
+                                    onSave={() => handleSave('yield')}
+                                    onCancel={() => handleCancel('yield')}
+                                />
+                            </div>
                             <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
                                 <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <Star

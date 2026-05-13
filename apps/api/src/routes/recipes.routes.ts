@@ -55,7 +55,17 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             await import('../services/recipes/recipes.service.js');
         const body = (request.body as { recipe?: NewRecipeBody }).recipe ?? request.body;
 
-        const { title, ingredients, notes, rating, remake, steps, tagIds, source } = body;
+        const {
+            title,
+            ingredients,
+            notes,
+            rating,
+            remake,
+            steps,
+            tagIds,
+            source,
+            yield: recipeYield,
+        } = body;
         try {
             const result = await createNewRecipe(
                 {
@@ -67,6 +77,7 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
                     steps,
                     tagIds,
                     source,
+                    yield: recipeYield,
                 },
                 userId
             );

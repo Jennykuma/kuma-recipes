@@ -29,6 +29,7 @@ const NewRecipe = () => {
             tagIds: [],
             ingredients: [{ ingredient: '' }],
             steps: [{ step: '' }],
+            yield: '',
         },
     });
     const { register, handleSubmit, control, formState, reset, watch } = methods;
@@ -147,7 +148,24 @@ const NewRecipe = () => {
                                         </p>
                                     )}
                                 </div>
-
+                                <div className="space-y-1">
+                                    <label
+                                        htmlFor="yield"
+                                        className="block text-sm text-left font-semibold"
+                                    >
+                                        Yield
+                                    </label>
+                                    <input
+                                        id="yield"
+                                        type="text"
+                                        className="
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                        placeholder="e.g. 4 servings or 12 cookies"
+                                        {...register('yield')}
+                                    />
+                                </div>
                                 <div className="flex gap-2 items-center">
                                     <label
                                         htmlFor="rating"

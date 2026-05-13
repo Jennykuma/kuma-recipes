@@ -11,6 +11,7 @@ export type Recipe = {
     title: string;
     source: string;
     imagePath?: string | null;
+    yield?: string;
     createdAt: string;
     updatedAt: string;
 };
@@ -33,6 +34,7 @@ export type NewRecipeBody = {
     tagIds?: string[];
     source?: string;
     imagePath?: string | null;
+    yield?: string;
 };
 
 export type UpdateRecipeBody = Partial<{
@@ -45,6 +47,7 @@ export type UpdateRecipeBody = Partial<{
     tagIds?: string[];
     rating: number;
     imagePath: string | null;
+    yield?: string;
 }>;
 
 export type IngredientsForm = {
