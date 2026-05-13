@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
+import { CalendarPlus, Link2, RotateCcw, Star, Trash2 } from 'lucide-react';
 import {
     useRecipeDetails,
     useDeleteRecipe,
@@ -211,18 +211,33 @@ const RecipeDetails = () => {
                     />
                     <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
                         <div className="flex h-full w-full flex-col gap-4 text-sm">
-                            <TagsSection
-                                tags={recipe?.tags}
-                                isEditing={editingField === 'tags'}
-                                onEdit={() => setEditingField('tags')}
-                                onSave={handleTagsSave}
-                                onCancel={handleTagsCancel}
-                            />
+                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                                    <CalendarPlus
+                                        className="h-3 w-3 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                    Created on
+                                </span>
+                                {recipe?.createdAt ? (
+                                    <time dateTime={recipe.createdAt}>
+                                        {new Date(recipe.createdAt).toLocaleDateString(
+                                            'en-US',
+                                            {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            }
+                                        )}
+                                    </time>
+                                ) : (
+                                    <span>Unknown</span>
+                                )}
+                            </div>
 
-                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
-
-                            <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <Star
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -236,8 +251,8 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <RotateCcw
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -251,10 +266,8 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="h-px w-full bg-gray-100 dark:bg-gray-700" />
-
-                            <div className="flex items-center gap-4">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <Link2
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -282,6 +295,13 @@ const RecipeDetails = () => {
                                     />
                                 </div>
                             </div>
+                            <TagsSection
+                                tags={recipe?.tags}
+                                isEditing={editingField === 'tags'}
+                                onEdit={() => setEditingField('tags')}
+                                onSave={handleTagsSave}
+                                onCancel={handleTagsCancel}
+                            />
                         </div>
                     </div>
                 </div>
