@@ -69,7 +69,7 @@ const recipe = {
         return response.json();
     },
 
-    async createRecipe(recipe: NewRecipeBody, token?: string): Promise<any> {
+    async createRecipe(recipe: NewRecipeBody, token?: string): Promise<Recipe> {
         const response = await fetch(buildApiUrl('/recipes'), {
             method: 'POST',
             headers: {

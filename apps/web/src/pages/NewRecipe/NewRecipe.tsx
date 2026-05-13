@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
 import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
-import { recipe as recipeApi } from '../../api';
 import { type RecipeFormValues } from '../../types/recipeForm';
-import { useUploadRecipePhoto } from '../../hooks';
+import { useCreateRecipe } from '../../hooks';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
@@ -16,8 +14,7 @@ import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
-    const { getToken } = useAuth();
-    const { mutateAsync: uploadRecipePhoto } = useUploadRecipePhoto();
+    const { mutateAsync: createRecipe } = useCreateRecipe();
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
 
@@ -54,6 +51,7 @@ const NewRecipe = () => {
 
     const onSubmit = async (data: RecipeFormValues) => {
         const { photo, ...recipeFields } = data;
+        const photoFile = photo?.[0];
         const normalizedIngredients = data.ingredients
             .map((i) => i.ingredient.trim())
             .filter((ingredient) => ingredient !== '');
@@ -66,16 +64,8 @@ const NewRecipe = () => {
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
-        const token = await getToken();
-        if (!token) {
-            throw new Error('Missing auth token');
-        }
 
-        const createdRecipe = await recipeApi.createRecipe(payload, token);
-        const photoFile = photo?.[0];
-        if (photoFile) {
-            await uploadRecipePhoto({ recipeId: createdRecipe.id, photo: photoFile });
-        }
+        const createdRecipe = await createRecipe({ recipe: payload, photo: photoFile });
         navigate(`/recipes/${createdRecipe.id}`);
     };
 

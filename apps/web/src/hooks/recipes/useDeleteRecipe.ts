@@ -18,6 +18,7 @@ const useDeleteRecipe = (id: string) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['recipes'] });
+            queryClient.invalidateQueries({ queryKey: ['tags'] });
         },
     });
 };
