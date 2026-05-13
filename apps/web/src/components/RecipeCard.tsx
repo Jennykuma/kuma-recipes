@@ -2,6 +2,7 @@ import Rating from './Rating';
 import { Link } from 'react-router-dom';
 import { getRecipePhotoUrl } from '../api/supabaseStorage';
 import type { Tag } from '../../../api/src/services/tags/tags.types';
+import { Cookie } from 'lucide-react';
 
 interface RecipeCardProps {
     id: string;
@@ -79,7 +80,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                         </div>
                     )}
                 </div>
-                <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-700 md:h-28 md:w-28">
+                <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-700 md:h-28 md:w-28">
                     {imageUrl ? (
                         <img
                             src={imageUrl}
@@ -87,7 +88,9 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                             className="h-full w-full object-cover"
                             loading="lazy"
                         />
-                    ) : null}
+                    ) : (
+                        <Cookie className="h-7 w-7 text-gray-400" />
+                    )}
                 </div>
             </div>
         </Link>
