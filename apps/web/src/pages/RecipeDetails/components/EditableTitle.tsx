@@ -53,17 +53,17 @@ const EditableTitle = ({
                     />
                     <button
                         type="button"
-                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
-                        onClick={onSave}
-                    >
-                        Save
-                    </button>
-                    <button
-                        type="button"
                         className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
                         onClick={onCancel}
                     >
                         Cancel
+                    </button>
+                    <button
+                        type="button"
+                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
+                        onClick={onSave}
+                    >
+                        Save
                     </button>
                 </span>
                 {error ? <p className="mt-1 text-xs text-red-500">{error}</p> : null}
@@ -80,7 +80,10 @@ const EditableTitle = ({
                 aria-label="Edit title"
                 className="inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
             >
-                <Pencil className="w-3 h-4 pt-1 cursor-pointer link-blush" aria-hidden="true" />
+                <Pencil
+                    className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                    aria-hidden="true"
+                />
             </button>
         </span>
     );
