@@ -90,9 +90,9 @@ const NewRecipe = () => {
                         <div className="h-full md:flex gap-8 min-h-0 items-stretch">
                             <div
                                 className="
-                            md:sticky top-6 w-full md:w-1/3 self-start
-                            p-6 space-y-6 border border-sage-300/50
-                            rounded-md shadow-sm shadow-gray-100"
+                                md:sticky top-6 w-full md:w-1/3 self-start
+                                p-6 space-y-4 border border-sage-300/50
+                                rounded-md shadow-sm shadow-gray-100"
                             >
                                 <div className="space-y-2">
                                     <span className="block text-sm text-left font-semibold">
@@ -101,6 +101,7 @@ const NewRecipe = () => {
                                     <RecipePhotoPicker
                                         alt="Selected recipe"
                                         imageUrl={photoPreviewUrl}
+                                        tileClassName="mx-auto h-48 w-full max-w-[16rem]"
                                         inputProps={{
                                             id: 'photo',
                                             ...register('photo', {
@@ -130,8 +131,10 @@ const NewRecipe = () => {
                                         id="title"
                                         type="text"
                                         className="
-                                        w-full pl-1 rounded-md border border-gray-200
-                                        focus:border-sage-300 focus:outline-none"
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                        placeholder="e.g. Grandma's apple pie"
                                         {...register('title', {
                                             setValueAs: (value) => value.trim(),
                                             validate: (value) =>
@@ -177,7 +180,7 @@ const NewRecipe = () => {
                                 </div>
 
                                 <div className="space-y-1">
-                                    <div className="space-y-0.5">
+                                    <div className="space-y-1">
                                         <label
                                             htmlFor="source"
                                             className="block text-sm text-left font-semibold"
