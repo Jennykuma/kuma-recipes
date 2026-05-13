@@ -41,6 +41,48 @@ describe('NotesSection', () => {
         expect(screen.getByRole('textbox')).toHaveValue('https://example.com');
     });
 
+    it('focuses the textarea when editing starts', () => {
+        render(<NotesSection {...defaultProps} isEditing draftValue="plain note" />);
+
+        const textarea = screen.getByRole('textbox');
+
+        expect(textarea).toHaveFocus();
+        expect(textarea).toHaveProperty('selectionStart', 'plain note'.length);
+        expect(textarea).toHaveProperty('selectionEnd', 'plain note'.length);
+    });
+
+    it('does not save when cancel is clicked', async () => {
+        const user = userEvent.setup();
+        const onSave = vi.fn();
+        const onCancel = vi.fn();
+
+        render(
+            <NotesSection
+                {...defaultProps}
+                isEditing
+                draftValue="plain note"
+                onSave={onSave}
+                onCancel={onCancel}
+            />
+        );
+
+        await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+        expect(onCancel).toHaveBeenCalledTimes(1);
+        expect(onSave).not.toHaveBeenCalled();
+    });
+
+    it('does not save on blur', async () => {
+        const user = userEvent.setup();
+        const onSave = vi.fn();
+
+        render(<NotesSection {...defaultProps} isEditing draftValue="plain note" onSave={onSave} />);
+
+        await user.tab();
+
+        expect(onSave).not.toHaveBeenCalled();
+    });
+
     it('starts editing when the saved notes area is clicked', async () => {
         const user = userEvent.setup();
         const onEdit = vi.fn();

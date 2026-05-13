@@ -93,8 +93,12 @@ const NotesSection = ({
                         rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
                     rows={7}
                     value={draftValue ?? ''}
+                    autoFocus
+                    onFocus={(event) => {
+                        const cursorPosition = event.target.value.length;
+                        event.target.setSelectionRange(cursorPosition, cursorPosition);
+                    }}
                     onChange={(e) => onChange(e.target.value)}
-                    onBlur={onSave}
                 ></textarea>
                 {isEditing && (
                     <div className="mt-1 flex gap-2 justify-end max-w-125">
