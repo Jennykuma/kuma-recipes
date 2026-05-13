@@ -78,7 +78,7 @@ const StepsTable = () => {
                     <div key={field.id} className="flex items-center">
                         <span
                             className={classNames(
-                                'text-xs w-8',
+                                'text-xs w-4',
                                 activeIndex === index ? 'text-gray-500' : 'text-gray-400'
                             )}
                         >
