@@ -210,9 +210,9 @@ const RecipeDetails = () => {
                         tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
                     />
                     <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
-                        <div className="flex h-full w-full flex-col gap-4 text-sm">
+                        <div className="flex h-full w-full flex-col gap-4">
                             <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex text-[10px] w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
                                     <CalendarPlus
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -236,8 +236,8 @@ const RecipeDetails = () => {
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <Star
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -251,8 +251,8 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <RotateCcw
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
@@ -266,15 +266,15 @@ const RecipeDetails = () => {
                                 />
                             </div>
 
-                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                            <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
+                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
                                     <Link2
                                         className="h-3 w-3 text-gray-400"
                                         aria-hidden="true"
                                     />
                                     Source
                                 </span>
-                                <div className="min-w-0 flex-1">
+                                <div className="min-w-0 flex-1 text-xs -mt-0.5">
                                     <EditableSource
                                         source={recipe?.source}
                                         isEditing={editingField === 'source'}

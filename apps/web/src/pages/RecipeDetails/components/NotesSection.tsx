@@ -83,7 +83,7 @@ const NotesSection = ({
     if (isEditing) {
         return (
             <div className="flex flex-col w-full min-w-0">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
+                <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     Notes
                 </span>
                 <textarea
@@ -126,7 +126,7 @@ const NotesSection = ({
             <span
                 className="
                     text-[10px] uppercase tracking-wide
-                    text-gray-500 rounded-full dark:text-gray-300"
+                    text-gray-600 rounded-full dark:text-gray-300"
             >
                 Notes
             </span>
