@@ -1,10 +1,15 @@
 import { SignIn } from '@clerk/clerk-react';
+import { getAppRedirectPath } from '../../utils/basePath';
 
 export default function SignInPage() {
+    const redirectPath = getAppRedirectPath();
+
     return (
         <main className="auth-page">
             <div className="auth-shell">
                 <SignIn
+                    forceRedirectUrl={redirectPath}
+                    fallbackRedirectUrl={redirectPath}
                     appearance={{
                         variables: {
                             colorPrimary: '#E97F97',

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
 import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
-import { recipe as recipeApi } from '../../api';
 import { type RecipeFormValues } from '../../types/recipeForm';
-import { useUploadRecipePhoto } from '../../hooks';
+import { useCreateRecipe } from '../../hooks';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
@@ -16,8 +14,7 @@ import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
-    const { getToken } = useAuth();
-    const { mutateAsync: uploadRecipePhoto } = useUploadRecipePhoto();
+    const { mutateAsync: createRecipe } = useCreateRecipe();
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
 
@@ -32,6 +29,7 @@ const NewRecipe = () => {
             tagIds: [],
             ingredients: [{ ingredient: '' }],
             steps: [{ step: '' }],
+            yield: '',
         },
     });
     const { register, handleSubmit, control, formState, reset, watch } = methods;
@@ -54,6 +52,7 @@ const NewRecipe = () => {
 
     const onSubmit = async (data: RecipeFormValues) => {
         const { photo, ...recipeFields } = data;
+        const photoFile = photo?.[0];
         const normalizedIngredients = data.ingredients
             .map((i) => i.ingredient.trim())
             .filter((ingredient) => ingredient !== '');
@@ -66,16 +65,8 @@ const NewRecipe = () => {
             ingredients: normalizedIngredients,
             steps: normalizedSteps,
         };
-        const token = await getToken();
-        if (!token) {
-            throw new Error('Missing auth token');
-        }
 
-        const createdRecipe = await recipeApi.createRecipe(payload, token);
-        const photoFile = photo?.[0];
-        if (photoFile) {
-            await uploadRecipePhoto({ recipeId: createdRecipe.id, photo: photoFile });
-        }
+        const createdRecipe = await createRecipe({ recipe: payload, photo: photoFile });
         navigate(`/recipes/${createdRecipe.id}`);
     };
 
@@ -100,9 +91,9 @@ const NewRecipe = () => {
                         <div className="h-full md:flex gap-8 min-h-0 items-stretch">
                             <div
                                 className="
-                            md:sticky top-6 w-full md:w-1/3 self-start
-                            p-6 space-y-6 border border-sage-300/50
-                            rounded-md shadow-sm shadow-gray-100"
+                                md:sticky top-6 w-full md:w-1/3 self-start
+                                p-6 space-y-4 border border-sage-300/50
+                                rounded-md shadow-sm shadow-gray-100"
                             >
                                 <div className="space-y-2">
                                     <span className="block text-sm text-left font-semibold">
@@ -111,6 +102,7 @@ const NewRecipe = () => {
                                     <RecipePhotoPicker
                                         alt="Selected recipe"
                                         imageUrl={photoPreviewUrl}
+                                        tileClassName="mx-auto h-48 w-full max-w-[16rem]"
                                         inputProps={{
                                             id: 'photo',
                                             ...register('photo', {
@@ -140,8 +132,10 @@ const NewRecipe = () => {
                                         id="title"
                                         type="text"
                                         className="
-                                        w-full pl-1 rounded-md border border-gray-200
-                                        focus:border-sage-300 focus:outline-none"
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                        placeholder="e.g. Grandma's apple pie"
                                         {...register('title', {
                                             setValueAs: (value) => value.trim(),
                                             validate: (value) =>
@@ -154,7 +148,24 @@ const NewRecipe = () => {
                                         </p>
                                     )}
                                 </div>
-
+                                <div className="space-y-1">
+                                    <label
+                                        htmlFor="yield"
+                                        className="block text-sm text-left font-semibold"
+                                    >
+                                        Yield
+                                    </label>
+                                    <input
+                                        id="yield"
+                                        type="text"
+                                        className="
+                                        w-full p-2 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                        placeholder="e.g. 4 servings or 12 cookies"
+                                        {...register('yield')}
+                                    />
+                                </div>
                                 <div className="flex gap-2 items-center">
                                     <label
                                         htmlFor="rating"
@@ -187,7 +198,7 @@ const NewRecipe = () => {
                                 </div>
 
                                 <div className="space-y-1">
-                                    <div className="space-y-0.5">
+                                    <div className="space-y-1">
                                         <label
                                             htmlFor="source"
                                             className="block text-sm text-left font-semibold"

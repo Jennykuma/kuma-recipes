@@ -25,6 +25,7 @@ model Recipe {
   source      String?
   imagePath   String?
   tags        Tag[]
+  yield       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

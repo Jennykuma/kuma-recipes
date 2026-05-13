@@ -73,32 +73,32 @@ const EditableSource = ({
                         }}
                     />
                     <button
-                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
-                        onClick={onSave}
-                    >
-                        Save
-                    </button>
-                    <button
                         className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
                         onClick={onCancel}
                     >
                         Cancel
                     </button>
+                    <button
+                        className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
+                        onClick={onSave}
+                    >
+                        Save
+                    </button>
                 </div>
             ) : (
-                <div className="inline-flex items-baseline gap-1 min-w-0 max-w-full">
+                <div className="inline-flex items-center gap-1 min-w-0 max-w-full leading-none">
                     {sourceLink ? (
                         <a
                             href={sourceLink}
                             target="_blank"
                             rel="noreferrer"
                             title={sourceLink}
-                            className="link-blush text-sm text-blush-400 hover:underline truncate overflow-hidden text-ellipsis min-w-0 max-w-full"
+                            className="link-blush text-xs leading-none text-blush-400 hover:underline truncate overflow-hidden text-ellipsis min-w-0 max-w-full"
                         >
                             {sourceText}
                         </a>
                     ) : (
-                        <span className="text-sm text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full dark:text-gray-200">
+                        <span className="text-xs leading-none text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full dark:text-gray-200">
                             {sourceText || '—'}
                         </span>
                     )}
@@ -109,7 +109,7 @@ const EditableSource = ({
                         className="inline-flex items-center shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
                     >
                         <Pencil
-                            className="w-3 h-4 pt-1 cursor-pointer link-blush shrink-0"
+                            className="w-3 h-4 pb-0.5 cursor-pointer link-blush shrink-0"
                             aria-hidden="true"
                         />
                     </button>

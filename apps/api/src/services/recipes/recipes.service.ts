@@ -63,8 +63,17 @@ export async function recipeDetails(recipeId: string, userId: string): Promise<a
 }
 
 export async function createNewRecipe(recipeParams: NewRecipeBody, userId: string) {
-    const { title, ingredients, notes, rating, remake, steps, tagIds, source } =
-        recipeParams;
+    const {
+        title,
+        ingredients,
+        notes,
+        rating,
+        remake,
+        steps,
+        tagIds,
+        source,
+        yield: recipeYield,
+    } = recipeParams;
     const ownedTagIds = await resolveOwnedTagIds(userId, tagIds);
     const normalizedTitle = normalizeTitle(title);
     const normalizedSource = source?.trim();
@@ -78,6 +87,7 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
             rating: rating ?? null,
             remake: remake ?? false,
             source: normalizedSource ? normalizedSource : null,
+            yield: recipeYield?.trim() ? recipeYield.trim() : null,
 
             // connect tags
             ...(ownedTagIds.length
@@ -94,9 +104,16 @@ export async function updateRecipe(
     userId: string
 ) {
     const { tagIds, ...rest } = updatedRecipe;
+    const { yield: recipeYield, ...otherUpdates } = rest;
     const ownedTagIds = tagIds ? await resolveOwnedTagIds(userId, tagIds) : null;
     const normalizedTitle =
         rest.title === undefined ? undefined : normalizeTitle(rest.title);
+    const normalizedYield =
+        recipeYield === undefined
+            ? undefined
+            : recipeYield.trim()
+              ? recipeYield.trim()
+              : null;
     const recipe = await prisma.recipe.findFirst({
         where: { id: recipeId, userId },
         select: { id: true },
@@ -109,8 +126,9 @@ export async function updateRecipe(
     await prisma.recipe.update({
         where: { id: recipeId },
         data: {
-            ...rest,
+            ...otherUpdates,
             ...(normalizedTitle !== undefined ? { title: normalizedTitle } : {}),
+            ...(normalizedYield !== undefined ? { yield: normalizedYield } : {}),
             ...(ownedTagIds ? { tags: { set: ownedTagIds.map((id) => ({ id })) } } : {}),
         },
     });

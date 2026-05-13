@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
 
-type EditableTitleProps = {
-    title?: string;
+type EditableYieldProps = {
+    recipeYield?: string;
     isEditing: boolean;
     draftValue?: string;
     error?: string;
@@ -12,8 +12,8 @@ type EditableTitleProps = {
     onCancel: () => void;
 };
 
-const EditableTitle = ({
-    title,
+const EditableYield = ({
+    recipeYield,
     isEditing,
     draftValue,
     error,
@@ -21,7 +21,7 @@ const EditableTitle = ({
     onChange,
     onSave,
     onCancel,
-}: EditableTitleProps) => {
+}: EditableYieldProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const EditableTitle = ({
                 <span className="flex w-full items-baseline gap-2">
                     <input
                         ref={inputRef}
-                        className="text-lg w-full max-w-125 font-bold border-b border-gray-300 bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm"
+                        className="text-xs w-full max-w-125 border-b border-gray-300 bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm"
                         value={draftValue ?? ''}
                         aria-invalid={error ? 'true' : undefined}
                         onChange={(e) => onChange(e.target.value)}
@@ -72,16 +72,16 @@ const EditableTitle = ({
     }
 
     return (
-        <span className="flex w-full items-baseline gap-1">
-            <h1 className="text-lg font-bold">{title}</h1>
+        <span className="flex w-full items-center gap-1">
+            <span className="text-xs">{recipeYield || 'N/A'}</span>
             <button
                 type="button"
                 onClick={onEdit}
-                aria-label="Edit title"
+                aria-label="Edit yield"
                 className="inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
             >
                 <Pencil
-                    className="w-3 h-4 pt-1 cursor-pointer link-blush"
+                    className="w-3 h-4 cursor-pointer link-blush"
                     aria-hidden="true"
                 />
             </button>
@@ -89,4 +89,4 @@ const EditableTitle = ({
     );
 };
 
-export default EditableTitle;
+export default EditableYield;

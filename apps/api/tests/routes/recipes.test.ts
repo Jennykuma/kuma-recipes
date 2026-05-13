@@ -57,10 +57,18 @@ describe('recipes routes', () => {
             payload: {
                 title: 'Matcha Cookies',
                 tagIds: ['0f15302d-3bb6-4f73-b16c-dddfbd39bd44'],
+                yield: '12 cookies',
             },
         });
 
         expect(res.statusCode).toBe(201);
+        expect(mockedCreateNewRecipe).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: 'Matcha Cookies',
+                yield: '12 cookies',
+            }),
+            'test-user-1'
+        );
         expect(res.json()).toMatchObject({
             title: 'Matcha Cookies',
         });

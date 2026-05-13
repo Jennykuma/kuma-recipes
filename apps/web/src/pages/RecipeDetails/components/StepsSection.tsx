@@ -72,7 +72,7 @@ const StepsSection = ({
     return (
         <div className="w-full max-w-150">
             <div className="flex flex-row items-baseline gap-1">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
+                <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     Steps
                 </span>
                 {!isEditing && (
@@ -113,29 +113,38 @@ const StepsSection = ({
                     </form>
                 </FormProvider>
             ) : (
-                <ul>
-                    {steps?.map((step) => {
+                <ol>
+                    {steps?.map((step, index) => {
                         const stepComplete = completedSteps.has(step);
                         return (
                             <li
-                                key={step}
-                                className="ml-4 list-decimal text-sm/7 text-gray-800 dark:text-gray-100"
+                                key={`${step}-${index}`}
+                                className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-1 text-sm/7 text-gray-800 dark:text-gray-100"
                             >
-                                {stepComplete ? (
-                                    <s className="text-gray-500">{step}</s>
-                                ) : (
-                                    step
-                                )}
+                                <span
+                                    aria-hidden="true"
+                                    className="w-6 pt-1.5 text-xs text-right tabular-nums text-gray-500"
+                                >
+                                    {index + 1}.
+                                </span>
+                                <span className="min-w-0 break-words">
+                                    {stepComplete ? (
+                                        <s className="text-gray-500">{step}</s>
+                                    ) : (
+                                        step
+                                    )}
+                                </span>
                                 <input
                                     type="checkbox"
                                     checked={stepComplete}
-                                    className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
+                                    aria-label={`Mark step ${index + 1} complete`}
+                                    className="mt-2 h-3 w-3 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
                                     onChange={() => toggleStep(step)}
                                 />
                             </li>
                         );
                     })}
-                </ul>
+                </ol>
             )}
         </div>
     );

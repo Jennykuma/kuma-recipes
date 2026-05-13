@@ -81,6 +81,7 @@ const useUpdateRecipe = (id: string) => {
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['recipe', id] });
             queryClient.invalidateQueries({ queryKey: ['recipes'] });
+            queryClient.invalidateQueries({ queryKey: ['tags'] });
         },
     });
 };

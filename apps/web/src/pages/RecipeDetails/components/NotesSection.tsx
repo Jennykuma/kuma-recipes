@@ -83,7 +83,7 @@ const NotesSection = ({
     if (isEditing) {
         return (
             <div className="flex flex-col w-full min-w-0">
-                <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
+                <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     Notes
                 </span>
                 <textarea
@@ -93,8 +93,12 @@ const NotesSection = ({
                         rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
                     rows={7}
                     value={draftValue ?? ''}
+                    autoFocus
+                    onFocus={(event) => {
+                        const cursorPosition = event.target.value.length;
+                        event.target.setSelectionRange(cursorPosition, cursorPosition);
+                    }}
                     onChange={(e) => onChange(e.target.value)}
-                    onBlur={onSave}
                 ></textarea>
                 {isEditing && (
                     <div className="mt-1 flex gap-2 justify-end max-w-125">
@@ -126,7 +130,7 @@ const NotesSection = ({
             <span
                 className="
                     text-[10px] uppercase tracking-wide
-                    text-gray-500 rounded-full dark:text-gray-300"
+                    text-gray-600 rounded-full dark:text-gray-300"
             >
                 Notes
             </span>

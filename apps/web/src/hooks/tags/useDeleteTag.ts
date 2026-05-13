@@ -20,6 +20,9 @@ const useDeleteTag = () => {
             queryClient.setQueriesData<Tag[]>({ queryKey: ['tags'] }, (existing = []) =>
                 existing.filter((tag) => tag.id !== id)
             );
+            queryClient.invalidateQueries({ queryKey: ['tags'] });
+            queryClient.invalidateQueries({ queryKey: ['recipes'] });
+            queryClient.invalidateQueries({ queryKey: ['recipe'] });
         },
     });
 };

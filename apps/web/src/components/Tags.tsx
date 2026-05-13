@@ -23,6 +23,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownMaxHeight, setDropdownMaxHeight] = useState(256);
+    const [openUpward, setOpenUpward] = useState(false);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const [showTagNameLimitMessage, setShowTagNameLimitMessage] = useState(false);
@@ -67,23 +68,36 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     useEffect(() => {
         if (!dropdownOpen) return;
 
-        const updateDropdownMaxHeight = () => {
+        const updateDropdownPlacement = () => {
             const containerRect = containerRef.current?.getBoundingClientRect();
             if (!containerRect) return;
 
             const viewportHeight = window.innerHeight;
-            const spaceBelow = viewportHeight - containerRect.bottom - 8;
-            const clampedMaxHeight = Math.max(120, Math.min(256, spaceBelow));
+            const viewportPadding = 8;
+            const minDropdownHeight = 120;
+            const maxDropdownHeight = 256;
+            const spaceBelow =
+                viewportHeight - containerRect.bottom - viewportPadding;
+            const spaceAbove = containerRect.top - viewportPadding;
+            const shouldOpenUpward =
+                spaceBelow < minDropdownHeight && spaceAbove > spaceBelow;
+            const availableSpace = shouldOpenUpward ? spaceAbove : spaceBelow;
+            const clampedMaxHeight = Math.max(
+                minDropdownHeight,
+                Math.min(maxDropdownHeight, availableSpace)
+            );
+
+            setOpenUpward(shouldOpenUpward);
             setDropdownMaxHeight(clampedMaxHeight);
         };
 
-        updateDropdownMaxHeight();
-        window.addEventListener('resize', updateDropdownMaxHeight);
-        window.addEventListener('scroll', updateDropdownMaxHeight, true);
+        updateDropdownPlacement();
+        window.addEventListener('resize', updateDropdownPlacement);
+        window.addEventListener('scroll', updateDropdownPlacement, true);
 
         return () => {
-            window.removeEventListener('resize', updateDropdownMaxHeight);
-            window.removeEventListener('scroll', updateDropdownMaxHeight, true);
+            window.removeEventListener('resize', updateDropdownPlacement);
+            window.removeEventListener('scroll', updateDropdownPlacement, true);
         };
     }, [dropdownOpen]);
 
@@ -188,7 +202,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                     aria-describedby={
                         hasReachedTagNameLimit ? 'tags-input-limit-message' : undefined
                     }
-                    className="flex-1 min-w-[120px] border-0 bg-transparent text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none dark:text-gray-100"
+                    className="flex-1 min-w-[120px] border-0 bg-transparent text-xs text-gray-800 placeholder:text-gray-400 focus:outline-none dark:text-gray-100"
                     placeholder="Add tags..."
                     value={query}
                     onFocus={() => setDropdownOpen(true)}
@@ -207,7 +221,9 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
 
             {dropdownOpen && (
                 <div
-                    className="absolute left-0 right-0 top-full z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none"
+                    className={`absolute left-0 right-0 z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none ${
+                        openUpward ? 'bottom-full mb-1' : 'top-full mt-1'
+                    }`}
                     style={{ maxHeight: `${dropdownMaxHeight}px` }}
                 >
                     {hasReachedTagNameLimit && (
