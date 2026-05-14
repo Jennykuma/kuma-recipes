@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
@@ -19,7 +19,8 @@ const StepsSection = ({
     onSave,
     onCancel,
 }: StepsSectionProps) => {
-    const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+    const editFormRef = useRef<HTMLFormElement>(null);
+    const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
     const form = useForm<StepsForm>({
         defaultValues: {
@@ -40,6 +41,38 @@ const StepsSection = ({
         });
     }, [steps, form]);
 
+    useEffect(() => {
+        if (!isEditing) return;
+
+        const updateFormMaxHeight = () => {
+            const editForm = editFormRef.current;
+            if (!editForm) return;
+
+            if (!window.matchMedia('(min-width: 768px)').matches) {
+                editForm.style.maxHeight = '';
+                return;
+            }
+
+            const viewportPadding = 32;
+            const formTop = editForm.getBoundingClientRect().top;
+            const maxHeight = Math.max(
+                160,
+                window.innerHeight - formTop - viewportPadding
+            );
+
+            editForm.style.maxHeight = `${maxHeight}px`;
+        };
+
+        updateFormMaxHeight();
+        window.addEventListener('resize', updateFormMaxHeight);
+        window.addEventListener('scroll', updateFormMaxHeight, true);
+
+        return () => {
+            window.removeEventListener('resize', updateFormMaxHeight);
+            window.removeEventListener('scroll', updateFormMaxHeight, true);
+        };
+    }, [isEditing]);
+
     const handleSubmit = (data: StepsForm) => {
         const normalizedSteps = data.steps
             .map((stepRow) => stepRow.step.trim())
@@ -55,14 +88,14 @@ const StepsSection = ({
         onCancel();
     };
 
-    const toggleStep = (step: string) => {
+    const toggleStep = (index: number) => {
         setCompletedSteps((prev) => {
             const next = new Set(prev);
 
-            if (next.has(step)) {
-                next.delete(step);
+            if (next.has(index)) {
+                next.delete(index);
             } else {
-                next.add(step);
+                next.add(index);
             }
 
             return next;
@@ -92,9 +125,13 @@ const StepsSection = ({
 
             {isEditing ? (
                 <FormProvider {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)}>
-                        <StepsTable />
-                        <div className="mt-1 flex gap-2 justify-end">
+                    <form
+                        ref={editFormRef}
+                        onSubmit={form.handleSubmit(handleSubmit)}
+                        className="flex flex-col md:min-h-0 md:overflow-hidden"
+                    >
+                        <StepsTable keepAddButtonVisible />
+                        <div className="mt-1 flex shrink-0 gap-2 justify-end">
                             <button
                                 className="font-jua text-xs text-gray-400 hover:text-gray-500"
                                 type="button"
@@ -115,7 +152,7 @@ const StepsSection = ({
             ) : (
                 <ol>
                     {steps?.map((step, index) => {
-                        const stepComplete = completedSteps.has(step);
+                        const stepComplete = completedSteps.has(index);
                         return (
                             <li
                                 key={`${step}-${index}`}
@@ -141,7 +178,7 @@ const StepsSection = ({
                                     checked={stepComplete}
                                     aria-label={`Mark step ${index + 1} complete`}
                                     className="mt-2 h-3 w-3 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
-                                    onChange={() => toggleStep(step)}
+                                    onChange={() => toggleStep(index)}
                                 />
                             </li>
                         );

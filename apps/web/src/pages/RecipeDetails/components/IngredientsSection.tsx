@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
@@ -19,6 +19,7 @@ const IngredientsSection = ({
     onSave,
     onCancel,
 }: IngredientsSectionProps) => {
+    const editFormRef = useRef<HTMLFormElement>(null);
     const form = useForm<IngredientsForm>({
         defaultValues: {
             ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
@@ -37,6 +38,38 @@ const IngredientsSection = ({
             ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
         });
     }, [ingredients, form]);
+
+    useEffect(() => {
+        if (!isEditing) return;
+
+        const updateFormMaxHeight = () => {
+            const editForm = editFormRef.current;
+            if (!editForm) return;
+
+            if (!window.matchMedia('(min-width: 768px)').matches) {
+                editForm.style.maxHeight = '';
+                return;
+            }
+
+            const viewportPadding = 32;
+            const formTop = editForm.getBoundingClientRect().top;
+            const maxHeight = Math.max(
+                160,
+                window.innerHeight - formTop - viewportPadding
+            );
+
+            editForm.style.maxHeight = `${maxHeight}px`;
+        };
+
+        updateFormMaxHeight();
+        window.addEventListener('resize', updateFormMaxHeight);
+        window.addEventListener('scroll', updateFormMaxHeight, true);
+
+        return () => {
+            window.removeEventListener('resize', updateFormMaxHeight);
+            window.removeEventListener('scroll', updateFormMaxHeight, true);
+        };
+    }, [isEditing]);
 
     const handleSubmit = (data: IngredientsForm) => {
         const normalizedIngredients = data.ingredients
@@ -76,9 +109,13 @@ const IngredientsSection = ({
 
             {isEditing ? (
                 <FormProvider {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)}>
-                        <IngredientsTable />
-                        <div className="mt-1 flex gap-2 justify-end">
+                    <form
+                        ref={editFormRef}
+                        onSubmit={form.handleSubmit(handleSubmit)}
+                        className="flex flex-col md:min-h-0 md:overflow-hidden"
+                    >
+                        <IngredientsTable keepAddButtonVisible />
+                        <div className="mt-1 flex shrink-0 gap-2 justify-end">
                             <button
                                 className="font-jua text-xs text-gray-400 hover:text-gray-500"
                                 type="button"

@@ -90,7 +90,8 @@ const NotesSection = ({
                     className="
                         flex-1 max-w-125 p-2 rounded-md text-xs
                         resize-none bg-white border border-gray-200
-                        rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
+                        rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+                        focus:border-sage-300 focus:outline-none"
                     rows={7}
                     value={draftValue ?? ''}
                     autoFocus
