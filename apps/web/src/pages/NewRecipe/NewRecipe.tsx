@@ -11,6 +11,7 @@ import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
+import { IdCard, PieChart, Star, RotateCcw, Link2, TagIcon } from 'lucide-react';
 
 const NewRecipe = () => {
     const navigate = useNavigate();
@@ -122,16 +123,23 @@ const NewRecipe = () => {
                                     className="
                                 md:sticky top-6 w-full self-start
                                 p-4 space-y-4 border border-sage-300/50
-                                rounded-xl shadow-sm shadow-gray-100"
+                                rounded-xl shadow-sm shadow-gray-100
+                                text-gray-600 dark:text-gray-300"
                                 >
                                     <div className="flex items-center gap-2">
                                         <label
                                             htmlFor="title"
-                                            className="block text-xs text-left font-semibold"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                         >
-                                            Title
-                                            <span className="align-top text-red-500">
-                                                *
+                                            <IdCard
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
+                                            <span>
+                                                Title
+                                                <span className="align-top text-red-500">
+                                                    *
+                                                </span>
                                             </span>
                                         </label>
                                         <input
@@ -157,8 +165,12 @@ const NewRecipe = () => {
                                     <div className="flex items-center gap-2">
                                         <label
                                             htmlFor="yield"
-                                            className="block text-xs text-left font-semibold"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                         >
+                                            <PieChart
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
                                             Yield
                                         </label>
                                         <input
@@ -175,8 +187,12 @@ const NewRecipe = () => {
                                     <div className="flex gap-2 items-center">
                                         <label
                                             htmlFor="rating"
-                                            className="block text-xs text-left font-semibold"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                         >
+                                            <Star
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
                                             Rating
                                         </label>
                                         <Controller
@@ -196,32 +212,39 @@ const NewRecipe = () => {
                                     <div className="flex gap-2 items-center">
                                         <label
                                             htmlFor="remake"
-                                            className="block text-xs text-left font-semibold"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                         >
-                                            Remake?
+                                            <RotateCcw
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
+                                            Remake
                                         </label>
-                                        <input type="checkbox" {...register('remake')} />
+                                        <input
+                                            type="checkbox"
+                                            id="remake"
+                                            {...register('remake')}
+                                        />
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                        <div className="space-y-1 w-28">
-                                            <label
-                                                htmlFor="source"
-                                                className="block text-xs text-left font-semibold"
-                                            >
-                                                Source
-                                            </label>
-                                            <span className="block text-[11px] text-left text-gray-400">
-                                                Original recipe link
-                                            </span>
-                                        </div>
+                                        <label
+                                            htmlFor="source"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                        >
+                                            <Link2
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
+                                            Source
+                                        </label>
                                         <input
                                             type="text"
                                             className="
                                         w-full p-2 rounded-md text-xs resize-none
                                         border border-gray-200 rounded-sm
                                         placeholder:text-sm focus:border-sage-300 focus:outline-none"
-                                            placeholder="URL"
+                                            placeholder="Original recipe URL"
                                             {...register('source')}
                                         ></input>
                                     </div>
@@ -229,8 +252,12 @@ const NewRecipe = () => {
                                     <div className="space-y-1">
                                         <label
                                             htmlFor="tags-input"
-                                            className="block text-xs text-left font-semibold"
+                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                         >
+                                            <TagIcon
+                                                className="h-3 w-3 text-gray-400"
+                                                aria-hidden="true"
+                                            />
                                             Tags
                                         </label>
                                         <Tags />
