@@ -13,6 +13,39 @@ import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 import { IdCard, PieChart, Star, RotateCcw, Link2, TagIcon } from 'lucide-react';
 
+const defaultRecipeFormValues: RecipeFormValues = {
+    title: '',
+    source: '',
+    notes: '',
+    rating: 0,
+    remake: false,
+    tagIds: [],
+    ingredients: [{ ingredient: '' }],
+    steps: [{ step: '' }],
+    yield: '',
+};
+
+type RecipeFormDraftValues = Partial<
+    Omit<RecipeFormValues, 'ingredients' | 'steps'> & {
+        ingredients: { ingredient?: string }[];
+        steps: { step?: string }[];
+    }
+>;
+
+const hasDraftContent = (values: RecipeFormDraftValues) =>
+    (values.title?.trim() ?? '') !== '' ||
+    (values.source?.trim() ?? '') !== '' ||
+    (values.notes?.trim() ?? '') !== '' ||
+    (values.yield?.trim() ?? '') !== '' ||
+    Boolean(values.rating) ||
+    Boolean(values.remake) ||
+    (values.tagIds?.length ?? 0) > 0 ||
+    Boolean(
+        values.ingredients?.some(({ ingredient }) => (ingredient?.trim() ?? '') !== '')
+    ) ||
+    Boolean(values.steps?.some(({ step }) => (step?.trim() ?? '') !== '')) ||
+    Boolean(values.photo?.length);
+
 const NewRecipe = () => {
     const navigate = useNavigate();
     const { mutateAsync: createRecipe } = useCreateRecipe();
@@ -20,22 +53,13 @@ const NewRecipe = () => {
 
     // method also returns register, handleSubmit, control, setFocus, watch, etc
     const methods = useForm<RecipeFormValues>({
-        defaultValues: {
-            title: '',
-            source: '',
-            notes: '',
-            rating: 0,
-            remake: false,
-            tagIds: [],
-            ingredients: [{ ingredient: '' }],
-            steps: [{ step: '' }],
-            yield: '',
-        },
+        defaultValues: defaultRecipeFormValues,
     });
-    const { register, handleSubmit, control, formState, reset } = methods;
+    const { register, handleSubmit, control, formState, reset, resetField } = methods;
     const { errors } = formState;
-    const shouldConfirmCancel = formState.isDirty;
-    const selectedPhoto = useWatch({ control, name: 'photo' });
+    const watchedFormValues = useWatch({ control });
+    const shouldConfirmCancel = hasDraftContent(watchedFormValues);
+    const selectedPhoto = watchedFormValues.photo;
     const photoPreviewUrl = useMemo(() => {
         const file = selectedPhoto?.[0];
         return file ? URL.createObjectURL(file) : null;
@@ -101,6 +125,7 @@ const NewRecipe = () => {
                                     <RecipePhotoPicker
                                         alt="Selected recipe"
                                         imageUrl={photoPreviewUrl}
+                                        onRemovePhoto={() => resetField('photo')}
                                         tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
                                         inputProps={{
                                             id: 'photo',
