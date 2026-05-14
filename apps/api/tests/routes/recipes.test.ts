@@ -13,6 +13,7 @@ vi.mock('../../src/services/recipes/recipes.service', () => ({
 }));
 
 vi.mock('../../src/services/recipes/recipe-photos.service', () => ({
+    deleteRecipePhoto: vi.fn(),
     uploadRecipePhoto: vi.fn(),
 }));
 
@@ -21,7 +22,10 @@ import {
     listRecipes,
     recipeDetails,
 } from '../../src/services/recipes/recipes.service';
-import { uploadRecipePhoto } from '../../src/services/recipes/recipe-photos.service';
+import {
+    deleteRecipePhoto,
+    uploadRecipePhoto,
+} from '../../src/services/recipes/recipe-photos.service';
 import { verifyToken } from '@clerk/backend';
 
 describe('recipes routes', () => {
@@ -231,6 +235,25 @@ describe('recipes routes', () => {
                 filename: 'photo.png',
                 mimetype: 'image/png',
             }),
+        });
+    });
+
+    test('DELETE /recipes/:id/photo removes the recipe photo', async () => {
+        const id = '6fd3f0c5-c098-4804-89ad-299a25d5373a';
+        const mockedDeleteRecipePhoto = vi.mocked(deleteRecipePhoto);
+        mockedDeleteRecipePhoto.mockResolvedValue({ imagePath: null });
+
+        const res = await app.inject({
+            method: 'DELETE',
+            url: `/recipes/${id}/photo`,
+            headers: authHeaders,
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.json()).toEqual({ imagePath: null });
+        expect(mockedDeleteRecipePhoto).toHaveBeenCalledWith({
+            recipeId: id,
+            userId: 'test-user-1',
         });
     });
 });

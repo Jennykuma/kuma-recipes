@@ -63,3 +63,40 @@ export async function uploadRecipePhoto({
 
     return { imagePath };
 }
+
+export async function deleteRecipePhoto({
+    recipeId,
+    userId,
+}: {
+    recipeId: string;
+    userId: string;
+}) {
+    const { prisma } = await import('../../prisma.js');
+
+    const recipe = await prisma.recipe.findFirst({
+        where: { id: recipeId, userId },
+        select: { id: true, imagePath: true },
+    });
+
+    if (!recipe) return null;
+
+    await prisma.recipe.update({
+        where: { id: recipeId },
+        data: { imagePath: null },
+    });
+
+    if (recipe.imagePath) {
+        const { supabase, recipePhotosBucket } = await import('../../supabase.js');
+        const { error } = await supabase.storage
+            .from(recipePhotosBucket)
+            .remove([recipe.imagePath]);
+
+        if (error) {
+            console.warn(
+                `Failed to remove recipe photo ${recipe.imagePath}: ${error.message}`
+            );
+        }
+    }
+
+    return { imagePath: null };
+}

@@ -4,6 +4,7 @@ import { CalendarPlus, Link2, RotateCcw, Star, Trash2, PieChart } from 'lucide-r
 import {
     useRecipeDetails,
     useDeleteRecipe,
+    useDeleteRecipePhoto,
     useUpdateRecipe,
     useUploadRecipePhoto,
 } from '../../hooks';
@@ -36,6 +37,11 @@ const RecipeDetails = () => {
         isPending: isUploadingPhoto,
         error: uploadPhotoError,
     } = useUploadRecipePhoto();
+    const {
+        mutate: deleteRecipePhoto,
+        isPending: isDeletingPhoto,
+        error: deletePhotoError,
+    } = useDeleteRecipePhoto();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
@@ -155,6 +161,11 @@ const RecipeDetails = () => {
         uploadRecipePhoto({ recipeId, photo });
     };
 
+    const handlePhotoRemove = () => {
+        if (!recipeId || !recipe?.imagePath) return;
+        deleteRecipePhoto({ recipeId });
+    };
+
     return (
         <div className="min-h-screen bg-white p-8 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto w-full max-w-7xl">
@@ -204,9 +215,11 @@ const RecipeDetails = () => {
                     <RecipePhotoPicker
                         alt={recipe?.title ?? 'Recipe photo'}
                         imageUrl={detailImageUrl}
-                        error={uploadPhotoError?.message}
-                        isUploading={isUploadingPhoto}
+                        error={uploadPhotoError?.message ?? deletePhotoError?.message}
+                        isUploading={isUploadingPhoto || isDeletingPhoto}
+                        busyText={isDeletingPhoto ? 'Removing...' : 'Uploading...'}
                         onFileSelect={handlePhotoUpload}
+                        onRemovePhoto={recipe?.imagePath ? handlePhotoRemove : undefined}
                         resetAfterChange
                         tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
                     />

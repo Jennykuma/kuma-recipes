@@ -4,7 +4,10 @@ import {
     type UpdateRecipeBody,
 } from '../services/recipes/recipes.types.js';
 import { requireUser } from '../auth/require-user.js';
-import { uploadRecipePhoto } from '../services/recipes/recipe-photos.service.js';
+import {
+    deleteRecipePhoto,
+    uploadRecipePhoto,
+} from '../services/recipes/recipe-photos.service.js';
 
 function parseTagFilters(tagQuery?: string | string[]) {
     const queryValues = Array.isArray(tagQuery) ? tagQuery : tagQuery ? [tagQuery] : [];
@@ -143,6 +146,25 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
             userId,
             file,
         });
+
+        reply.send(result);
+    });
+
+    // DELETE /:id/photo
+    fastify.delete('/:id/photo', async (request, reply) => {
+        const userId = await requireUser(request, reply);
+        if (!userId) return;
+
+        const { id } = request.params as { id: string };
+        const result = await deleteRecipePhoto({
+            recipeId: id,
+            userId,
+        });
+
+        if (!result) {
+            reply.code(404).send({ message: 'Recipe not found' });
+            return;
+        }
 
         reply.send(result);
     });

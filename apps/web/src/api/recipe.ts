@@ -119,6 +119,19 @@ const recipe = {
 
         return response.json();
     },
+
+    async deleteRecipePhoto(id: string, token?: string): Promise<{ imagePath: null }> {
+        const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
+            method: 'DELETE',
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to remove recipe photo');
+        }
+
+        return response.json();
+    },
 };
 
 export default recipe;
