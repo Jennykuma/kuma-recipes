@@ -82,13 +82,13 @@ const NotesSection = ({
 }: NotesSectionProps) => {
     if (isEditing) {
         return (
-            <div className="flex flex-col w-full min-w-0">
+            <div className="flex h-full w-full min-w-0 flex-col">
                 <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     Notes
                 </span>
                 <textarea
                     className="
-                        flex-1 max-w-125 p-2 rounded-md text-xs
+                        h-full min-h-0 w-full flex-1 p-2 rounded-md text-xs
                         resize-none bg-white border border-gray-200
                         rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
                         focus:border-sage-300 focus:outline-none"
@@ -102,7 +102,7 @@ const NotesSection = ({
                     onChange={(e) => onChange(e.target.value)}
                 ></textarea>
                 {isEditing && (
-                    <div className="mt-1 flex gap-2 justify-end max-w-125">
+                    <div className="mt-1 flex justify-end gap-2">
                         <button
                             className="font-jua text-xs text-gray-400 hover:text-gray-500"
                             type="button"
@@ -127,7 +127,7 @@ const NotesSection = ({
     const noteParts = getNoteParts(noteText);
 
     return (
-        <div className="flex flex-col w-full min-w-0">
+        <div className="flex h-full w-full min-w-0 flex-col">
             <span
                 className="
                     text-[10px] uppercase tracking-wide
@@ -137,9 +137,10 @@ const NotesSection = ({
             </span>
             <div
                 className="
-                    flex-1 max-w-125 min-h-[132px] p-2 rounded-md text-xs
+                    h-full max-h-[200px] min-h-0 w-full flex-1 p-2 rounded-md text-xs
                     whitespace-pre-wrap break-words bg-white border border-gray-200
-                    rounded-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100"
+                    rounded-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+                    overflow-scroll"
                 onClick={onEdit}
                 role="button"
                 tabIndex={0}

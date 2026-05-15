@@ -90,23 +90,24 @@ const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
         <div
             ref={containerRef}
             className={classNames(
-                !keepAddButtonVisible && 'space-y-3',
-                keepAddButtonVisible && 'md:flex md:min-h-0 md:flex-col'
+                !keepAddButtonVisible && 'space-y-2',
+                keepAddButtonVisible && 'md:flex md:min-h-0 md:flex-1 md:flex-col'
             )}
         >
             <div
                 ref={rowsRef}
                 className={classNames(
-                    'space-y-3',
-                    keepAddButtonVisible && 'md:min-h-0 md:overflow-y-auto md:pr-2'
+                    'space-y-2',
+                    keepAddButtonVisible &&
+                        'md:flex-1 md:min-h-0 md:overflow-y-auto md:pr-2'
                 )}
             >
                 {fields.map((field, index) => {
                     return (
-                        <div key={field.id} className="flex items-center">
+                        <div key={field.id} className="flex items-center gap-1">
                             <span
                                 className={classNames(
-                                    'text-xs w-4',
+                                    'text-xs w-4 text-right',
                                     activeIndex === index
                                         ? 'text-gray-500'
                                         : 'text-gray-400'
@@ -148,29 +149,28 @@ const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
                         </div>
                     );
                 })}
+                <button
+                    type="button"
+                    className={classNames(
+                        'mt-2 inline-flex items-center gap-2 text-xs text-blush-400',
+                        'border border-blush-200 bg-white px-2.5 py-1.5 rounded-full',
+                        'hover:bg-blush-200 hover:text-white transition-colors disabled:cursor-not-allowed',
+                        'dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300',
+                        'dark:hover:bg-blush-400 dark:hover:text-white',
+                        'disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
+                        'dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500',
+                        'self-start'
+                    )}
+                    onClick={() => {
+                        if (isAddDisabled) return;
+                        append({ step: '' }, { shouldFocus: true });
+                    }}
+                    disabled={isAddDisabled}
+                >
+                    <Plus className="w-4 h-4" />
+                    Add step
+                </button>
             </div>
-
-            <button
-                type="button"
-                className={classNames(
-                    'mt-2 inline-flex items-center gap-2 text-xs text-blush-400',
-                    'border border-blush-200 bg-white px-2.5 py-1.5 rounded-full',
-                    'hover:bg-blush-200 hover:text-white transition-colors disabled:cursor-not-allowed',
-                    'dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300',
-                    'dark:hover:bg-blush-400 dark:hover:text-white',
-                    'disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
-                    'dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500',
-                    keepAddButtonVisible && 'shrink-0 self-start'
-                )}
-                onClick={() => {
-                    if (isAddDisabled) return;
-                    append({ step: '' }, { shouldFocus: true });
-                }}
-                disabled={isAddDisabled}
-            >
-                <Plus className="w-4 h-4" />
-                Add step
-            </button>
         </div>
     );
 };

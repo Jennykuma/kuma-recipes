@@ -167,7 +167,7 @@ const RecipeDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white p-8 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
+        <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto w-full max-w-7xl">
                 <BackButton to="/" />
                 <header className="flex items-center justify-between mb-1">
@@ -224,123 +224,141 @@ const RecipeDetails = () => {
                         tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
                     />
                     <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
-                        <div className="flex h-full w-full flex-col gap-4">
-                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex text-[10px] w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
-                                    <CalendarPlus
-                                        className="h-3 w-3 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    Created on
-                                </span>
-                                {recipe?.createdAt ? (
-                                    <time dateTime={recipe.createdAt}>
-                                        {new Date(recipe.createdAt).toLocaleDateString(
-                                            'en-US',
-                                            {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric',
-                                            }
-                                        )}
-                                    </time>
-                                ) : (
-                                    <span>Unknown</span>
-                                )}
-                            </div>
-                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                    <PieChart
-                                        className="h-3 w-3 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    Yield
-                                </span>
-                                <EditableYield
-                                    recipeYield={recipe?.yield}
-                                    isEditing={editingField === 'yield'}
-                                    draftValue={draft.yield}
-                                    onEdit={() => {
-                                        setDraft({
-                                            ...draft,
-                                            yield: recipe?.yield ?? '',
-                                        });
-                                        setEditingField('yield');
-                                    }}
-                                    onChange={(value) =>
-                                        setDraft({ ...draft, yield: value })
-                                    }
-                                    onSave={() => handleSave('yield')}
-                                    onCancel={() => handleCancel('yield')}
-                                />
-                            </div>
-                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                    <Star
-                                        className="h-3 w-3 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    Rating
-                                </span>
-                                <Rating
-                                    value={recipe?.rating}
-                                    onChange={handleChangeRating}
-                                    className="justify-start"
-                                />
-                            </div>
-
-                            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                    <RotateCcw
-                                        className="h-3 w-3 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    Remake
-                                </span>
-                                <RemakeToggle
-                                    checked={recipe?.remake}
-                                    onToggle={handleToggleRemake}
-                                    label="Would remake"
-                                />
-                            </div>
-
-                            <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
-                                <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                    <Link2
-                                        className="h-3 w-3 text-gray-400"
-                                        aria-hidden="true"
-                                    />
-                                    Source
-                                </span>
-                                <div className="min-w-0 flex-1 text-xs -mt-0.5">
-                                    <EditableSource
-                                        source={recipe?.source}
-                                        isEditing={editingField === 'source'}
-                                        draftValue={draft.source}
-                                        hideLabel
+                        <div className="grid h-full w-full gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-stretch">
+                            <div className="flex min-w-0 flex-col gap-4">
+                                <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex text-[10px] w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                                        <CalendarPlus
+                                            className="h-3 w-3 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        Created on
+                                    </span>
+                                    {recipe?.createdAt ? (
+                                        <time dateTime={recipe.createdAt}>
+                                            {new Date(recipe.createdAt).toLocaleDateString(
+                                                'en-US',
+                                                {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                }
+                                            )}
+                                        </time>
+                                    ) : (
+                                        <span>Unknown</span>
+                                    )}
+                                </div>
+                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                                        <PieChart
+                                            className="h-3 w-3 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        Yield
+                                    </span>
+                                    <EditableYield
+                                        recipeYield={recipe?.yield}
+                                        isEditing={editingField === 'yield'}
+                                        draftValue={draft.yield}
                                         onEdit={() => {
                                             setDraft({
                                                 ...draft,
-                                                source: recipe?.source ?? '',
+                                                yield: recipe?.yield ?? '',
                                             });
-                                            setEditingField('source');
+                                            setEditingField('yield');
                                         }}
                                         onChange={(value) =>
-                                            setDraft({ ...draft, source: value })
+                                            setDraft({ ...draft, yield: value })
                                         }
-                                        onSave={() => handleSave('source')}
-                                        onCancel={() => handleCancel('source')}
+                                        onSave={() => handleSave('yield')}
+                                        onCancel={() => handleCancel('yield')}
                                     />
                                 </div>
+                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                                        <Star
+                                            className="h-3 w-3 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        Rating
+                                    </span>
+                                    <Rating
+                                        value={recipe?.rating}
+                                        onChange={handleChangeRating}
+                                        className="justify-start"
+                                    />
+                                </div>
+
+                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                                        <RotateCcw
+                                            className="h-3 w-3 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        Remake
+                                    </span>
+                                    <RemakeToggle
+                                        checked={recipe?.remake}
+                                        onToggle={handleToggleRemake}
+                                        label="Would remake"
+                                    />
+                                </div>
+
+                                <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
+                                        <Link2
+                                            className="h-3 w-3 text-gray-400"
+                                            aria-hidden="true"
+                                        />
+                                        Source
+                                    </span>
+                                    <div className="min-w-0 flex-1 text-xs -mt-0.5">
+                                        <EditableSource
+                                            source={recipe?.source}
+                                            isEditing={editingField === 'source'}
+                                            draftValue={draft.source}
+                                            hideLabel
+                                            onEdit={() => {
+                                                setDraft({
+                                                    ...draft,
+                                                    source: recipe?.source ?? '',
+                                                });
+                                                setEditingField('source');
+                                            }}
+                                            onChange={(value) =>
+                                                setDraft({ ...draft, source: value })
+                                            }
+                                            onSave={() => handleSave('source')}
+                                            onCancel={() => handleCancel('source')}
+                                        />
+                                    </div>
+                                </div>
+                                <TagsSection
+                                    tags={recipe?.tags}
+                                    isEditing={editingField === 'tags'}
+                                    onEdit={() => setEditingField('tags')}
+                                    onSave={handleTagsSave}
+                                    onCancel={handleTagsCancel}
+                                />
                             </div>
-                            <TagsSection
-                                tags={recipe?.tags}
-                                isEditing={editingField === 'tags'}
-                                onEdit={() => setEditingField('tags')}
-                                onSave={handleTagsSave}
-                                onCancel={handleTagsCancel}
-                            />
+                            <div className="min-w-0 lg:self-stretch">
+                                <NotesSection
+                                    notes={recipe?.notes}
+                                    isEditing={editingField === 'notes'}
+                                    draftValue={draft.notes}
+                                    onEdit={() => {
+                                        setDraft({ ...draft, notes: recipe?.notes ?? '' });
+                                        setEditingField('notes');
+                                    }}
+                                    onChange={(value) =>
+                                        setDraft({ ...draft, notes: value })
+                                    }
+                                    onSave={() => handleSave('notes')}
+                                    onCancel={() => handleCancel('notes')}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,18 +371,6 @@ const RecipeDetails = () => {
                             onEdit={() => setEditingField('ingredients')}
                             onSave={handleIngredientsSave}
                             onCancel={handleIngredientsCancel}
-                        />
-                        <NotesSection
-                            notes={recipe?.notes}
-                            isEditing={editingField === 'notes'}
-                            draftValue={draft.notes}
-                            onEdit={() => {
-                                setDraft({ ...draft, notes: recipe?.notes ?? '' });
-                                setEditingField('notes');
-                            }}
-                            onChange={(value) => setDraft({ ...draft, notes: value })}
-                            onSave={() => handleSave('notes')}
-                            onCancel={() => handleCancel('notes')}
                         />
                     </div>
 

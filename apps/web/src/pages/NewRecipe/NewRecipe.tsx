@@ -99,7 +99,7 @@ const NewRecipe = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white p-8 text-gray-900 md:h-dvh md:overflow-hidden dark:bg-[#1f1f1f] dark:text-gray-100">
+        <div className="min-h-screen bg-white p-6 text-gray-900 md:h-dvh md:overflow-hidden dark:bg-[#1f1f1f] dark:text-gray-100">
             <div className="mx-auto flex w-full max-w-7xl flex-col md:h-full md:min-h-0">
                 <FormProvider {...methods}>
                     <form
@@ -147,145 +147,168 @@ const NewRecipe = () => {
                                 <div
                                     className="
                                 md:sticky top-6 w-full self-start
-                                p-4 space-y-4 border border-sage-300/50
+                                p-4 border border-sage-300/50
                                 rounded-xl shadow-sm shadow-gray-100
                                 text-gray-600 dark:text-gray-300"
                                 >
-                                    <div className="flex items-center gap-2">
-                                        <label
-                                            htmlFor="title"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <IdCard
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            <span>
-                                                Title
-                                                <span className="align-top text-red-500">
-                                                    *
-                                                </span>
-                                            </span>
-                                        </label>
-                                        <input
-                                            id="title"
-                                            type="text"
-                                            className="
-                                        w-full p-2 rounded-md text-xs resize-none
-                                        border border-gray-200 rounded-sm
-                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
-                                            placeholder="e.g. Grandma's apple pie"
-                                            {...register('title', {
-                                                setValueAs: (value) => value.trim(),
-                                                validate: (value) =>
-                                                    value !== '' || 'Title is required',
-                                            })}
-                                        />
-                                        {formState.isSubmitted && errors.title && (
-                                            <p className="text-xs text-red-500">
-                                                {errors.title.message}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <label
-                                            htmlFor="yield"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <PieChart
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            Yield
-                                        </label>
-                                        <input
-                                            id="yield"
-                                            type="text"
-                                            className="
-                                        w-full p-2 rounded-md text-xs resize-none
-                                        border border-gray-200 rounded-sm
-                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
-                                            placeholder="e.g. 4 servings or 12 cookies"
-                                            {...register('yield')}
-                                        />
-                                    </div>
-                                    <div className="flex gap-2 items-center">
-                                        <label
-                                            htmlFor="rating"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <Star
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            Rating
-                                        </label>
-                                        <Controller
-                                            name="rating"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <Rating
-                                                    id="rating"
-                                                    value={field.value}
-                                                    onChange={field.onChange}
-                                                    interactive
+                                    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
+                                        <div className="flex min-w-0 flex-col space-y-2">
+                                            <div className="flex items-center gap-2">
+                                                <label
+                                                    htmlFor="title"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <IdCard
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    <span>
+                                                        Title
+                                                        <span className="align-top text-red-500">
+                                                            *
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                                <input
+                                                    id="title"
+                                                    type="text"
+                                                    className="
+                                                    w-full p-1.5 rounded-md text-xs resize-none
+                                                    border border-gray-200 rounded-sm
+                                                    placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                                    placeholder="e.g. Grandma's apple pie"
+                                                    {...register('title', {
+                                                        setValueAs: (value) =>
+                                                            value.trim(),
+                                                        validate: (value) =>
+                                                            value !== '' ||
+                                                            'Title is required',
+                                                    })}
                                                 />
-                                            )}
-                                        />
-                                    </div>
-
-                                    <div className="flex gap-2 items-center">
-                                        <label
-                                            htmlFor="remake"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <RotateCcw
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            Remake
-                                        </label>
-                                        <input
-                                            type="checkbox"
-                                            id="remake"
-                                            {...register('remake')}
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center gap-2">
-                                        <label
-                                            htmlFor="source"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <Link2
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            Source
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="
-                                        w-full p-2 rounded-md text-xs resize-none
+                                                {formState.isSubmitted &&
+                                                    errors.title && (
+                                                        <p className="text-xs text-red-500">
+                                                            {errors.title.message}
+                                                        </p>
+                                                    )}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <label
+                                                    htmlFor="yield"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <PieChart
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Yield
+                                                </label>
+                                                <input
+                                                    id="yield"
+                                                    type="text"
+                                                    className="
+                                        w-full p-1.5 rounded-md text-xs resize-none
                                         border border-gray-200 rounded-sm
                                         placeholder:text-sm focus:border-sage-300 focus:outline-none"
-                                            placeholder="Original recipe URL"
-                                            {...register('source')}
-                                        ></input>
-                                    </div>
-
-                                    <div className="space-y-1">
-                                        <label
-                                            htmlFor="tags-input"
-                                            className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                        >
-                                            <TagIcon
-                                                className="h-3 w-3 text-gray-400"
-                                                aria-hidden="true"
-                                            />
-                                            Tags
-                                        </label>
-                                        <Tags />
+                                                    placeholder="e.g. 4 servings or 12 cookies"
+                                                    {...register('yield')}
+                                                />
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <label
+                                                    htmlFor="rating"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <Star
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Rating
+                                                </label>
+                                                <Controller
+                                                    name="rating"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Rating
+                                                            id="rating"
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                            interactive
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <label
+                                                    htmlFor="remake"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <RotateCcw
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Remake
+                                                </label>
+                                                <input
+                                                    type="checkbox"
+                                                    id="remake"
+                                                    {...register('remake')}
+                                                />
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <label
+                                                    htmlFor="source"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <Link2
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Source
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    className="
+                                        w-full p-1.5 rounded-md text-xs resize-none
+                                        border border-gray-200 rounded-sm
+                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                                    placeholder="Original recipe URL"
+                                                    {...register('source')}
+                                                ></input>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label
+                                                    htmlFor="tags-input"
+                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                                                >
+                                                    <TagIcon
+                                                        className="h-3 w-3 text-gray-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                    Tags
+                                                </label>
+                                                <Tags />
+                                            </div>
+                                        </div>
+                                        <div className="flex w-full min-w-0 flex-col lg:self-stretch">
+                                            <label
+                                                htmlFor="notes"
+                                                className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300"
+                                            >
+                                                Notes
+                                            </label>
+                                            <textarea
+                                                className="
+                                            h-20 sm:h-24 lg:h-full w-full p-2 rounded-md text-xs
+                                            resize-none bg-white border border-gray-200
+                                            rounded-sm placeholder:text-xs focus:border-sage-300
+                                            focus:outline-none dark:border-gray-700
+                                            dark:bg-[#2a2a2a] dark:text-gray-100"
+                                                rows={4}
+                                                placeholder="e.g. too sweet, bake 2 min longer next time"
+                                                {...register('notes')}
+                                            ></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -293,8 +316,8 @@ const NewRecipe = () => {
 
                         <div className="grid w-full grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:overflow-y-auto md:overflow-x-hidden md:pb-2 md:pr-2">
                             <div className="order-1 flex flex-col md:order-none md:col-start-1 md:min-h-0">
-                                <div className="flex w-full max-w-125 flex-col gap-3 md:min-h-0 md:flex-1">
-                                    <div className="flex flex-col md:min-h-0">
+                                <div className="flex w-full min-w-0 max-w-125 flex-col gap-3 md:min-h-0 md:flex-1">
+                                    <div className="flex flex-col md:min-h-0 md:flex-1">
                                         <div className="flex flex-row items-baseline gap-1">
                                             <label
                                                 htmlFor="ingredients"
@@ -312,26 +335,6 @@ const NewRecipe = () => {
                                             </p>
                                         )}
                                         <IngredientsTable keepAddButtonVisible />
-                                    </div>
-
-                                    <div className="flex w-full min-w-0 shrink-0 flex-col">
-                                        <label
-                                            htmlFor="notes"
-                                            className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300"
-                                        >
-                                            Notes
-                                        </label>
-                                        <textarea
-                                            className="
-                                            flex-1 max-w-125 p-2 rounded-md text-xs
-                                            resize-none bg-white border border-gray-200
-                                            rounded-sm placeholder:text-xs focus:border-sage-300
-                                            focus:outline-none dark:border-gray-700
-                                            dark:bg-[#2a2a2a] dark:text-gray-100"
-                                            rows={7}
-                                            placeholder="e.g. too sweet, bake 2 min longer next time"
-                                            {...register('notes')}
-                                        ></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +367,7 @@ const NewRecipe = () => {
                                 type="button"
                                 className="
                                         font-jua text-sage-400 border border-sage-300
-                                        bg-surface hover:bg-sage-100 px-5 py-2.5
+                                        bg-surface hover:bg-sage-100 px-4 py-1.5
                                         rounded-xl transition-colors"
                                 onClick={() =>
                                     shouldConfirmCancel
@@ -378,7 +381,7 @@ const NewRecipe = () => {
                                 type="submit"
                                 className="
                                         font-jua bg-blush-200 hover:bg-blush-400
-                                        px-5 py-2.5 rounded-xl text-white transition-colors"
+                                        px-4 py-1.5 rounded-xl text-white transition-colors"
                             >
                                 Save recipe
                             </button>
