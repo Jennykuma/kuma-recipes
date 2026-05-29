@@ -26,6 +26,7 @@ model Recipe {
   imagePath   String?
   tags        Tag[]
   yield       String?
+  shareLinks  RecipeShareLink[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -42,4 +43,16 @@ model Tag {
 
   @@unique([userId, slug])
   @@index([userId, name])
+}
+
+model RecipeShareLink {
+  id        String   @id @default(uuid())
+  recipeId  String
+  token     String   @unique
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
 }
