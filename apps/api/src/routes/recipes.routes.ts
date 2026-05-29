@@ -168,6 +168,25 @@ const recipesRoutes: FastifyPluginAsync = async (fastify) => {
 
         reply.send(result);
     });
+
+    // POST /recipes/:id/share
+    fastify.post('/:id/share', async (request, reply) => {
+        const userId = await requireUser(request, reply);
+        if (!userId) return;
+
+        const { id } = request.params as { id: string };
+        const { createRecipeShareLink } =
+            await import('../services/recipes/recipes.service.js');
+
+        const shareLink = await createRecipeShareLink(id, userId);
+
+        if (!shareLink) {
+            reply.code(404).send({ message: 'Recipe not found' });
+            return;
+        }
+
+        reply.code(201).send({ shareLink });
+    });
 };
 
 export default recipesRoutes;

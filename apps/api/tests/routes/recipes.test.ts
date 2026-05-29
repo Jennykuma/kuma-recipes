@@ -10,6 +10,7 @@ vi.mock('../../src/services/recipes/recipes.service', () => ({
     createNewRecipe: vi.fn(),
     listRecipes: vi.fn(),
     recipeDetails: vi.fn(),
+    createRecipeShareLink: vi.fn();
 }));
 
 vi.mock('../../src/services/recipes/recipe-photos.service', () => ({
@@ -19,6 +20,7 @@ vi.mock('../../src/services/recipes/recipe-photos.service', () => ({
 
 import {
     createNewRecipe,
+    createRecipeShareLink,
     listRecipes,
     recipeDetails,
 } from '../../src/services/recipes/recipes.service';
@@ -254,6 +256,36 @@ describe('recipes routes', () => {
         expect(mockedDeleteRecipePhoto).toHaveBeenCalledWith({
             recipeId: id,
             userId: 'test-user-1',
+        });
+    });
+
+    test('POST /recipes/:id/share creates a recipe share link', async () => {
+        const id = '6fd3f0c5-c098-4804-89ad-299a25d5373a';
+        const mockedCreateRecipeShareLink = vi.mocked(createRecipeShareLink);
+
+        mockedCreateRecipeShareLink.mockResolvedValue({
+            id: 'share-link-id',
+            recipeId: id,
+            token: 'share-token',
+            revokedAt: null,
+            createdAt: new Date('2026-05-28T00:00:00.000Z'),
+        } as any);
+
+        const res = await app.inject({
+            method: 'POST',
+            url: `/recipes/${id}/share`,
+            headers: authHeaders,
+        });
+
+        expect(res.statusCode).toBe(201);
+        expect(mockedCreateRecipeShareLink).toHaveBeenCalledWith(id, 'test-user-1');
+        expect(res.json()).toMatchObject({
+            shareLink: {
+                id: 'share-link-id',
+                recipeId: id,
+                token: 'share-token',
+                revokedAt: null,
+            },
         });
     });
 });

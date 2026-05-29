@@ -4,6 +4,20 @@ import {
     NewRecipeBody,
     UpdateRecipeBody,
 } from '../recipes/recipes.types.js';
+import { randomBytes } from 'node:crypto';
+
+function createShareToken() {
+    return randomBytes(32).toString('base64url');
+}
+
+function normalizeTitle(title: string) {
+    const normalizedTitle = title.trim();
+    if (!normalizedTitle) {
+        throw new Error('Title is required');
+    }
+
+    return normalizedTitle;
+}
 
 async function resolveOwnedTagIds(userId: string, tagIds: string[] = []) {
     if (!tagIds.length) return [];
@@ -21,15 +35,6 @@ async function resolveOwnedTagIds(userId: string, tagIds: string[] = []) {
     }
 
     return ownedTags.map((tag) => tag.id);
-}
-
-function normalizeTitle(title: string) {
-    const normalizedTitle = title.trim();
-    if (!normalizedTitle) {
-        throw new Error('Title is required');
-    }
-
-    return normalizedTitle;
 }
 
 export async function listRecipes(
@@ -141,4 +146,20 @@ export async function deleteRecipe(recipeId: string, userId: string): Promise<bo
         where: { id: recipeId, userId },
     });
     return deleted.count > 0;
+}
+
+export async function createRecipeShareLink(recipeId: string, userId: string) {
+    const recipe = await prisma.recipe.findFirst({
+        where: { id: recipeId, userId },
+        select: { id: true },
+    });
+
+    if (!recipe) return null;
+
+    return prisma.recipeShareLink.create({
+        data: {
+            recipeId,
+            token: createShareToken(),
+        },
+    });
 }
