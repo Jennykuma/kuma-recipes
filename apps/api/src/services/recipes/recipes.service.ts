@@ -156,6 +156,18 @@ export async function createRecipeShareLink(recipeId: string, userId: string) {
 
     if (!recipe) return null;
 
+    const existingShareLink = await prisma.recipeShareLink.findFirst({
+        where: {
+            recipeId,
+            revokedAt: null,
+        },
+        orderBy: { createdAt: 'desc' },
+    });
+
+    if (existingShareLink) {
+        return existingShareLink;
+    }
+
     return prisma.recipeShareLink.create({
         data: {
             recipeId,
