@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { useCreateRecipeShareLink } from '../../../hooks';
 import { Share } from 'lucide-react';
+import { getAppBasePath } from '../../../utils/basePath';
 
 type ShareRecipeProps = { id: string };
+
+function buildSharedRecipeUrl(token: string) {
+    const basePath = getAppBasePath();
+    const sharedRecipePath =
+        basePath === '/'
+            ? `/shared-recipes/${token}`
+            : `${basePath}/shared-recipes/${token}`;
+
+    return new URL(sharedRecipePath, window.location.origin).toString();
+}
 
 const ShareRecipe = (props: ShareRecipeProps) => {
     const { id } = props;
@@ -11,7 +22,7 @@ const ShareRecipe = (props: ShareRecipeProps) => {
 
     const handleClickShare = async () => {
         const shareLinkItem = await shareRecipe(id);
-        const recipeShareLink = `${window.location.origin}/shared-recipes/${shareLinkItem.token}`;
+        const recipeShareLink = buildSharedRecipeUrl(shareLinkItem.token);
         if (recipeShareLink) {
             setShowTooltip(true);
             navigator.clipboard.writeText(recipeShareLink);
