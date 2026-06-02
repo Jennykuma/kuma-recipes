@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CalendarPlus, Link2, Star, Trash2, PieChart } from 'lucide-react';
+import { CalendarPlus, Link2, Star, PieChart } from 'lucide-react';
 import {
     useRecipeDetails,
     useDeleteRecipe,
     useDeleteRecipePhoto,
     useUpdateRecipe,
     useUploadRecipePhoto,
+    useToast,
 } from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
@@ -21,11 +22,13 @@ import NotesSection from './components/NotesSection';
 import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import EditableYield from './components/EditableYield';
+import DeleteRecipe from './components/DeleteRecipe';
 import ShareRecipe from './components/ShareRecipe';
 import RecipeDetailsView from './RecipeDetailsView';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const { id } = useParams();
     const recipeId = id ?? '';
     const { recipe } = useRecipeDetails(recipeId);
@@ -74,7 +77,15 @@ const RecipeDetails = () => {
     const handleDelete = () => {
         if (!recipeId) return;
         setShowDeleteModal(false);
-        deleteRecipe(undefined, { onSuccess: () => navigate('/') });
+        deleteRecipe(undefined, {
+            onSuccess: () => {
+                showToast({
+                    status: 'success',
+                    message: 'Recipe deleted successfully!',
+                });
+                navigate('/');
+            },
+        });
     };
 
     const handleIngredientsSave = async (normalizedIngredients: string[]) => {
@@ -184,18 +195,7 @@ const RecipeDetails = () => {
             headerActions={
                 <>
                     <ShareRecipe id={recipeId} />
-                    <button
-                        onClick={() => setShowDeleteModal(true)}
-                        className="
-                            ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
-                            text-red-500 hover:bg-red-50 hover:text-red-600
-                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
-                            dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
-                        aria-label="Delete recipe"
-                        title="Delete recipe"
-                    >
-                        <Trash2 className="h-4 w-4" aria-hidden="true" />
-                    </button>
+                    <DeleteRecipe onDelete={() => setShowDeleteModal(true)} />
                 </>
             }
             modal={

@@ -10,3 +10,4 @@ export { default as useCreateTag } from './tags/useCreateTag';
 export { default as useDeleteTag } from './tags/useDeleteTag';
 export { default as useCreateRecipeShareLink } from './recipes/useCreateRecipeShareLink';
 export { default as useSharedRecipe } from './recipes/useSharedRecipe';
+export { default as useToast } from './useToast';

@@ -87,7 +87,7 @@ const App = () => {
             <div
                 className="
                 grid grid-cols-[repeat(auto-fill,minmax(20rem,26rem))]
-                gap-4 p-6 justify-start"
+                gap-4 pt-6 pb-6 justify-start"
             >
                 {filteredRecipes?.map((recipe) => (
                     <RecipeCard

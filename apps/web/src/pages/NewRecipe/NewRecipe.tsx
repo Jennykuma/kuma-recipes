@@ -5,7 +5,7 @@ import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
 import { type RecipeFormValues } from '../../types/recipeForm';
-import { useCreateRecipe } from '../../hooks';
+import { useCreateRecipe, useToast } from '../../hooks';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
@@ -47,6 +47,7 @@ const hasDraftContent = (values: RecipeFormDraftValues) =>
 const NewRecipe = () => {
     const navigate = useNavigate();
     const { mutateAsync: createRecipe } = useCreateRecipe();
+    const { showToast } = useToast();
     const [showCancelModal, setShowCancelModal] = useState(false);
 
     // method also returns register, handleSubmit, control, setFocus, watch, etc
@@ -87,8 +88,26 @@ const NewRecipe = () => {
             steps: normalizedSteps,
         };
 
-        const createdRecipe = await createRecipe({ recipe: payload, photo: photoFile });
-        navigate(`/recipes/${createdRecipe.id}`);
+        try {
+            const createdRecipe = await createRecipe({
+                recipe: payload,
+                photo: photoFile,
+            });
+            showToast({
+                status: 'error',
+                message: 'Failed to create recipe. Please try again.',
+            });
+            // showToast({
+            //     status: 'success',
+            //     message: 'Recipe created successfully!',
+            // });
+            // navigate(`/recipes/${createdRecipe.id}`);
+        } catch (error) {
+            showToast({
+                status: 'error',
+                message: 'Failed to create recipe. Please try again.',
+            });
+        }
     };
 
     const handleDiscard = () => {

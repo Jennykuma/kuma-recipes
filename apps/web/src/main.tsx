@@ -7,9 +7,12 @@ import router from './routes.tsx';
 import { getAppRedirectPath, getSignInPath } from './utils/basePath';
 import './index.css';
 import './App.css';
+import { ToastProvider } from './widgets/Toast/ToastProvider.tsx';
 
 const queryClient = new QueryClient();
-const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as
+    | string
+    | undefined;
 const appRedirectPath = getAppRedirectPath();
 const signInPath = getSignInPath();
 const signUpPath = signInPath.replace(/sign-in$/, 'sign-up');
@@ -31,10 +34,12 @@ createRoot(document.getElementById('root')!).render(
             signInFallbackRedirectUrl={appRedirectPath}
             signUpFallbackRedirectUrl={appRedirectPath}
         >
-            <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router} />
-                {/* <ReactQueryDevtools buttonPosition="bottom-left" /> */}
-            </QueryClientProvider>
+            <ToastProvider>
+                <QueryClientProvider client={queryClient}>
+                    <RouterProvider router={router} />
+                    {/* <ReactQueryDevtools buttonPosition="bottom-left" /> */}
+                </QueryClientProvider>
+            </ToastProvider>
         </ClerkProvider>
     </StrictMode>
 );
