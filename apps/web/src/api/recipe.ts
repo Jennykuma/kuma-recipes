@@ -11,6 +11,10 @@ type GetRecipeDetailsResponse = {
     recipe: Recipe;
 };
 
+type GetSharedRecipeResponse = {
+    sharedRecipe: Recipe;
+};
+
 type GetRecipesResponse = {
     recipes: RecipeListItem[];
 };
@@ -156,8 +160,8 @@ const recipe = {
             }
             throw await this.parseError(response, 'Failed to fetch shared recipe');
         }
-        const data: GetRecipeDetailsResponse = await response.json();
-        return data.recipe;
+        const data: GetSharedRecipeResponse = await response.json();
+        return data.sharedRecipe;
     },
 };
 
