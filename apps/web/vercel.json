@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/[...route].ts": {
-      "includeFiles": "../api/node_modules/@prisma/client/runtime/query_compiler*postgresql*"
+      "includeFiles": "../../node_modules/.pnpm/@prisma+client@*/node_modules/@prisma/client/runtime/query_compiler*postgresql*"
     }
   },
   "rewrites": [
