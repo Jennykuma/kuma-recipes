@@ -1,10 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
 import type { ShareLinkItem } from '../../../../api/src/services/recipes/recipes.types';
 import { useAuth } from '@clerk/clerk-react';
 
 const useCreateRecipeShareLink = () => {
-    const queryClient = useQueryClient();
     const { getToken } = useAuth();
 
     return useMutation({

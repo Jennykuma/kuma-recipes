@@ -4,7 +4,7 @@ import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
 import NewRecipe from './pages/NewRecipe/NewRecipe';
 import SignInPage from './pages/Authentication/SignIn';
 import SignUpPage from './pages/Authentication/SignUp';
-import SharedRecipeDetails from './pages/RecipeDetails/SharedRecipeDetails';
+// import SharedRecipeDetails from './pages/RecipeDetails/SharedRecipeDetails';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const configuredBasePath =
@@ -46,10 +46,10 @@ const router = createBrowserRouter(
                 </ProtectedRoute>
             ),
         },
-        {
-            path: 'shared-recipes/:token',
-            element: <SharedRecipeDetails />,
-        },
+        // {
+        //     path: 'shared-recipes/:token',
+        //     element: <SharedRecipeDetails />,
+        // },
     ],
     { basename: basePath }
 );
