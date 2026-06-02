@@ -6,15 +6,17 @@ import type { IngredientsForm } from '../../../../../api/src/services/recipes/re
 
 type IngredientsSectionProps = {
     ingredients?: string[];
-    isEditing: boolean;
-    onEdit: () => void;
-    onSave: (ingredients: string[]) => void;
-    onCancel: () => void;
+    editable?: boolean;
+    isEditing?: boolean;
+    onEdit?: () => void;
+    onSave?: (ingredients: string[]) => void;
+    onCancel?: () => void;
 };
 
 const IngredientsSection = ({
     ingredients,
-    isEditing,
+    editable = true,
+    isEditing = false,
     onEdit,
     onSave,
     onCancel,
@@ -76,14 +78,14 @@ const IngredientsSection = ({
             .map((ingredientRow) => ingredientRow.ingredient.trim())
             .filter((ingredient) => ingredient.length > 0);
 
-        onSave(normalizedIngredients);
+        onSave?.(normalizedIngredients);
     };
 
     const handleCancel = () => {
         form.reset({
             ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
         });
-        onCancel();
+        onCancel?.();
     };
 
     return (
@@ -92,7 +94,7 @@ const IngredientsSection = ({
                 <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
                     Ingredients
                 </span>
-                {!isEditing && (
+                {editable && !isEditing && (
                     <button
                         type="button"
                         onClick={onEdit}

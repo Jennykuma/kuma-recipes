@@ -11,7 +11,7 @@ const ShareRecipe = (props: ShareRecipeProps) => {
 
     const handleClickShare = async () => {
         const shareLinkItem = await shareRecipe(id);
-        const recipeShareLink = `https://www.jennyle.dev/kuma-recipes/recipes/${shareLinkItem.token}`;
+        const recipeShareLink = `${window.location.origin}/shared-recipes/${shareLinkItem.token}`;
         if (recipeShareLink) {
             setShowTooltip(true);
             navigator.clipboard.writeText(recipeShareLink);

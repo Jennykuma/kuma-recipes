@@ -43,8 +43,8 @@ const Rating = ({
                 key={`${index}`}
                 className={classNames(
                     'rating-star',
-                    isInteractive && 'cursor-pointer',
-                    !isInteractive && 'cursor-default'
+                    isInteractive && '!cursor-pointer',
+                    !isInteractive && '!cursor-default'
                 )}
                 onClick={canChange ? () => onChange?.(valueForStar) : undefined}
                 onMouseEnter={canChange ? () => setHoverRating(valueForStar) : undefined}

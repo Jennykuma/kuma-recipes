@@ -6,17 +6,25 @@ import type { Tag } from '../../../../../api/src/services/tags/tags.types';
 
 type TagsSectionProps = {
     tags?: Tag[];
-    isEditing: boolean;
-    onEdit: () => void;
-    onSave: (tagIds: string[]) => void;
-    onCancel: () => void;
+    editable?: boolean;
+    isEditing?: boolean;
+    onEdit?: () => void;
+    onSave?: (tagIds: string[]) => void;
+    onCancel?: () => void;
 };
 
 type TagsFormValues = {
     tagIds: string[];
 };
 
-const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionProps) => {
+const TagsSection = ({
+    tags,
+    editable = true,
+    isEditing = false,
+    onEdit,
+    onSave,
+    onCancel,
+}: TagsSectionProps) => {
     const form = useForm<TagsFormValues>({
         defaultValues: {
             tagIds: tags?.map((tag) => tag.id) ?? [],
@@ -30,11 +38,11 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
 
     const handleCancel = () => {
         form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
-        onCancel();
+        onCancel?.();
     };
 
     const handleSave = () => {
-        onSave(selectedTagIds);
+        onSave?.(selectedTagIds);
     };
 
     return (
@@ -44,7 +52,7 @@ const TagsSection = ({ tags, isEditing, onEdit, onSave, onCancel }: TagsSectionP
                     <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
                     Tags
                 </span>
-                {!isEditing && (
+                {editable && !isEditing && (
                     <button
                         type="button"
                         onClick={onEdit}

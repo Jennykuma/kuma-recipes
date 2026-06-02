@@ -1,11 +1,14 @@
+import { useEffect, useRef } from 'react';
+
 type NotesSectionProps = {
     notes?: string | null;
-    isEditing: boolean;
+    editable?: boolean;
+    isEditing?: boolean;
     draftValue?: string;
-    onEdit: () => void;
-    onChange: (value: string) => void;
-    onSave: () => void;
-    onCancel: () => void;
+    onEdit?: () => void;
+    onChange?: (value: string) => void;
+    onSave?: () => void;
+    onCancel?: () => void;
 };
 
 type NotePart =
@@ -73,13 +76,31 @@ function getNoteParts(notes: string): NotePart[] {
 
 const NotesSection = ({
     notes,
-    isEditing,
+    editable = true,
+    isEditing = false,
     draftValue,
     onEdit,
     onChange,
     onSave,
     onCancel,
 }: NotesSectionProps) => {
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        if (!isEditing) {
+            return;
+        }
+
+        const textarea = textareaRef.current;
+        if (!textarea) {
+            return;
+        }
+
+        textarea.focus();
+        const cursorPosition = textarea.value.length;
+        textarea.setSelectionRange(cursorPosition, cursorPosition);
+    }, [isEditing]);
+
     if (isEditing) {
         return (
             <div className="flex h-full w-full min-w-0 flex-col">
@@ -87,6 +108,7 @@ const NotesSection = ({
                     Notes
                 </span>
                 <textarea
+                    ref={textareaRef}
                     className="
                         h-full min-h-0 w-full flex-1 p-2 rounded-md text-xs
                         resize-none bg-white border border-gray-200
@@ -94,12 +116,7 @@ const NotesSection = ({
                         focus:border-sage-300 focus:outline-none"
                     rows={7}
                     value={draftValue ?? ''}
-                    autoFocus
-                    onFocus={(event) => {
-                        const cursorPosition = event.target.value.length;
-                        event.target.setSelectionRange(cursorPosition, cursorPosition);
-                    }}
-                    onChange={(e) => onChange(e.target.value)}
+                    onChange={(e) => onChange?.(e.target.value)}
                 ></textarea>
                 {isEditing && (
                     <div className="mt-1 flex justify-end gap-2">
@@ -141,13 +158,17 @@ const NotesSection = ({
                     whitespace-pre-wrap break-words bg-white border border-gray-200
                     rounded-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
                     overflow-scroll"
-                onClick={onEdit}
-                role="button"
-                tabIndex={0}
+                onClick={editable ? onEdit : undefined}
+                role={editable ? 'button' : undefined}
+                tabIndex={editable ? 0 : undefined}
                 onKeyDown={(event) => {
+                    if (!editable) {
+                        return;
+                    }
+
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
-                        onEdit();
+                        onEdit?.();
                     }
                 }}
             >

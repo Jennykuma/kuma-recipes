@@ -6,15 +6,17 @@ import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.
 
 type StepsSectionProps = {
     steps?: string[];
-    isEditing: boolean;
-    onEdit: () => void;
-    onSave: (steps: string[]) => void;
-    onCancel: () => void;
+    editable?: boolean;
+    isEditing?: boolean;
+    onEdit?: () => void;
+    onSave?: (steps: string[]) => void;
+    onCancel?: () => void;
 };
 
 const StepsSection = ({
     steps,
-    isEditing,
+    editable = true,
+    isEditing = false,
     onEdit,
     onSave,
     onCancel,
@@ -78,14 +80,14 @@ const StepsSection = ({
             .map((stepRow) => stepRow.step.trim())
             .filter((step) => step.length > 0);
 
-        onSave(normalizedSteps);
+        onSave?.(normalizedSteps);
     };
 
     const handleCancel = () => {
         form.reset({
             steps: (steps ?? ['']).map((step) => ({ step })),
         });
-        onCancel();
+        onCancel?.();
     };
 
     const toggleStep = (index: number) => {
@@ -108,7 +110,7 @@ const StepsSection = ({
                 <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
                     Steps
                 </span>
-                {!isEditing && (
+                {editable && !isEditing && (
                     <button
                         type="button"
                         onClick={onEdit}

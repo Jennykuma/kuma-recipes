@@ -23,6 +23,7 @@ import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import EditableYield from './components/EditableYield';
 import ShareRecipe from './components/ShareRecipe';
+import RecipeDetailsView from './RecipeDetailsView';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
@@ -168,29 +169,31 @@ const RecipeDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
-            <div className="mx-auto w-full max-w-7xl">
-                <BackButton to="/" />
-                <header className="flex items-center justify-between mb-1">
-                    <EditableTitle
-                        title={recipe?.title}
-                        isEditing={editingField === 'title'}
-                        draftValue={draft.title}
-                        error={titleError ?? undefined}
-                        onEdit={() => {
-                            setDraft({ ...draft, title: recipe?.title ?? '' });
+        <RecipeDetailsView
+            backButton={<BackButton to="/" />}
+            title={
+                <EditableTitle
+                    title={recipe?.title}
+                    isEditing={editingField === 'title'}
+                    draftValue={draft.title}
+                    error={titleError ?? undefined}
+                    onEdit={() => {
+                        setDraft({ ...draft, title: recipe?.title ?? '' });
+                        setTitleError(null);
+                        setEditingField('title');
+                    }}
+                    onChange={(value) => {
+                        setDraft({ ...draft, title: value });
+                        if (value.trim()) {
                             setTitleError(null);
-                            setEditingField('title');
-                        }}
-                        onChange={(value) => {
-                            setDraft({ ...draft, title: value });
-                            if (value.trim()) {
-                                setTitleError(null);
-                            }
-                        }}
-                        onSave={handleTitleSave}
-                        onCancel={() => handleCancel('title')}
-                    />
+                        }
+                    }}
+                    onSave={handleTitleSave}
+                    onCancel={() => handleCancel('title')}
+                />
+            }
+            headerActions={
+                <>
                     <ShareRecipe id={recipeId} />
                     <button
                         onClick={() => setShowDeleteModal(true)}
@@ -204,192 +207,165 @@ const RecipeDetails = () => {
                     >
                         <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </button>
-                </header>
-                {showDeleteModal ? (
+                </>
+            }
+            modal={
+                showDeleteModal ? (
                     <DeleteModal
                         title={recipe?.title}
                         onClose={() => setShowDeleteModal(false)}
                         onConfirm={handleDelete}
                     />
-                ) : null}
-
-                <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
-                    <RecipePhotoPicker
-                        alt={recipe?.title ?? 'Recipe photo'}
-                        imageUrl={detailImageUrl}
-                        error={uploadPhotoError?.message ?? deletePhotoError?.message}
-                        isUploading={isUploadingPhoto || isDeletingPhoto}
-                        busyText={isDeletingPhoto ? 'Removing...' : 'Uploading...'}
-                        onFileSelect={handlePhotoUpload}
-                        onRemovePhoto={recipe?.imagePath ? handlePhotoRemove : undefined}
-                        resetAfterChange
-                        tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
-                    />
-                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
-                        <div className="grid h-full w-full gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-stretch">
-                            <div className="flex min-w-0 flex-col gap-4">
-                                <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-                                    <span className="inline-flex text-[10px] w-[110px] shrink-0 items-center gap-1 uppercase tracking-wide text-gray-600 dark:text-gray-300">
-                                        <CalendarPlus
-                                            className="h-3 w-3 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Created on
-                                    </span>
-                                    {recipe?.createdAt ? (
-                                        <time dateTime={recipe.createdAt}>
-                                            {new Date(
-                                                recipe.createdAt
-                                            ).toLocaleDateString('en-US', {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric',
-                                            })}
-                                        </time>
-                                    ) : (
-                                        <span>Unknown</span>
-                                    )}
-                                </div>
-                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                        <PieChart
-                                            className="h-3 w-3 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Yield
-                                    </span>
-                                    <EditableYield
-                                        recipeYield={recipe?.yield}
-                                        isEditing={editingField === 'yield'}
-                                        draftValue={draft.yield}
-                                        onEdit={() => {
-                                            setDraft({
-                                                ...draft,
-                                                yield: recipe?.yield ?? '',
-                                            });
-                                            setEditingField('yield');
-                                        }}
-                                        onChange={(value) =>
-                                            setDraft({ ...draft, yield: value })
-                                        }
-                                        onSave={() => handleSave('yield')}
-                                        onCancel={() => handleCancel('yield')}
-                                    />
-                                </div>
-                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                        <Star
-                                            className="h-3 w-3 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Rating
-                                    </span>
-                                    <Rating
-                                        value={recipe?.rating}
-                                        onChange={handleChangeRating}
-                                        className="justify-start"
-                                    />
-                                </div>
-
-                                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                        <RotateCcw
-                                            className="h-3 w-3 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Remake
-                                    </span>
-                                    <RemakeToggle
-                                        checked={recipe?.remake}
-                                        onToggle={handleToggleRemake}
-                                        label="Would remake"
-                                    />
-                                </div>
-
-                                <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
-                                    <span className="inline-flex w-[110px] text-[10px] shrink-0 items-center gap-1 uppercase tracking-wide">
-                                        <Link2
-                                            className="h-3 w-3 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Source
-                                    </span>
-                                    <div className="min-w-0 flex-1 text-xs -mt-0.5">
-                                        <EditableSource
-                                            source={recipe?.source}
-                                            isEditing={editingField === 'source'}
-                                            draftValue={draft.source}
-                                            hideLabel
-                                            onEdit={() => {
-                                                setDraft({
-                                                    ...draft,
-                                                    source: recipe?.source ?? '',
-                                                });
-                                                setEditingField('source');
-                                            }}
-                                            onChange={(value) =>
-                                                setDraft({ ...draft, source: value })
-                                            }
-                                            onSave={() => handleSave('source')}
-                                            onCancel={() => handleCancel('source')}
-                                        />
-                                    </div>
-                                </div>
-                                <TagsSection
-                                    tags={recipe?.tags}
-                                    isEditing={editingField === 'tags'}
-                                    onEdit={() => setEditingField('tags')}
-                                    onSave={handleTagsSave}
-                                    onCancel={handleTagsCancel}
-                                />
-                            </div>
-                            <div className="min-w-0 lg:self-stretch">
-                                <NotesSection
-                                    notes={recipe?.notes}
-                                    isEditing={editingField === 'notes'}
-                                    draftValue={draft.notes}
-                                    onEdit={() => {
-                                        setDraft({
-                                            ...draft,
-                                            notes: recipe?.notes ?? '',
-                                        });
-                                        setEditingField('notes');
-                                    }}
-                                    onChange={(value) =>
-                                        setDraft({ ...draft, notes: value })
-                                    }
-                                    onSave={() => handleSave('notes')}
-                                    onCancel={() => handleCancel('notes')}
-                                />
-                            </div>
+                ) : null
+            }
+            photo={
+                <RecipePhotoPicker
+                    alt={recipe?.title ?? 'Recipe photo'}
+                    imageUrl={detailImageUrl}
+                    error={uploadPhotoError?.message ?? deletePhotoError?.message}
+                    isUploading={isUploadingPhoto || isDeletingPhoto}
+                    busyText={isDeletingPhoto ? 'Removing...' : 'Uploading...'}
+                    onFileSelect={handlePhotoUpload}
+                    onRemovePhoto={recipe?.imagePath ? handlePhotoRemove : undefined}
+                    resetAfterChange
+                    tileClassName="h-[250px] w-full rounded-xl md:w-[250px]"
+                />
+            }
+            summary={
+                <>
+                    <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-600 dark:text-gray-300">
+                            <CalendarPlus
+                                className="h-3 w-3 text-gray-400"
+                                aria-hidden="true"
+                            />
+                            Created on
+                        </span>
+                        {recipe?.createdAt ? (
+                            <time dateTime={recipe.createdAt}>
+                                {new Date(recipe.createdAt).toLocaleDateString('en-US', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                })}
+                            </time>
+                        ) : (
+                            <span>Unknown</span>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+                            <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            Yield
+                        </span>
+                        <EditableYield
+                            recipeYield={recipe?.yield}
+                            isEditing={editingField === 'yield'}
+                            draftValue={draft.yield}
+                            onEdit={() => {
+                                setDraft({
+                                    ...draft,
+                                    yield: recipe?.yield ?? '',
+                                });
+                                setEditingField('yield');
+                            }}
+                            onChange={(value) => setDraft({ ...draft, yield: value })}
+                            onSave={() => handleSave('yield')}
+                            onCancel={() => handleCancel('yield')}
+                        />
+                    </div>
+                    <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+                            <Star className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            Rating
+                        </span>
+                        <Rating
+                            value={recipe?.rating}
+                            onChange={handleChangeRating}
+                            className="justify-start"
+                        />
+                    </div>
+                    <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+                            <RotateCcw className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            Remake
+                        </span>
+                        <RemakeToggle
+                            checked={recipe?.remake}
+                            onToggle={handleToggleRemake}
+                            label="Would remake"
+                        />
+                    </div>
+                    <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
+                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+                            <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            Source
+                        </span>
+                        <div className="-mt-0.5 min-w-0 flex-1 text-xs">
+                            <EditableSource
+                                source={recipe?.source}
+                                isEditing={editingField === 'source'}
+                                draftValue={draft.source}
+                                hideLabel
+                                onEdit={() => {
+                                    setDraft({
+                                        ...draft,
+                                        source: recipe?.source ?? '',
+                                    });
+                                    setEditingField('source');
+                                }}
+                                onChange={(value) => setDraft({ ...draft, source: value })}
+                                onSave={() => handleSave('source')}
+                                onCancel={() => handleCancel('source')}
+                            />
                         </div>
                     </div>
-                </div>
-
-                <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="order-1 md:order-none md:col-start-1 flex flex-col gap-3">
-                        <IngredientsSection
-                            ingredients={recipe?.ingredients}
-                            isEditing={editingField === 'ingredients'}
-                            onEdit={() => setEditingField('ingredients')}
-                            onSave={handleIngredientsSave}
-                            onCancel={handleIngredientsCancel}
-                        />
-                    </div>
-
-                    <div className="order-2 md:order-none md:col-start-2 flex flex-col gap-3">
-                        <StepsSection
-                            steps={recipe?.steps}
-                            isEditing={editingField === 'steps'}
-                            onEdit={() => setEditingField('steps')}
-                            onSave={handleStepsSave}
-                            onCancel={handleStepsCancel}
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <TagsSection
+                        tags={recipe?.tags}
+                        isEditing={editingField === 'tags'}
+                        onEdit={() => setEditingField('tags')}
+                        onSave={handleTagsSave}
+                        onCancel={handleTagsCancel}
+                    />
+                </>
+            }
+            notes={
+                <NotesSection
+                    notes={recipe?.notes}
+                    isEditing={editingField === 'notes'}
+                    draftValue={draft.notes}
+                    onEdit={() => {
+                        setDraft({
+                            ...draft,
+                            notes: recipe?.notes ?? '',
+                        });
+                        setEditingField('notes');
+                    }}
+                    onChange={(value) => setDraft({ ...draft, notes: value })}
+                    onSave={() => handleSave('notes')}
+                    onCancel={() => handleCancel('notes')}
+                />
+            }
+            ingredients={
+                <IngredientsSection
+                    ingredients={recipe?.ingredients}
+                    isEditing={editingField === 'ingredients'}
+                    onEdit={() => setEditingField('ingredients')}
+                    onSave={handleIngredientsSave}
+                    onCancel={handleIngredientsCancel}
+                />
+            }
+            steps={
+                <StepsSection
+                    steps={recipe?.steps}
+                    isEditing={editingField === 'steps'}
+                    onEdit={() => setEditingField('steps')}
+                    onSave={handleStepsSave}
+                    onCancel={handleStepsCancel}
+                />
+            }
+        />
     );
 };
 
