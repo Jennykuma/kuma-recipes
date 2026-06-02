@@ -65,6 +65,9 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
+# This repo uses pnpm workspaces; keep npm lockfiles out to avoid mixed dependency graphs.
+package-lock.json
+
 # dotenv environment variable files
 .env
 .env.*
