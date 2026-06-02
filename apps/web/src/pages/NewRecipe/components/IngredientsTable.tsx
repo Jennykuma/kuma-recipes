@@ -58,9 +58,11 @@ const IngredientsTable = ({ keepAddButtonVisible = false }: IngredientsTableProp
         ingredient: string,
         index: number
     ) => {
+        const isBlankIngredient = ingredient.trim() === '';
+
         if (event.key === 'Enter') {
             event.preventDefault();
-            if (ingredient === '') return;
+            if (isBlankIngredient) return;
             const nextIndex = index + 1;
             insert(nextIndex, { ingredient: '' });
 

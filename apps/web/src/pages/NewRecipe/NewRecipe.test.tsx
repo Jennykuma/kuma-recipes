@@ -5,6 +5,7 @@ import NewRecipe from './NewRecipe';
 
 vi.mock('../../hooks', () => ({
     useCreateRecipe: () => ({ mutateAsync: vi.fn() }),
+    useToast: () => ({ showToast: vi.fn() }),
 }));
 
 vi.mock('../../hooks/tags/useTagsQuery', () => ({
@@ -51,5 +52,29 @@ describe('NewRecipe cancel guard', () => {
 
         expect(screen.getByText(/you have unsaved changes/i)).toBeInTheDocument();
         expect(screen.queryByText('Home page')).not.toBeInTheDocument();
+    });
+
+    it('keeps save disabled until title, ingredient, and step all have content', async () => {
+        const user = userEvent.setup();
+        const { container } = renderNewRecipe();
+
+        const saveButton = screen.getByRole('button', { name: /save recipe/i });
+        const ingredientInput = container.querySelector(
+            'input[name="ingredients.0.ingredient"]'
+        ) as HTMLInputElement;
+        const stepInput = container.querySelector(
+            'input[name="steps.0.step"]'
+        ) as HTMLInputElement;
+
+        expect(saveButton).toBeDisabled();
+
+        await user.type(screen.getByLabelText(/title/i), 'Apple pie');
+        expect(saveButton).toBeDisabled();
+
+        await user.type(ingredientInput, '2 apples');
+        expect(saveButton).toBeDisabled();
+
+        await user.type(stepInput, 'Mix everything together');
+        expect(saveButton).toBeEnabled();
     });
 });

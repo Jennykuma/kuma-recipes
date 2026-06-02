@@ -20,6 +20,15 @@ describe('StepsTable', () => {
         expect(screen.getAllByRole('textbox')).toHaveLength(2);
     });
 
+    it('does not add a row on Enter when the current step is only whitespace', async () => {
+        const user = userEvent.setup();
+        renderWithForm(<StepsTable />);
+
+        await user.type(screen.getAllByRole('textbox')[0], '   {enter}');
+
+        expect(screen.getAllByRole('textbox')).toHaveLength(1);
+    });
+
     it('inserts a row after the focused step on Enter', async () => {
         const user = userEvent.setup();
         renderWithForm(<StepsTable />, {

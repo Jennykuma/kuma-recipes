@@ -57,9 +57,11 @@ const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
         step: string,
         index: number
     ) => {
+        const isBlankStep = step.trim() === '';
+
         if (event.key === 'Enter') {
             event.preventDefault();
-            if (step === '') return;
+            if (isBlankStep) return;
             const nextIndex = index + 1;
             insert(nextIndex, { step: '' });
 
@@ -69,7 +71,7 @@ const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
             });
         }
 
-        if (step === '' && event.key === 'Backspace') {
+        if (isBlankStep && event.key === 'Backspace') {
             event.preventDefault();
             if (fields.length === 1) return;
             removeAndFocus(index);

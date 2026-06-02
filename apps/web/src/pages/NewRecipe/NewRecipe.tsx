@@ -12,6 +12,7 @@ import Tags from '../../components/Tags';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 import { IdCard, PieChart, Star, Link2, TagIcon } from 'lucide-react';
+import classNames from 'classnames';
 
 const defaultRecipeFormValues: RecipeFormValues = {
     title: '',
@@ -57,6 +58,14 @@ const NewRecipe = () => {
     const { register, handleSubmit, control, formState, reset, resetField } = methods;
     const { errors } = formState;
     const watchedFormValues = useWatch({ control });
+    const hasIngredient = Boolean(
+        watchedFormValues.ingredients?.some(({ ingredient }) => ingredient?.trim() !== '')
+    );
+    const hasStep = Boolean(
+        watchedFormValues.steps?.some(({ step }) => step?.trim() !== '')
+    );
+    const canSaveRecipe = !!watchedFormValues.title?.trim() && hasIngredient && hasStep;
+
     const shouldConfirmCancel = hasDraftContent(watchedFormValues);
     const selectedPhoto = watchedFormValues.photo;
     const photoPreviewUrl = useMemo(() => {
@@ -132,9 +141,6 @@ const NewRecipe = () => {
                             </header>
                             <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
                                 <div className="h-full space-y-2">
-                                    {/* <span className="block text-sm text-left font-semibold">
-                                    Photo
-                                </span> */}
                                     <RecipePhotoPicker
                                         alt="Selected recipe"
                                         imageUrl={photoPreviewUrl}
@@ -220,9 +226,9 @@ const NewRecipe = () => {
                                                     id="yield"
                                                     type="text"
                                                     className="
-                                        w-full p-1.5 rounded-md text-xs resize-none
-                                        border border-gray-200 rounded-sm
-                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                                        w-full p-1.5 rounded-md text-xs resize-none
+                                                        border border-gray-200 rounded-sm
+                                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
                                                     placeholder="e.g. 4 servings or 12 cookies"
                                                     {...register('yield')}
                                                 />
@@ -265,9 +271,9 @@ const NewRecipe = () => {
                                                 <input
                                                     type="text"
                                                     className="
-                                        w-full p-1.5 rounded-md text-xs resize-none
-                                        border border-gray-200 rounded-sm
-                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                                                        w-full p-1.5 rounded-md text-xs resize-none
+                                                        border border-gray-200 rounded-sm
+                                                        placeholder:text-sm focus:border-sage-300 focus:outline-none"
                                                     placeholder="Original recipe URL"
                                                     {...register('source')}
                                                 ></input>
@@ -295,11 +301,11 @@ const NewRecipe = () => {
                                             </label>
                                             <textarea
                                                 className="
-                                            h-20 sm:h-24 lg:h-full w-full p-2 rounded-md text-xs
-                                            resize-none bg-white border border-gray-200
-                                            rounded-sm placeholder:text-xs focus:border-sage-300
-                                            focus:outline-none dark:border-gray-700
-                                            dark:bg-[#2a2a2a] dark:text-gray-100"
+                                                    h-20 sm:h-24 lg:h-full w-full p-2 rounded-md text-xs
+                                                    resize-none bg-white border border-gray-200
+                                                    rounded-sm placeholder:text-xs focus:border-sage-300
+                                                    focus:outline-none dark:border-gray-700
+                                                    dark:bg-[#2a2a2a] dark:text-gray-100"
                                                 rows={4}
                                                 placeholder="e.g. too sweet, bake 2 min longer next time"
                                                 {...register('notes')}
@@ -375,9 +381,14 @@ const NewRecipe = () => {
                             </button>
                             <button
                                 type="submit"
-                                className="
-                                        font-jua bg-blush-200 hover:bg-blush-400
-                                        px-4 py-1.5 rounded-xl text-white transition-colors"
+                                disabled={!canSaveRecipe}
+                                className={classNames(
+                                    'font-jua',
+                                    canSaveRecipe
+                                        ? 'bg-blush-400 hover:bg-blush-500'
+                                        : 'bg-blush-200 cursor-not-allowed',
+                                    'px-4 py-1.5 rounded-xl text-white transition-colors'
+                                )}
                             >
                                 Save recipe
                             </button>
