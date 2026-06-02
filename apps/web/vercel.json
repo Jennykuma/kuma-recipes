@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/[...route].ts": {
+      "includeFiles": "../api/node_modules/@prisma/client/runtime/query_compiler_bg.postgresql*"
+    }
+  },
   "rewrites": [
     {
       "source": "/kuma-recipes",
