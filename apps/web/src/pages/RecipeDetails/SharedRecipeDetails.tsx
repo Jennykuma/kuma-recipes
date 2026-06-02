@@ -33,7 +33,7 @@ const getSourceLink = (source?: string) => {
 const SharedRecipeStatus = ({ message }: { message: string }) => {
     return (
         <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
-            <div className="mx-auto flex w-full max-w-3xl items-center justify-center rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-8 text-center text-sm text-gray-600 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:text-gray-300 dark:shadow-none">
+            <div className="mx-auto flex w-full max-w-3xl items-center justify-center rounded-xl border border-sage-300/50 p-8 text-center text-sm text-gray-600 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:text-gray-300 dark:shadow-none">
                 {message}
             </div>
         </div>

@@ -39,7 +39,7 @@ const RecipeDetailsView = ({
 
                 <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
                     {photo}
-                    <div className="w-full rounded-xl border border-sage-300/50 bg-gradient-to-br from-white to-sage-50/30 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
+                    <div className="w-full rounded-xl border border-sage-300/50 p-4 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:shadow-none">
                         <div className="grid h-full w-full gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-stretch">
                             <div className="flex min-w-0 flex-col gap-4">{summary}</div>
                             <div className="min-w-0 lg:self-stretch">{notes}</div>
