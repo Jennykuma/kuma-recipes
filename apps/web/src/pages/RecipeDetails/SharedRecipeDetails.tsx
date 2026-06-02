@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { CalendarPlus, Link2, PieChart, RotateCcw, Star } from 'lucide-react';
+import { CalendarPlus, Link2, PieChart, Star } from 'lucide-react';
 import { useSharedRecipe } from '../../hooks';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';

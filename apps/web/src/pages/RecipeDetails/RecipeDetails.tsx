@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CalendarPlus, Link2, RotateCcw, Star, Trash2, PieChart } from 'lucide-react';
+import { CalendarPlus, Link2, Star, Trash2, PieChart } from 'lucide-react';
 import {
     useRecipeDetails,
     useDeleteRecipe,

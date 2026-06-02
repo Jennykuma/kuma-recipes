@@ -11,7 +11,7 @@ import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
-import { IdCard, PieChart, Star, RotateCcw, Link2, TagIcon } from 'lucide-react';
+import { IdCard, PieChart, Star, Link2, TagIcon } from 'lucide-react';
 
 const defaultRecipeFormValues: RecipeFormValues = {
     title: '',
