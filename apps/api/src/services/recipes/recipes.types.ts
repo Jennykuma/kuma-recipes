@@ -50,6 +50,14 @@ export type UpdateRecipeBody = Partial<{
     yield?: string;
 }>;
 
+export type ShareLinkItem = {
+    id: string;
+    recipeId: string;
+    token: string;
+    revokedAt: Date | null;
+    createdAt: Date;
+};
+
 export type IngredientsForm = {
     ingredients: { ingredient: string }[];
 };

@@ -3,6 +3,7 @@ import type {
     RecipeListItem,
     NewRecipeBody,
     UpdateRecipeBody,
+    ShareLinkItem,
 } from '../../../api/src/services/recipes/recipes.types';
 import { buildApiUrl } from './client';
 
@@ -131,6 +132,20 @@ const recipe = {
         }
 
         return response.json();
+    },
+
+    async createRecipeShareLink(id: string, token?: string): Promise<ShareLinkItem> {
+        const response = await fetch(buildApiUrl(`/recipes/${id}/share`), {
+            method: 'POST',
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+
+        if (!response.ok) {
+            throw await this.parseError(response, 'Failed to create share link');
+        }
+
+        const data: { shareLink: ShareLinkItem } = await response.json();
+        return data.shareLink;
     },
 };
 

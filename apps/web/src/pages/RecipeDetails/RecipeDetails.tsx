@@ -22,6 +22,7 @@ import NotesSection from './components/NotesSection';
 import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
 import EditableYield from './components/EditableYield';
+import ShareRecipe from './components/ShareRecipe';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
@@ -190,13 +191,14 @@ const RecipeDetails = () => {
                         onSave={handleTitleSave}
                         onCancel={() => handleCancel('title')}
                     />
+                    <ShareRecipe id={recipeId} />
                     <button
                         onClick={() => setShowDeleteModal(true)}
                         className="
-                        ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
-                        text-red-500 hover:bg-red-50 hover:text-red-600
-                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
-                        dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
+                            ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
+                            text-red-500 hover:bg-red-50 hover:text-red-600
+                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
+                            dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
                         aria-label="Delete recipe"
                         title="Delete recipe"
                     >
@@ -236,15 +238,14 @@ const RecipeDetails = () => {
                                     </span>
                                     {recipe?.createdAt ? (
                                         <time dateTime={recipe.createdAt}>
-                                            {new Date(recipe.createdAt).toLocaleDateString(
-                                                'en-US',
-                                                {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                }
-                                            )}
+                                            {new Date(
+                                                recipe.createdAt
+                                            ).toLocaleDateString('en-US', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            })}
                                         </time>
                                     ) : (
                                         <span>Unknown</span>
@@ -349,7 +350,10 @@ const RecipeDetails = () => {
                                     isEditing={editingField === 'notes'}
                                     draftValue={draft.notes}
                                     onEdit={() => {
-                                        setDraft({ ...draft, notes: recipe?.notes ?? '' });
+                                        setDraft({
+                                            ...draft,
+                                            notes: recipe?.notes ?? '',
+                                        });
                                         setEditingField('notes');
                                     }}
                                     onChange={(value) =>

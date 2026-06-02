@@ -10,7 +10,7 @@ vi.mock('../../src/services/recipes/recipes.service', () => ({
     createNewRecipe: vi.fn(),
     listRecipes: vi.fn(),
     recipeDetails: vi.fn(),
-    createRecipeShareLink: vi.fn();
+    createRecipeShareLink: vi.fn(),
 }));
 
 vi.mock('../../src/services/recipes/recipe-photos.service', () => ({

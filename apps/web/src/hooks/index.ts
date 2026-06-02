@@ -8,3 +8,4 @@ export { default as useUploadRecipePhoto } from './recipes/useUploadRecipePhoto'
 export { default as useTagsQuery } from './tags/useTagsQuery';
 export { default as useCreateTag } from './tags/useCreateTag';
 export { default as useDeleteTag } from './tags/useDeleteTag';
+export { default as useCreateRecipeShareLink } from './recipes/useCreateRecipeShareLink';
