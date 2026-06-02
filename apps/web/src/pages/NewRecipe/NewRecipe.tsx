@@ -94,14 +94,10 @@ const NewRecipe = () => {
                 photo: photoFile,
             });
             showToast({
-                status: 'error',
-                message: 'Failed to create recipe. Please try again.',
+                status: 'success',
+                message: 'Recipe created successfully!',
             });
-            // showToast({
-            //     status: 'success',
-            //     message: 'Recipe created successfully!',
-            // });
-            // navigate(`/recipes/${createdRecipe.id}`);
+            navigate(`/recipes/${createdRecipe.id}`);
         } catch (error) {
             showToast({
                 status: 'error',

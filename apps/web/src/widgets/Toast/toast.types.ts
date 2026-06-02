@@ -1,4 +1,4 @@
-type ToastStatus = 'success' | 'error';
+export type ToastStatus = 'success' | 'error' | 'info';
 
 export type ToastItem = {
     id: string;
