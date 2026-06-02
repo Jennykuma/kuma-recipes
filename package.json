@@ -8,6 +8,7 @@
         "dev:web": "pnpm --filter web dev",
         "dev:api": "pnpm --filter api dev",
         "dev": "pnpm -r dev",
+        "db:migrate": "pnpm --filter api prisma:migrate:deploy",
         "lint": "eslint .",
         "format": "prettier . --write",
         "format:check": "prettier . --check"

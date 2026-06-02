@@ -1,8 +1,9 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
 
 const sharedRecipesRoutes: FastifyPluginAsync = async (fastify) => {
+    // GET /shared-recipes/:token (for shared recipes)
     fastify.get<{ Params: { token: string } }>(
-        '/shared-recipes/:token',
+        '/:token',
         async (request, reply: FastifyReply) => {
             const { getSharedRecipe } =
                 await import('../services/recipes/sharedRecipes.service.js');

@@ -147,6 +147,18 @@ const recipe = {
         const data: { shareLink: ShareLinkItem } = await response.json();
         return data.shareLink;
     },
+
+    async getSharedRecipe(token: string): Promise<Recipe | null> {
+        const response = await fetch(buildApiUrl(`/shared-recipes/${token}`));
+        if (!response.ok) {
+            if (response.status === 404) {
+                return null; // Not found is a valid case for shared recipes
+            }
+            throw await this.parseError(response, 'Failed to fetch shared recipe');
+        }
+        const data: GetRecipeDetailsResponse = await response.json();
+        return data.recipe;
+    },
 };
 
 export default recipe;
