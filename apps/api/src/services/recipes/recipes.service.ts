@@ -73,7 +73,6 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
         ingredients,
         notes,
         rating,
-        remake,
         steps,
         tagIds,
         source,
@@ -90,7 +89,6 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
             steps: steps || [],
             notes: notes ?? null,
             rating: rating ?? null,
-            remake: remake ?? false,
             source: normalizedSource ? normalizedSource : null,
             yield: recipeYield?.trim() ? recipeYield.trim() : null,
 

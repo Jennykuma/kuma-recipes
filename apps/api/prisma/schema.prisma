@@ -20,7 +20,6 @@ model Recipe {
   ingredients String[]
   notes       String?
   rating      Int?
-  remake      Boolean? @default(false)
   steps       String[]
   source      String?
   imagePath   String?

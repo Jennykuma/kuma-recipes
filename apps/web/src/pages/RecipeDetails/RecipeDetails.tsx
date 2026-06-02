@@ -17,7 +17,6 @@ import EditableTitle from './components/EditableTitle';
 import EditableSource from './components/EditableSource';
 import IngredientsSection from './components/IngredientsSection';
 import StepsSection from './components/StepsSection';
-import RemakeToggle from './components/RemakeToggle';
 import NotesSection from './components/NotesSection';
 import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
@@ -148,16 +147,6 @@ const RecipeDetails = () => {
         }
     };
 
-    const handleToggleRemake = () => {
-        if (!recipeId || recipe?.remake === undefined) return;
-
-        try {
-            updateRecipe({ remake: !recipe.remake });
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
     const handlePhotoUpload = (photo: File) => {
         if (!recipeId) return;
         uploadRecipePhoto({ recipeId, photo });
@@ -256,7 +245,10 @@ const RecipeDetails = () => {
                     </div>
                     <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
                         <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
-                            <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            <PieChart
+                                className="h-3 w-3 text-gray-400"
+                                aria-hidden="true"
+                            />
                             Yield
                         </span>
                         <EditableYield
@@ -286,17 +278,6 @@ const RecipeDetails = () => {
                             className="justify-start"
                         />
                     </div>
-                    <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
-                            <RotateCcw className="h-3 w-3 text-gray-400" aria-hidden="true" />
-                            Remake
-                        </span>
-                        <RemakeToggle
-                            checked={recipe?.remake}
-                            onToggle={handleToggleRemake}
-                            label="Would remake"
-                        />
-                    </div>
                     <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
                         <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
                             <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
@@ -315,7 +296,9 @@ const RecipeDetails = () => {
                                     });
                                     setEditingField('source');
                                 }}
-                                onChange={(value) => setDraft({ ...draft, source: value })}
+                                onChange={(value) =>
+                                    setDraft({ ...draft, source: value })
+                                }
                                 onSave={() => handleSave('source')}
                                 onCancel={() => handleCancel('source')}
                             />

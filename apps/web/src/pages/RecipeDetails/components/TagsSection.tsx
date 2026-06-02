@@ -106,7 +106,7 @@ const TagsSection = ({
                 </div>
             ) : (
                 <p className="text-xs text-gray-600 dark:text-gray-300">
-                    Add tags to categorize your recipe.
+                    {editable ? 'Add tags to categorize your recipe.' : 'No tags added'}
                 </p>
             )}
         </div>

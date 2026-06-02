@@ -5,7 +5,6 @@ export type Recipe = {
     ingredients: string[];
     notes: string;
     rating: number;
-    remake: boolean;
     steps: string[];
     tags: Tag[];
     title: string;
@@ -29,7 +28,6 @@ export type NewRecipeBody = {
     ingredients?: string[];
     notes?: string;
     rating?: number;
-    remake?: boolean;
     steps?: string[];
     tagIds?: string[];
     source?: string;
@@ -41,7 +39,6 @@ export type UpdateRecipeBody = Partial<{
     title: string;
     notes: string;
     source: string;
-    remake: boolean;
     ingredients: string[];
     steps: string[];
     tagIds?: string[];

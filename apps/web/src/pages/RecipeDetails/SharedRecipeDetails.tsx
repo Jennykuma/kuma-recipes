@@ -97,7 +97,10 @@ const SharedRecipeDetails = () => {
                     </div>
                     <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
                         <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
-                            <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
+                            <PieChart
+                                className="h-3 w-3 text-gray-400"
+                                aria-hidden="true"
+                            />
                             Yield
                         </span>
                         <span className="text-xs">{sharedRecipe.yield || 'N/A'}</span>
@@ -112,15 +115,6 @@ const SharedRecipeDetails = () => {
                             readOnly
                             className="justify-start"
                         />
-                    </div>
-                    <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
-                            <RotateCcw className="h-3 w-3 text-gray-400" aria-hidden="true" />
-                            Remake
-                        </span>
-                        <span className="text-xs">
-                            {sharedRecipe.remake ? 'Would remake' : 'Would not remake'}
-                        </span>
                     </div>
                     <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
                         <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">

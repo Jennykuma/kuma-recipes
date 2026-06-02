@@ -3,7 +3,6 @@ export type RecipeFormValues = {
     source: string;
     notes: string;
     rating: number;
-    remake: boolean;
     yield: string;
     tagIds: string[];
     ingredients: { ingredient: string }[];

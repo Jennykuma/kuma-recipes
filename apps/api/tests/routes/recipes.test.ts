@@ -160,7 +160,6 @@ describe('recipes routes', () => {
             rating: 5,
             ingredients: null,
             notes: null,
-            remake: false,
             steps: null,
             tags: [],
         });
@@ -179,7 +178,6 @@ describe('recipes routes', () => {
                 rating: 5,
                 ingredients: null,
                 notes: null,
-                remake: false,
                 steps: null,
                 tags: [],
             },

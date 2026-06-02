@@ -18,7 +18,6 @@ const defaultRecipeFormValues: RecipeFormValues = {
     source: '',
     notes: '',
     rating: 0,
-    remake: false,
     tagIds: [],
     ingredients: [{ ingredient: '' }],
     steps: [{ step: '' }],
@@ -38,7 +37,6 @@ const hasDraftContent = (values: RecipeFormDraftValues) =>
     (values.notes?.trim() ?? '') !== '' ||
     (values.yield?.trim() ?? '') !== '' ||
     Boolean(values.rating) ||
-    Boolean(values.remake) ||
     (values.tagIds?.length ?? 0) > 0 ||
     Boolean(
         values.ingredients?.some(({ ingredient }) => (ingredient?.trim() ?? '') !== '')
@@ -236,23 +234,6 @@ const NewRecipe = () => {
                                                             interactive
                                                         />
                                                     )}
-                                                />
-                                            </div>
-                                            <div className="flex gap-2 items-center">
-                                                <label
-                                                    htmlFor="remake"
-                                                    className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
-                                                >
-                                                    <RotateCcw
-                                                        className="h-3 w-3 text-gray-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                    Remake
-                                                </label>
-                                                <input
-                                                    type="checkbox"
-                                                    id="remake"
-                                                    {...register('remake')}
                                                 />
                                             </div>
                                             <div className="flex items-center gap-2">
