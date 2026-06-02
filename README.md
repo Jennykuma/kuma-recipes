@@ -124,6 +124,12 @@ Notes:
   - If API is hosted elsewhere, set a full API origin (for example `https://api.jennyle.dev`).
 - Run `pnpm --filter api prisma:migrate:deploy` with the production `DATABASE_URL`
   whenever a deploy includes new files under `apps/api/prisma/migrations`.
+- This repo includes a GitHub Actions workflow at
+  [.github/workflows/production-prisma-migrate.yml](/Users/jenny/Documents/projects/kuma-recipes/.github/workflows/production-prisma-migrate.yml)
+  that runs `pnpm db:migrate` for `main` when Prisma migration files change.
+  Add these GitHub repository or environment secrets before relying on it:
+  `PRODUCTION_DATABASE_URL` and, optionally, `PRODUCTION_DIRECT_URL`.
+  Since Vercel production deploys can still happen in parallel, the safest long-term setup is to trigger production deploys only after this workflow passes.
 
 ### Vercel setup
 
