@@ -34,24 +34,16 @@ const App = () => {
                     role="link"
                     tabIndex={0}
                     className="
-                    inline-flex items-center gap-2
-                    font-jua text-sm text-blush-500
-                    border border-blush-200 bg-white
-                    px-4 py-2 rounded-xl
-                    hover:bg-blush-200 hover:text-white
-                    transition-colors
-                    dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300
-                    dark:hover:bg-blush-400 dark:hover:text-white"
+                        inline-flex items-center gap-2 px-4 py-2 rounded-xl 
+                        font-jua text-sm text-white transition-colors
+                        bg-blush-400 hover:bg-blush-500 hover:text-white"
                     to={`/recipes/new`}
                 >
                     Add recipe
                 </Link>
             </header>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
-                <Search
-                    value={searchTerm}
-                    onChange={setSearchTerm}
-                />
+                <Search value={searchTerm} onChange={setSearchTerm} />
                 <RecipeTagFilter selectedTags={selectedTags} onChange={setSelectedTags} />
                 {searchTerm || selectedTags.length > 0 ? (
                     <span className="self-center text-xs text-gray-500 dark:text-gray-400 italic">
