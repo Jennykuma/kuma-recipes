@@ -1,6 +1,5 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Analytics } from '@vercel/analytics/react';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { RouterProvider } from 'react-router-dom';
 import { ToastProvider } from './widgets/Toast/ToastProvider.tsx';
@@ -38,7 +37,6 @@ createRoot(document.getElementById('root')!).render(
             <ToastProvider>
                 <QueryClientProvider client={queryClient}>
                     <RouterProvider router={router} />
-                    <Analytics />
                 </QueryClientProvider>
             </ToastProvider>
         </ClerkProvider>
