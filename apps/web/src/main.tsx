@@ -1,13 +1,14 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Analytics } from '@vercel/analytics/react';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { RouterProvider } from 'react-router-dom';
+import { ToastProvider } from './widgets/Toast/ToastProvider.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import router from './routes.tsx';
 import { getAppRedirectPath, getSignInPath } from './utils/basePath';
 import './index.css';
 import './App.css';
-import { ToastProvider } from './widgets/Toast/ToastProvider.tsx';
 
 const queryClient = new QueryClient();
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as
@@ -37,7 +38,7 @@ createRoot(document.getElementById('root')!).render(
             <ToastProvider>
                 <QueryClientProvider client={queryClient}>
                     <RouterProvider router={router} />
-                    {/* <ReactQueryDevtools buttonPosition="bottom-left" /> */}
+                    <Analytics />
                 </QueryClientProvider>
             </ToastProvider>
         </ClerkProvider>
