@@ -7,6 +7,7 @@ const useSharedRecipe = (token: string) => {
         data: sharedRecipe,
         isLoading,
         error,
+        refetch,
     } = useQuery<Recipe>({
         queryKey: ['sharedRecipe', token],
         queryFn: async () => {
@@ -24,6 +25,7 @@ const useSharedRecipe = (token: string) => {
         sharedRecipe,
         isLoading,
         error,
+        refetch,
     };
 };
 

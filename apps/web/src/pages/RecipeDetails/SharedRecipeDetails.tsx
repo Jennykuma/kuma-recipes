@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { CalendarPlus, Link2, PieChart, Star } from 'lucide-react';
 import { useSharedRecipe } from '../../hooks';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
+import PageState from '../../components/PageState';
 import Rating from '../../components/Rating';
 import IngredientsSection from './components/IngredientsSection';
 import NotesSection from './components/NotesSection';
@@ -30,27 +31,43 @@ const getSourceLink = (source?: string) => {
     }
 };
 
-const SharedRecipeStatus = ({ message }: { message: string }) => {
-    return (
-        <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
-            <div className="mx-auto flex w-full max-w-3xl items-center justify-center rounded-xl border border-sage-300/50 p-8 text-center text-sm text-gray-600 shadow-sm shadow-gray-100 dark:border-gray-700 dark:bg-[#2a2a2a] dark:bg-none dark:text-gray-300 dark:shadow-none">
-                {message}
-            </div>
-        </div>
-    );
-};
-
 const SharedRecipeDetails = () => {
     const { token } = useParams();
-    const { sharedRecipe, isLoading, error } = useSharedRecipe(token || '');
+    const { sharedRecipe, isLoading, error, refetch } = useSharedRecipe(token || '');
     const detailImageUrl = getRecipePhotoUrl(sharedRecipe?.imagePath);
 
     if (isLoading) {
-        return <SharedRecipeStatus message="Loading recipe..." />;
+        return (
+            <PageState
+                variant="loading"
+                title="Opening shared recipe"
+                message="Gathering the ingredients, notes, and steps for this share link."
+            />
+        );
     }
 
     if (error || !sharedRecipe) {
-        return <SharedRecipeStatus message="Recipe not found." />;
+        const isMissingRecipe = error instanceof Error && error.message === 'Recipe not found';
+
+        return (
+            <PageState
+                variant="error"
+                title={
+                    isMissingRecipe || !sharedRecipe
+                        ? "This shared recipe isn't available"
+                        : "We couldn't open this shared recipe"
+                }
+                message={
+                    isMissingRecipe || !sharedRecipe
+                        ? 'The share link may have expired, or the recipe may no longer be shared.'
+                        : error instanceof Error
+                          ? error.message
+                          : 'Please try again in a moment.'
+                }
+                actionLabel={isMissingRecipe || !sharedRecipe ? undefined : 'Try again'}
+                onAction={isMissingRecipe || !sharedRecipe ? undefined : () => void refetch()}
+            />
+        );
     }
 
     const sourceLink = getSourceLink(sharedRecipe.source);

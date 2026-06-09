@@ -10,6 +10,7 @@ const useRecipes = (tagSlugs: string[] = []) => {
         data: recipes,
         isLoading,
         error,
+        refetch,
     } = useQuery<RecipeListItem[]>({
         queryKey: ['recipes', tagSlugs],
         enabled: isLoaded && isSignedIn,
@@ -28,6 +29,7 @@ const useRecipes = (tagSlugs: string[] = []) => {
         recipes,
         isLoading,
         error,
+        refetch,
     };
 };
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { RecipeListItem } from '../../api/src/services/recipes/recipes.types';
 import type { Tag } from '../../api/src/services/tags/tags.types';
 import useRecipes from './hooks/recipes/useRecipes';
+import PageState from './components/PageState';
 import RecipeCard from './components/RecipeCard';
 import RecipeTagFilter from './components/RecipeTagFilter';
 import Search from './widgets/Search';
@@ -15,14 +16,37 @@ const App = () => {
         () => selectedTags.map((tag) => tag.slug),
         [selectedTags]
     );
-    const { recipes, isLoading, error } = useRecipes(selectedTagSlugs);
+    const { recipes, isLoading, error, refetch } = useRecipes(selectedTagSlugs);
 
     const filteredRecipes = recipes?.filter((recipe: RecipeListItem) =>
         recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error...</div>;
+    if (isLoading) {
+        return (
+            <PageState
+                variant="loading"
+                title="Warming up the kitchen"
+                message="Getting your saved recipes and tags ready."
+            />
+        );
+    }
+
+    if (error) {
+        return (
+            <PageState
+                variant="error"
+                title="A little kitchen hiccup"
+                message={
+                    error instanceof Error
+                        ? error.message
+                        : 'Please refresh and try again.'
+                }
+                actionLabel="Try again"
+                onAction={() => void refetch()}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
@@ -45,7 +69,10 @@ const App = () => {
                 </header>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
                     <Search value={searchTerm} onChange={setSearchTerm} />
-                    <RecipeTagFilter selectedTags={selectedTags} onChange={setSelectedTags} />
+                    <RecipeTagFilter
+                        selectedTags={selectedTags}
+                        onChange={setSelectedTags}
+                    />
                     {searchTerm || selectedTags.length > 0 ? (
                         <span className="self-center text-xs text-gray-500 dark:text-gray-400 italic">
                             {filteredRecipes?.length} recipe
