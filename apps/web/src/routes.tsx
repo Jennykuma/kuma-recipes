@@ -32,23 +32,44 @@ const router = createBrowserRouter(
         },
         {
             path: 'recipes/:id',
-            element: (
-                <ProtectedRoute>
-                    <RecipeDetails />
-                </ProtectedRoute>
-            ),
+            lazy: async () => {
+                const { default: RecipeDetails } =
+                    await import('./pages/RecipeDetails/RecipeDetails.tsx');
+
+                return {
+                    Component: () => (
+                        <ProtectedRoute>
+                            <RecipeDetails />
+                        </ProtectedRoute>
+                    ),
+                };
+            },
         },
         {
             path: 'recipes/new',
-            element: (
-                <ProtectedRoute>
-                    <NewRecipe />
-                </ProtectedRoute>
-            ),
+            lazy: async () => {
+                const { default: NewRecipe } =
+                    await import('./pages/NewRecipe/NewRecipe.tsx');
+
+                return {
+                    Component: () => (
+                        <ProtectedRoute>
+                            <NewRecipe />
+                        </ProtectedRoute>
+                    ),
+                };
+            },
         },
         {
             path: 'shared-recipes/:token',
-            element: <SharedRecipeDetails />,
+            lazy: async () => {
+                const { default: SharedRecipeDetails } =
+                    await import('./pages/RecipeDetails/SharedRecipeDetails.tsx');
+
+                return {
+                    Component: SharedRecipeDetails,
+                };
+            },
         },
     ],
     { basename: basePath }
