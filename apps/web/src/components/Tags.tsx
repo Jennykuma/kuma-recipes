@@ -31,7 +31,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const selectedTagCacheRef = useRef<Map<string, Tag>>(new Map());
 
-    const { data: options = [], isLoading } = useTagsQuery(debouncedQuery);
+    const { data: options = [], isLoading } = useTagsQuery(debouncedQuery, dropdownOpen);
     const { mutateAsync: createTag, isPending: isCreating } = useCreateTag();
     const { mutateAsync: deleteTag } = useDeleteTag();
     const hasReachedTagNameLimit =
@@ -76,8 +76,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
             const viewportPadding = 8;
             const minDropdownHeight = 120;
             const maxDropdownHeight = 256;
-            const spaceBelow =
-                viewportHeight - containerRect.bottom - viewportPadding;
+            const spaceBelow = viewportHeight - containerRect.bottom - viewportPadding;
             const spaceAbove = containerRect.top - viewportPadding;
             const shouldOpenUpward =
                 spaceBelow < minDropdownHeight && spaceAbove > spaceBelow;
