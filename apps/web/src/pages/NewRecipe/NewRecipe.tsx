@@ -234,8 +234,8 @@ const NewRecipe = () => {
                                                 />
                                             </div>
                                             <div className="flex gap-2 items-center">
-                                                <label
-                                                    htmlFor="rating"
+                                                <span
+                                                    id="rating-label"
                                                     className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
                                                 >
                                                     <Star
@@ -243,13 +243,14 @@ const NewRecipe = () => {
                                                         aria-hidden="true"
                                                     />
                                                     Rating
-                                                </label>
+                                                </span>
                                                 <Controller
                                                     name="rating"
                                                     control={control}
                                                     render={({ field }) => (
                                                         <Rating
                                                             id="rating"
+                                                            ariaLabelledby="rating-label"
                                                             value={field.value}
                                                             onChange={field.onChange}
                                                             interactive

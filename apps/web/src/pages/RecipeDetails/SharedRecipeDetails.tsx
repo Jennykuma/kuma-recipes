@@ -106,13 +106,17 @@ const SharedRecipeDetails = () => {
                         <span className="text-xs">{sharedRecipe.yield || 'N/A'}</span>
                     </div>
                     <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                        <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+                        <span
+                            id="shared-recipe-rating-label"
+                            className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide"
+                        >
                             <Star className="h-3 w-3 text-gray-400" aria-hidden="true" />
                             Rating
                         </span>
                         <Rating
                             value={sharedRecipe.rating}
                             readOnly
+                            ariaLabelledby="shared-recipe-rating-label"
                             className="justify-start"
                         />
                     </div>
