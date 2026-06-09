@@ -25,7 +25,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
             role="link"
             tabIndex={0}
             className="
-                flex flex-col w-full max-w-[26rem]
+                flex h-full w-full flex-col
                 gap-4 p-4 bg-white border border-gray-200
                 rounded-xl shadow-md shadow-gray-100
                 hover:shadow-none cursor-pointer
