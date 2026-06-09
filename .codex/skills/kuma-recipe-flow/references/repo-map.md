@@ -66,12 +66,7 @@
 
 ## Commands
 
-- `pnpm dev`
-- `pnpm dev:web`
-- `pnpm dev:api`
-- `pnpm --filter web test`
-- `pnpm --filter api test`
-- `pnpm lint`
+See `AGENTS.md` for the current repo command list and verification workflow.
 
 ## Working notes
 
