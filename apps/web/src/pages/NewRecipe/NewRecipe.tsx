@@ -275,6 +275,7 @@ const NewRecipe = () => {
                                                         border border-gray-200 rounded-sm
                                                         placeholder:text-sm focus:border-sage-300 focus:outline-none"
                                                     placeholder="Original recipe URL"
+                                                    id="source"
                                                     {...register('source')}
                                                 ></input>
                                             </div>
@@ -306,6 +307,7 @@ const NewRecipe = () => {
                                                     rounded-sm placeholder:text-xs focus:border-sage-300
                                                     focus:outline-none dark:border-gray-700
                                                     dark:bg-[#2a2a2a] dark:text-gray-100"
+                                                id="notes"
                                                 rows={4}
                                                 placeholder="e.g. too sweet, bake 2 min longer next time"
                                                 {...register('notes')}
@@ -321,22 +323,33 @@ const NewRecipe = () => {
                                 <div className="flex w-full min-w-0 max-w-125 flex-col gap-3 md:min-h-0 md:flex-1">
                                     <div className="flex flex-col md:min-h-0 md:flex-1">
                                         <div className="flex flex-row items-baseline gap-1">
-                                            <label
-                                                htmlFor="ingredients"
+                                            <span
+                                                id="ingredients-label"
                                                 className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300"
                                             >
                                                 Ingredients
                                                 <span className="align-top text-red-500">
                                                     *
                                                 </span>
-                                            </label>
+                                            </span>
                                         </div>
                                         {errors.ingredients?.root?.message && (
-                                            <p className="text-xs text-red-500">
+                                            <p
+                                                id="ingredients-error"
+                                                className="text-xs text-red-500"
+                                            >
                                                 {errors.ingredients.root.message}
                                             </p>
                                         )}
-                                        <IngredientsTable keepAddButtonVisible />
+                                        <IngredientsTable
+                                            keepAddButtonVisible
+                                            labelledBy="ingredients-label"
+                                            describedBy={
+                                                errors.ingredients?.root?.message
+                                                    ? 'ingredients-error'
+                                                    : undefined
+                                            }
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -344,22 +357,33 @@ const NewRecipe = () => {
                             <div className="order-2 flex flex-col gap-3 md:order-none md:col-start-2 md:min-h-0">
                                 <div className="flex w-full max-w-150 flex-col md:min-h-0 md:flex-1">
                                     <div className="flex flex-row items-baseline gap-1">
-                                        <label
-                                            htmlFor="steps"
+                                        <span
+                                            id="steps-label"
                                             className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300"
                                         >
                                             Steps
                                             <span className="align-top text-red-500">
                                                 *
                                             </span>
-                                        </label>
+                                        </span>
                                     </div>
                                     {errors.steps?.root?.message && (
-                                        <p className="text-xs text-red-500">
+                                        <p
+                                            id="steps-error"
+                                            className="text-xs text-red-500"
+                                        >
                                             {errors.steps.root.message}
                                         </p>
                                     )}
-                                    <StepsTable keepAddButtonVisible />
+                                    <StepsTable
+                                        keepAddButtonVisible
+                                        labelledBy="steps-label"
+                                        describedBy={
+                                            errors.steps?.root?.message
+                                                ? 'steps-error'
+                                                : undefined
+                                        }
+                                    />
                                 </div>
                             </div>
                         </div>

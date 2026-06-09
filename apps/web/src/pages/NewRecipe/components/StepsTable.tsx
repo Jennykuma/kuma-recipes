@@ -7,9 +7,15 @@ import { Plus, CircleMinus } from 'lucide-react';
 
 type StepsTableProps = {
     keepAddButtonVisible?: boolean;
+    labelledBy?: string;
+    describedBy?: string;
 };
 
-const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
+const StepsTable = ({
+    keepAddButtonVisible = false,
+    labelledBy,
+    describedBy,
+}: StepsTableProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const rowsRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
@@ -91,6 +97,9 @@ const StepsTable = ({ keepAddButtonVisible = false }: StepsTableProps) => {
     return (
         <div
             ref={containerRef}
+            role="group"
+            aria-labelledby={labelledBy}
+            aria-describedby={describedBy}
             className={classNames(
                 !keepAddButtonVisible && 'space-y-2',
                 keepAddButtonVisible && 'md:flex md:min-h-0 md:flex-1 md:flex-col'
