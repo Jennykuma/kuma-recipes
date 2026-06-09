@@ -20,6 +20,7 @@ describe('App recipe search', () => {
             ],
             isLoading: false,
             error: null,
+            refetch: vi.fn(),
         });
         mockUseTagsQuery.mockReturnValue({
             data: [
