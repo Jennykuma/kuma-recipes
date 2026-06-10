@@ -165,10 +165,10 @@ const NewRecipe = () => {
                                 </div>
                                 <div
                                     className="
-                                md:sticky top-6 w-full self-start
-                                p-4 border border-sage-300/50
-                                rounded-xl shadow-sm shadow-gray-100
-                                text-gray-600 dark:text-gray-300"
+                                        relative z-20 md:sticky top-6 w-full self-start
+                                        p-4 border border-sage-300/50
+                                        rounded-xl shadow-sm shadow-gray-100
+                                        text-gray-600 dark:text-gray-300"
                                 >
                                     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
                                         <div className="flex min-w-0 flex-col space-y-2">

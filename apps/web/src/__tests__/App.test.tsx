@@ -71,4 +71,28 @@ describe('App recipe search', () => {
         expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
         expect(mockUseRecipes).toHaveBeenLastCalledWith(['dessert', 'quick']);
     });
+
+    it('keeps the desktop grid at three columns for a single recipe', () => {
+        mockUseRecipes.mockReturnValue({
+            recipes: [
+                { id: '1', title: 'Cookie Latte', rating: 4, tags: [], imagePath: null },
+            ],
+            isLoading: false,
+            error: null,
+            refetch: vi.fn(),
+        });
+
+        render(
+            <MemoryRouter>
+                <App />
+            </MemoryRouter>
+        );
+
+        expect(screen.getByTestId('recipe-list')).toHaveClass(
+            'grid',
+            'grid-cols-1',
+            'md:grid-cols-3'
+        );
+        expect(screen.getByText('Cookie Latte')).toBeInTheDocument();
+    });
 });

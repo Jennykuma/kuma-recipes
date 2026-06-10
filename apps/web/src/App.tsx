@@ -81,9 +81,10 @@ const App = () => {
                     ) : null}
                 </div>
                 <div
+                    data-testid="recipe-list"
                     className="
                         grid grid-cols-1 gap-4 pt-6 pb-6
-                        md:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]"
+                        md:grid-cols-3"
                 >
                     {filteredRecipes?.map((recipe) => (
                         <RecipeCard
