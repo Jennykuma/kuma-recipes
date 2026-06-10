@@ -98,7 +98,7 @@ const TagsSection = ({
                     {tags.map((tag: Tag) => (
                         <span
                             key={tag.id}
-                            className="inline-flex h-6 items-center rounded-full bg-sage-50 px-2.5 text-xs text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+                            className="inline-flex min-h-6 items-center rounded-full bg-sage-50 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                         >
                             {tag.name}
                         </span>

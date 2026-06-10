@@ -49,9 +49,11 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                                 <span
                                     key={tag.id}
                                     title={tag.name}
-                                    className="inline-flex h-6 min-w-0 max-w-24 items-center rounded-full bg-sage-50 px-2.5 text-xs leading-none text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+                                    className="inline-flex min-h-6 min-w-0 max-w-24 items-center rounded-full bg-sage-50 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                                 >
-                                    <span className="min-w-0 truncate">{tag.name}</span>
+                                    <span className="min-w-0 truncate leading-tight">
+                                        {tag.name}
+                                    </span>
                                 </span>
                             ))}
                             {hiddenTags.length > 0 && (
@@ -60,7 +62,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                                         aria-label={`${hiddenTags.length} more tags: ${hiddenTags
                                             .map((tag) => tag.name)
                                             .join(', ')}`}
-                                        className="inline-flex h-6 items-center rounded-full bg-sage-100 px-2.5 text-xs leading-none text-gray-700 dark:bg-sage-300/25 dark:text-sage-100"
+                                        className="inline-flex min-h-6 items-center rounded-full bg-sage-100 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/25 dark:text-sage-100"
                                     >
                                         +{hiddenTags.length}
                                     </span>
