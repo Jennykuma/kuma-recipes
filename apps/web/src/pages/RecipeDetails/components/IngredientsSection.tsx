@@ -142,7 +142,8 @@ const IngredientsSection = ({
                             <li
                                 key={ingredient}
                                 className="ml-4 list-disc max-w-2xl
-                                text-sm/6 text-gray-800 dark:text-gray-100"
+                                text-sm/6 text-gray-800 dark:text-gray-100
+                                marker:text-gray-400 marker:text-xs"
                             >
                                 {ingredient}
                                 <input

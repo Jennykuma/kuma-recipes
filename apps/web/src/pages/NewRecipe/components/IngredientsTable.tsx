@@ -121,7 +121,7 @@ const IngredientsTable = ({
                                 className={classNames(
                                     'w-3 h-1.5',
                                     activeIndex === index
-                                        ? 'text-gray-600'
+                                        ? 'text-gray-500'
                                         : 'text-gray-400'
                                 )}
                             />
