@@ -170,7 +170,7 @@ const RecipeDetails = () => {
 
     return (
         <RecipeDetailsView
-            backButton={<BackButton to="/" />}
+            backButton={<BackButton />}
             title={
                 <EditableTitle
                     title={recipe?.title}

@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import type { RecipeListItem } from '../../api/src/services/recipes/recipes.types';
 import type { Tag } from '../../api/src/services/tags/tags.types';
 import useRecipes from './hooks/recipes/useRecipes';
@@ -7,20 +6,36 @@ import PageState from './components/PageState';
 import RecipeCard from './components/RecipeCard';
 import RecipeTagFilter from './components/RecipeTagFilter';
 import Search from './widgets/Search';
+import { useTagsQuery } from './hooks';
 import './App.css';
 
 const App = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-    const selectedTagSlugs = useMemo(
-        () => selectedTags.map((tag) => tag.slug),
-        [selectedTags]
-    );
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const searchTerm = searchParams.get('q') || '';
+    const selectedTagSlugs = searchParams.getAll('tags');
+    const { data: allTags = [] } = useTagsQuery('');
     const { recipes, isLoading, error, refetch } = useRecipes(selectedTagSlugs);
 
     const filteredRecipes = recipes?.filter((recipe: RecipeListItem) =>
         recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const selectedTags = allTags.filter((tag) => selectedTagSlugs.includes(tag.slug));
+
+    const handleUpdateSearch = (nextSearchTerm: string) => {
+        const updatedSearchParams = new URLSearchParams(searchParams);
+        if (nextSearchTerm.trim()) updatedSearchParams.set('q', nextSearchTerm);
+        else updatedSearchParams.delete('q');
+        setSearchParams(updatedSearchParams, { replace: true });
+    };
+
+    const handleSelectedTagsChange = (nextTags: Tag[]) => {
+        const updatedSearchParams = new URLSearchParams(searchParams);
+        updatedSearchParams.delete('tags');
+        nextTags.forEach((tag) => updatedSearchParams.append('tags', tag.slug));
+        setSearchParams(updatedSearchParams, { replace: true });
+    };
 
     if (isLoading) {
         return (
@@ -68,10 +83,10 @@ const App = () => {
                     </Link>
                 </header>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
-                    <Search value={searchTerm} onChange={setSearchTerm} />
+                    <Search value={searchTerm} onChange={handleUpdateSearch} />
                     <RecipeTagFilter
                         selectedTags={selectedTags}
-                        onChange={setSelectedTags}
+                        onChange={handleSelectedTagsChange}
                     />
                     {searchTerm || selectedTags.length > 0 ? (
                         <span className="self-center text-xs text-gray-500 dark:text-gray-400 italic">
