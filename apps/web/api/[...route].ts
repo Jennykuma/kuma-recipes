@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { buildApp } from '../../api/src/app.js';
-import { normalizeProxyHeaders, readRequestBody } from './fastifyProxy';
+import { normalizeProxyHeaders, readRequestBody } from './fastifyProxy.js';
 
 let appPromise: ReturnType<typeof initApp> | null = null;
 
