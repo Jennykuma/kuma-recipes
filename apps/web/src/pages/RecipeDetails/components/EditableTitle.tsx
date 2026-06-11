@@ -72,15 +72,15 @@ const EditableTitle = ({
   }
 
   return (
-    <span className="inline-flex max-w-125 items-baseline gap-1">
-      <h1 className="text-lg flex-1 font-bold truncate" title={title}>
+    <span className="inline-flex min-w-0 max-w-full items-baseline gap-1 sm:max-w-125">
+      <h1 className="min-w-0 flex-1 text-lg font-bold truncate" title={title}>
         {title}
       </h1>
       <button
         type="button"
         onClick={onEdit}
         aria-label="Edit title"
-        className="inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
+        className="inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
       >
         <Pencil className="w-3 h-4 pt-1 cursor-pointer link-blush" aria-hidden="true" />
       </button>
