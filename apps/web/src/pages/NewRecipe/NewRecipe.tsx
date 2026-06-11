@@ -106,7 +106,7 @@ const NewRecipe = () => {
         status: 'success',
         message: 'Recipe created successfully!',
       });
-      navigate(`/recipes/${createdRecipe.id}`);
+      navigate(`/recipes/${createdRecipe.id}`, { replace: true });
     } catch (error) {
       showToast({
         status: 'error',

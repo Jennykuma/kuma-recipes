@@ -2,10 +2,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import NewRecipe from './NewRecipe';
+import BackButton from '../../components/BackButton';
+
+const createRecipeMock = vi.fn();
+const showToastMock = vi.fn();
 
 vi.mock('../../hooks', () => ({
-  useCreateRecipe: () => ({ mutateAsync: vi.fn() }),
-  useToast: () => ({ showToast: vi.fn() }),
+  useCreateRecipe: () => ({ mutateAsync: createRecipeMock }),
+  useToast: () => ({ showToast: showToastMock }),
 }));
 
 vi.mock('../../hooks/tags/useTagsQuery', () => ({
@@ -31,6 +35,11 @@ const renderNewRecipe = () =>
   );
 
 describe('NewRecipe cancel guard', () => {
+  beforeEach(() => {
+    createRecipeMock.mockReset();
+    showToastMock.mockReset();
+  });
+
   it('goes back without a dirty modal when no fields changed', async () => {
     const user = userEvent.setup();
     renderNewRecipe();
@@ -76,5 +85,46 @@ describe('NewRecipe cancel guard', () => {
 
     await user.type(stepInput, 'Mix everything together');
     expect(saveButton).toBeEnabled();
+  });
+
+  it('replaces the new recipe page in history after a successful create', async () => {
+    createRecipeMock.mockResolvedValue({ id: 'recipe-123' });
+    const user = userEvent.setup();
+    const { container } = render(
+      <MemoryRouter initialEntries={['/', '/recipes/new']} initialIndex={1}>
+        <Routes>
+          <Route path="/" element={<div>Home page</div>} />
+          <Route path="/recipes/new" element={<NewRecipe />} />
+          <Route
+            path="/recipes/:id"
+            element={
+              <div>
+                <div>Recipe details page</div>
+                <BackButton />
+              </div>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const ingredientInput = container.querySelector(
+      'input[name="ingredients.0.ingredient"]'
+    ) as HTMLInputElement;
+    const stepInput = container.querySelector(
+      'input[name="steps.0.step"]'
+    ) as HTMLInputElement;
+
+    await user.type(screen.getByLabelText(/title/i), 'Apple pie');
+    await user.type(ingredientInput, '2 apples');
+    await user.type(stepInput, 'Mix everything together');
+    await user.click(screen.getByRole('button', { name: /save recipe/i }));
+
+    expect(await screen.findByText('Recipe details page')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /back/i }));
+
+    expect(screen.getByText('Home page')).toBeInTheDocument();
+    expect(screen.queryByText('Recipe details page')).not.toBeInTheDocument();
   });
 });
