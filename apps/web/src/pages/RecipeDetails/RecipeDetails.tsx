@@ -25,13 +25,15 @@ import EditableYield from './components/EditableYield';
 import DeleteRecipe from './components/DeleteRecipe';
 import ShareRecipe from './components/ShareRecipe';
 import RecipeDetailsView from './RecipeDetailsView';
+import RecipeDetailsSkeleton from './RecipeDetailsSkeleton';
+import PageState from '../../components/PageState';
 
 const RecipeDetails = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { id } = useParams();
   const recipeId = id ?? '';
-  const { recipe } = useRecipeDetails(recipeId);
+  const { recipe, isLoading, error, refetch } = useRecipeDetails(recipeId);
   const detailImageUrl = getRecipePhotoUrl(recipe?.imagePath);
   const { mutate: updateRecipe, mutateAsync: updateRecipeAsync } =
     useUpdateRecipe(recipeId);
@@ -167,6 +169,22 @@ const RecipeDetails = () => {
     if (!recipeId || !recipe?.imagePath) return;
     deleteRecipePhoto({ recipeId });
   };
+
+  if (isLoading) {
+    return <RecipeDetailsSkeleton />;
+  }
+
+  if (error || !recipe) {
+    return (
+      <PageState
+        variant="error"
+        title="A little kitchen hiccup"
+        message={error instanceof Error ? error.message : 'Please refresh and try again.'}
+        actionLabel="Try again"
+        onAction={() => void refetch()}
+      />
+    );
+  }
 
   return (
     <RecipeDetailsView

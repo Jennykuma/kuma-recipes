@@ -10,6 +10,7 @@ const useRecipeDetails = (id: string) => {
     data: recipe,
     isLoading,
     error,
+    refetch,
   } = useQuery<Recipe>({
     queryKey: ['recipe', id],
     enabled: Boolean(id) && isLoaded && isSignedIn,
@@ -27,6 +28,7 @@ const useRecipeDetails = (id: string) => {
     recipe,
     isLoading,
     error,
+    refetch,
   };
 };
 
