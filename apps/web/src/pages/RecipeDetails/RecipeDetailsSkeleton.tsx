@@ -8,16 +8,18 @@ const SkeletonBlock = ({ className }: { className: string }) => (
   />
 );
 
-const RecipeDetailsSkeleton = () => {
+const RecipeDetailsSkeleton = ({ shared = false }: { shared?: boolean }) => {
   return (
     <RecipeDetailsView
-      backButton={<BackButton />}
+      backButton={shared ? undefined : <BackButton />}
       title={<SkeletonBlock className="h-8 w-56" />}
       headerActions={
-        <div className="flex gap-2">
-          <SkeletonBlock className="h-9 w-10" />
-          <SkeletonBlock className="h-9 w-10" />
-        </div>
+        shared ? undefined : (
+          <div className="flex gap-2">
+            <SkeletonBlock className="h-9 w-10" />
+            <SkeletonBlock className="h-9 w-10" />
+          </div>
+        )
       }
       photo={<SkeletonBlock className="h-[250px] w-full md:w-[250px]" />}
       summary={

@@ -9,6 +9,7 @@ import NotesSection from './components/NotesSection';
 import StepsSection from './components/StepsSection';
 import TagsSection from './components/TagsSection';
 import RecipeDetailsView from './RecipeDetailsView';
+import RecipeDetailsSkeleton from './RecipeDetailsSkeleton';
 
 const getSourceLink = (source?: string) => {
   const sourceText = source?.trim() ?? '';
@@ -37,13 +38,7 @@ const SharedRecipeDetails = () => {
   const detailImageUrl = getRecipePhotoUrl(sharedRecipe?.imagePath);
 
   if (isLoading) {
-    return (
-      <PageState
-        variant="loading"
-        title="Opening shared recipe"
-        message="Gathering the ingredients, notes, and steps for this share link."
-      />
-    );
+    return <RecipeDetailsSkeleton shared />;
   }
 
   if (error || !sharedRecipe) {
