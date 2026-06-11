@@ -72,7 +72,7 @@ const EditableTitle = ({
   }
 
   return (
-    <span className="flex w-full max-w-125 items-baseline gap-1">
+    <span className="inline-flex max-w-125 items-baseline gap-1">
       <h1 className="text-lg flex-1 font-bold truncate" title={title}>
         {title}
       </h1>
