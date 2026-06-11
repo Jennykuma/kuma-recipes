@@ -1,168 +1,168 @@
 import type {
-    Recipe,
-    RecipeListItem,
-    NewRecipeBody,
-    UpdateRecipeBody,
-    ShareLinkItem,
+  Recipe,
+  RecipeListItem,
+  NewRecipeBody,
+  UpdateRecipeBody,
+  ShareLinkItem,
 } from '../../../api/src/services/recipes/recipes.types';
 import { buildApiUrl } from './client';
 
 type GetRecipeDetailsResponse = {
-    recipe: Recipe;
+  recipe: Recipe;
 };
 
 type GetSharedRecipeResponse = {
-    sharedRecipe: Recipe;
+  sharedRecipe: Recipe;
 };
 
 type GetRecipesResponse = {
-    recipes: RecipeListItem[];
+  recipes: RecipeListItem[];
 };
 
 const recipe = {
-    async parseError(response: Response, fallbackMessage: string): Promise<Error> {
-        try {
-            const error = await response.json();
-            return new Error(error.message ?? fallbackMessage);
-        } catch {
-            return new Error(fallbackMessage);
-        }
-    },
+  async parseError(response: Response, fallbackMessage: string): Promise<Error> {
+    try {
+      const error = await response.json();
+      return new Error(error.message ?? fallbackMessage);
+    } catch {
+      return new Error(fallbackMessage);
+    }
+  },
 
-    async getRecipes(token?: string, tagSlugs: string[] = []): Promise<RecipeListItem[]> {
-        const params = new URLSearchParams();
-        tagSlugs.forEach((tagSlug) => params.append('tag', tagSlug));
-        const queryString = params.size > 0 ? `?${params.toString()}` : '';
+  async getRecipes(token?: string, tagSlugs: string[] = []): Promise<RecipeListItem[]> {
+    const params = new URLSearchParams();
+    tagSlugs.forEach((tagSlug) => params.append('tag', tagSlug));
+    const queryString = params.size > 0 ? `?${params.toString()}` : '';
 
-        const response = await fetch(`${buildApiUrl('/recipes')}${queryString}`, {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to fetch recipes');
-        }
-        const data: GetRecipesResponse = await response.json();
-        return data.recipes;
-    },
+    const response = await fetch(`${buildApiUrl('/recipes')}${queryString}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to fetch recipes');
+    }
+    const data: GetRecipesResponse = await response.json();
+    return data.recipes;
+  },
 
-    async getRecipeDetails(id: string, token?: string): Promise<Recipe> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to fetch recipe details');
-        }
-        const data: GetRecipeDetailsResponse = await response.json();
-        return data.recipe;
-    },
+  async getRecipeDetails(id: string, token?: string): Promise<Recipe> {
+    const response = await fetch(buildApiUrl(`/recipes/${id}`), {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to fetch recipe details');
+    }
+    const data: GetRecipeDetailsResponse = await response.json();
+    return data.recipe;
+  },
 
-    async updateRecipe(
-        id: string,
-        updatedRecipe: UpdateRecipeBody,
-        token?: string
-    ): Promise<any> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` }),
-            },
-            body: JSON.stringify(updatedRecipe),
-        });
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to update recipe');
-        }
-        return response.json();
-    },
+  async updateRecipe(
+    id: string,
+    updatedRecipe: UpdateRecipeBody,
+    token?: string
+  ): Promise<any> {
+    const response = await fetch(buildApiUrl(`/recipes/${id}`), {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(updatedRecipe),
+    });
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to update recipe');
+    }
+    return response.json();
+  },
 
-    async createRecipe(recipe: NewRecipeBody, token?: string): Promise<Recipe> {
-        const response = await fetch(buildApiUrl('/recipes'), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` }),
-            },
-            body: JSON.stringify(recipe),
-        });
+  async createRecipe(recipe: NewRecipeBody, token?: string): Promise<Recipe> {
+    const response = await fetch(buildApiUrl('/recipes'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(recipe),
+    });
 
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to create recipe');
-        }
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to create recipe');
+    }
 
-        return response.json();
-    },
+    return response.json();
+  },
 
-    async deleteRecipe(id: string, token?: string): Promise<any> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}`), {
-            method: 'DELETE',
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
+  async deleteRecipe(id: string, token?: string): Promise<any> {
+    const response = await fetch(buildApiUrl(`/recipes/${id}`), {
+      method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
 
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to delete recipe');
-        }
-    },
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to delete recipe');
+    }
+  },
 
-    async uploadRecipePhoto(
-        id: string,
-        photo: File,
-        token?: string
-    ): Promise<{ imagePath: string }> {
-        const formData = new FormData();
-        formData.append('photo', photo);
+  async uploadRecipePhoto(
+    id: string,
+    photo: File,
+    token?: string
+  ): Promise<{ imagePath: string }> {
+    const formData = new FormData();
+    formData.append('photo', photo);
 
-        const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
-            method: 'POST',
-            headers: {
-                ...(token && { Authorization: `Bearer ${token}` }),
-            },
-            body: formData,
-        });
+    const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
+      method: 'POST',
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: formData,
+    });
 
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to upload recipe photo');
-        }
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to upload recipe photo');
+    }
 
-        return response.json();
-    },
+    return response.json();
+  },
 
-    async deleteRecipePhoto(id: string, token?: string): Promise<{ imagePath: null }> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
-            method: 'DELETE',
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
+  async deleteRecipePhoto(id: string, token?: string): Promise<{ imagePath: null }> {
+    const response = await fetch(buildApiUrl(`/recipes/${id}/photo`), {
+      method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
 
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to remove recipe photo');
-        }
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to remove recipe photo');
+    }
 
-        return response.json();
-    },
+    return response.json();
+  },
 
-    async createRecipeShareLink(id: string, token?: string): Promise<ShareLinkItem> {
-        const response = await fetch(buildApiUrl(`/recipes/${id}/share`), {
-            method: 'POST',
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
+  async createRecipeShareLink(id: string, token?: string): Promise<ShareLinkItem> {
+    const response = await fetch(buildApiUrl(`/recipes/${id}/share`), {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
 
-        if (!response.ok) {
-            throw await this.parseError(response, 'Failed to create share link');
-        }
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to create share link');
+    }
 
-        const data: { shareLink: ShareLinkItem } = await response.json();
-        return data.shareLink;
-    },
+    const data: { shareLink: ShareLinkItem } = await response.json();
+    return data.shareLink;
+  },
 
-    async getSharedRecipe(token: string): Promise<Recipe | null> {
-        const response = await fetch(buildApiUrl(`/shared-recipes/${token}`));
-        if (!response.ok) {
-            if (response.status === 404) {
-                return null; // Not found is a valid case for shared recipes
-            }
-            throw await this.parseError(response, 'Failed to fetch shared recipe');
-        }
-        const data: GetSharedRecipeResponse = await response.json();
-        return data.sharedRecipe;
-    },
+  async getSharedRecipe(token: string): Promise<Recipe | null> {
+    const response = await fetch(buildApiUrl(`/shared-recipes/${token}`));
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null; // Not found is a valid case for shared recipes
+      }
+      throw await this.parseError(response, 'Failed to fetch shared recipe');
+    }
+    const data: GetSharedRecipeResponse = await response.json();
+    return data.sharedRecipe;
+  },
 };
 
 export default recipe;

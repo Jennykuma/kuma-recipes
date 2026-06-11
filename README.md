@@ -136,6 +136,7 @@ Notes:
 Vercel allows a production domain to be attached to only one project. For `jennyle.dev/kuma-recipes`, use two projects:
 
 1. `kuma-recipes` project (this repo, root dir: `apps/web`)
+
 - Add env vars:
 
 ```
@@ -145,6 +146,7 @@ VITE_BASE_PATH=/kuma-recipes/
 - This repo includes [apps/web/vercel.json](/Users/jenny/Documents/projects/kuma-recipes/apps/web/vercel.json) for SPA fallback under `/kuma-recipes/*`.
 
 2. `jennyle.dev` project (your main site project)
+
 - Add rewrites in that project's `vercel.json`:
 
 ```json

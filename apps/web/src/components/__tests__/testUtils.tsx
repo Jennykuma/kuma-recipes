@@ -4,38 +4,38 @@ import { render } from '@testing-library/react';
 import { type RecipeFormValues } from '../../types/recipeForm';
 
 const baseDefaults: RecipeFormValues = {
-    title: '',
-    source: '',
-    notes: '',
-    rating: 0,
-    yield: '',
-    tagIds: [],
-    ingredients: [{ ingredient: '' }],
-    steps: [{ step: '' }],
+  title: '',
+  source: '',
+  notes: '',
+  rating: 0,
+  yield: '',
+  tagIds: [],
+  ingredients: [{ ingredient: '' }],
+  steps: [{ step: '' }],
 };
 
 type RenderOptions = {
-    defaultValues?: Partial<RecipeFormValues>;
+  defaultValues?: Partial<RecipeFormValues>;
 };
 
 export const renderWithForm = (
-    ui: ReactElement,
-    { defaultValues }: RenderOptions = {}
+  ui: ReactElement,
+  { defaultValues }: RenderOptions = {}
 ) => {
-    const Wrapper = ({ children }: PropsWithChildren) => {
-        const methods = useForm<RecipeFormValues>({
-            defaultValues: {
-                ...baseDefaults,
-                ...defaultValues,
-            },
-        });
+  const Wrapper = ({ children }: PropsWithChildren) => {
+    const methods = useForm<RecipeFormValues>({
+      defaultValues: {
+        ...baseDefaults,
+        ...defaultValues,
+      },
+    });
 
-        return (
-            <FormProvider {...methods}>
-                <form>{children}</form>
-            </FormProvider>
-        );
-    };
+    return (
+      <FormProvider {...methods}>
+        <form>{children}</form>
+      </FormProvider>
+    );
+  };
 
-    return render(ui, { wrapper: Wrapper });
+  return render(ui, { wrapper: Wrapper });
 };

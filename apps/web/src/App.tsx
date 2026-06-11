@@ -10,111 +10,107 @@ import { useTagsQuery } from './hooks';
 import './App.css';
 
 const App = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const searchTerm = searchParams.get('q') || '';
-    const selectedTagSlugs = searchParams.getAll('tags');
-    const { data: allTags = [] } = useTagsQuery('');
-    const { recipes, isLoading, error, refetch } = useRecipes(selectedTagSlugs);
+  const searchTerm = searchParams.get('q') || '';
+  const selectedTagSlugs = searchParams.getAll('tags');
+  const { data: allTags = [] } = useTagsQuery('');
+  const { recipes, isLoading, error, refetch } = useRecipes(selectedTagSlugs);
 
-    const filteredRecipes = recipes?.filter((recipe: RecipeListItem) =>
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filteredRecipes = recipes?.filter((recipe: RecipeListItem) =>
+    recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    const selectedTags = allTags.filter((tag) => selectedTagSlugs.includes(tag.slug));
+  const selectedTags = allTags.filter((tag) => selectedTagSlugs.includes(tag.slug));
 
-    const handleUpdateSearch = (nextSearchTerm: string) => {
-        const updatedSearchParams = new URLSearchParams(searchParams);
-        if (nextSearchTerm.trim()) updatedSearchParams.set('q', nextSearchTerm);
-        else updatedSearchParams.delete('q');
-        setSearchParams(updatedSearchParams, { replace: true });
-    };
+  const handleUpdateSearch = (nextSearchTerm: string) => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+    if (nextSearchTerm.trim()) updatedSearchParams.set('q', nextSearchTerm);
+    else updatedSearchParams.delete('q');
+    setSearchParams(updatedSearchParams, { replace: true });
+  };
 
-    const handleSelectedTagsChange = (nextTags: Tag[]) => {
-        const updatedSearchParams = new URLSearchParams(searchParams);
-        updatedSearchParams.delete('tags');
-        nextTags.forEach((tag) => updatedSearchParams.append('tags', tag.slug));
-        setSearchParams(updatedSearchParams, { replace: true });
-    };
+  const handleSelectedTagsChange = (nextTags: Tag[]) => {
+    const updatedSearchParams = new URLSearchParams(searchParams);
+    updatedSearchParams.delete('tags');
+    nextTags.forEach((tag) => updatedSearchParams.append('tags', tag.slug));
+    setSearchParams(updatedSearchParams, { replace: true });
+  };
 
-    if (isLoading) {
-        return (
-            <PageState
-                variant="loading"
-                title="Warming up the kitchen"
-                message="Getting your saved recipes and tags ready."
-            />
-        );
-    }
-
-    if (error) {
-        return (
-            <PageState
-                variant="error"
-                title="A little kitchen hiccup"
-                message={
-                    error instanceof Error
-                        ? error.message
-                        : 'Please refresh and try again.'
-                }
-                actionLabel="Try again"
-                onAction={() => void refetch()}
-            />
-        );
-    }
-
+  if (isLoading) {
     return (
-        <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
-            <div className="mx-auto flex w-full max-w-[82rem] flex-col">
-                <header className="flex justify-between gap-4">
-                    <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
-                        Kuma Recipes 🧸
-                    </Link>
-                    <Link
-                        role="link"
-                        tabIndex={0}
-                        className="
-                            inline-flex items-center gap-2 px-4 py-2 rounded-xl 
-                            font-jua text-sm text-white transition-colors
-                            bg-blush-400 hover:bg-blush-500 hover:text-white"
-                        to={`/recipes/new`}
-                    >
-                        Add recipe
-                    </Link>
-                </header>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
-                    <Search value={searchTerm} onChange={handleUpdateSearch} />
-                    <RecipeTagFilter
-                        selectedTags={selectedTags}
-                        onChange={handleSelectedTagsChange}
-                    />
-                    {searchTerm || selectedTags.length > 0 ? (
-                        <span className="self-center text-xs text-gray-500 dark:text-gray-400 italic">
-                            {filteredRecipes?.length} recipe
-                            {filteredRecipes?.length !== 1 ? 's' : ''} found
-                        </span>
-                    ) : null}
-                </div>
-                <div
-                    data-testid="recipe-list"
-                    className="
+      <PageState
+        variant="loading"
+        title="Warming up the kitchen"
+        message="Getting your saved recipes and tags ready."
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <PageState
+        variant="error"
+        title="A little kitchen hiccup"
+        message={error instanceof Error ? error.message : 'Please refresh and try again.'}
+        actionLabel="Try again"
+        onAction={() => void refetch()}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
+      <div className="mx-auto flex w-full max-w-[82rem] flex-col">
+        <header className="flex justify-between gap-4">
+          <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
+            Kuma Recipes 🧸
+          </Link>
+          <Link
+            role="link"
+            tabIndex={0}
+            className="
+              inline-flex items-center gap-2 px-4 py-2 rounded-xl
+              font-jua text-sm text-white transition-colors
+              bg-blush-400 hover:bg-blush-500 hover:text-white"
+            to={`/recipes/new`}
+          >
+            Add recipe
+          </Link>
+        </header>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
+          <Search value={searchTerm} onChange={handleUpdateSearch} />
+          <RecipeTagFilter
+            selectedTags={selectedTags}
+            onChange={handleSelectedTagsChange}
+          />
+          {searchTerm || selectedTags.length > 0 ? (
+            <span className="self-center text-xs text-gray-500 dark:text-gray-400 italic">
+              {filteredRecipes?.length} recipe
+              {filteredRecipes?.length !== 1 ? 's' : ''} found
+            </span>
+          ) : null}
+        </div>
+        <div
+          data-testid="recipe-list"
+          className="
                         grid grid-cols-1 gap-4 pt-6 pb-6
                         md:grid-cols-3"
-                >
-                    {filteredRecipes?.map((recipe) => (
-                        <RecipeCard
-                            key={recipe.id}
-                            id={recipe.id}
-                            rating={recipe.rating}
-                            tags={recipe.tags}
-                            title={recipe.title}
-                            imagePath={recipe.imagePath}
-                        />
-                    ))}
-                </div>
-            </div>
+        >
+          {filteredRecipes?.map((recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              id={recipe.id}
+              rating={recipe.rating}
+              tags={recipe.tags}
+              title={recipe.title}
+              imagePath={recipe.imagePath}
+            />
+          ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default App;

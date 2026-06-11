@@ -1,6 +1,6 @@
 ---
 name: kuma-recipe-flow
-description: "Help with feature work in the Kuma Recipes app. Use when working on recipe creation, recipe details, tags, share links, or full-stack changes in this repository. Choose the checklist that matches the change type: UI, API, database, or cross-stack."
+description: 'Help with feature work in the Kuma Recipes app. Use when working on recipe creation, recipe details, tags, share links, or full-stack changes in this repository. Choose the checklist that matches the change type: UI, API, database, or cross-stack.'
 ---
 
 When working in this repo:

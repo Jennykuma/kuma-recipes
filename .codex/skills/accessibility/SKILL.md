@@ -8,6 +8,7 @@ Use this skill when working on frontend accessibility work in the `kuma-recipes`
 ## Focus areas
 
 Prioritize:
+
 - semantic HTML before ARIA
 - accessible labels for form controls
 - keyboard navigation and visible focus states
@@ -15,10 +16,10 @@ Prioritize:
 - colour contrast and non-colour indicators for important information
 - error messaging, validation, and status annoucements
 
-
 ## Repo context
 
 Key frontend areas:
+
 - `apps/web/src/App.tsx`
 - `apps/web/src/pages/NewRecipe/NewRecipe.tsx`
 - `apps/web/src/pages/RecipeDetails/RecipeDetails.tsx`
@@ -28,6 +29,7 @@ If a change affects shared UI patterns, inspect related reusable components in `
 ## Workflow
 
 When using this skill:
+
 1. Identify the user flow and affected UI surface
 2. Check semantic structure first before adding ARIA
 3. Verify every interactive element has an accessible name
@@ -52,12 +54,14 @@ When using this skill:
 ## Implementation guidance
 
 Prefer:
+
 - native `button`, `label`, `input`, `select`, `textarea`, `fieldset`, `legend`
 - headings in a meaningful order
 - `aria-*` only when native semantics are not enough
 - explicit labels for recipe forms, tag inputs, and share flows
 
 Avoid:
+
 - clickable `div` or `span` elements when a `button` fits
 - placeholder-only labeling
 - adding ARIA that conflicts with native semantics
@@ -66,6 +70,7 @@ Avoid:
 ## Output expectations
 
 When reviewing or making changes:
+
 - explain the accessibility issue in practical terms
 - describe who is affected if relevant
 - make the smallest clear fix that matches existing patterns
@@ -74,6 +79,7 @@ When reviewing or making changes:
 ## Verification
 
 For accessibility-related frontend changes, consider:
+
 - keyboard-only navigation
 - screen reader naming and announcements
 - basic contrast checks
@@ -82,6 +88,7 @@ For accessibility-related frontend changes, consider:
 ## Audit mode
 
 When asked to audit frontend accessibility:
+
 1. Inspect the affected pages and shared components.
 2. Identify issues with semantics, labeling, keyboard navigation, focus visibility, screen reader support, and contrast.
 3. Prioritize findings by user impact.

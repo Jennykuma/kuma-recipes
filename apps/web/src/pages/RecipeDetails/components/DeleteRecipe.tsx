@@ -1,24 +1,24 @@
 import { Trash2 } from 'lucide-react';
 
 type DeleteRecipeProps = {
-    onDelete: () => void;
+  onDelete: () => void;
 };
 
 const DeleteRecipe = ({ onDelete }: DeleteRecipeProps) => {
-    return (
-        <button
-            onClick={onDelete}
-            className="
-                ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
-                text-red-500 hover:bg-red-50 hover:text-red-600
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
-                dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
-            aria-label="Delete recipe"
-            title="Delete recipe"
-        >
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
-        </button>
-    );
+  return (
+    <button
+      onClick={onDelete}
+      className="
+        ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full
+        text-red-500 hover:bg-red-50 hover:text-red-600
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
+        dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
+      aria-label="Delete recipe"
+      title="Delete recipe"
+    >
+      <Trash2 className="h-4 w-4" aria-hidden="true" />
+    </button>
+  );
 };
 
 export default DeleteRecipe;

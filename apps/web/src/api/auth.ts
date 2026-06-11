@@ -1,18 +1,18 @@
 import { useAuth } from '@clerk/clerk-react';
 
 export function useAuthorizedFetch() {
-    const { getToken } = useAuth();
-    return async (input: RequestInfo | URL, init: RequestInit = {}) => {
-        const token = await getToken();
-        const headers = new Headers(init.headers);
+  const { getToken } = useAuth();
+  return async (input: RequestInfo | URL, init: RequestInit = {}) => {
+    const token = await getToken();
+    const headers = new Headers(init.headers);
 
-        if (token) {
-            headers.set('Authorization', `Bearer ${token}`);
-        }
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
 
-        return fetch(input, {
-            ...init,
-            headers,
-        });
-    };
+    return fetch(input, {
+      ...init,
+      headers,
+    });
+  };
 }
