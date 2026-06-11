@@ -72,13 +72,17 @@ const EditableYield = ({
   }
 
   return (
-    <span className="flex w-full items-center gap-1">
-      <span className="text-xs">{recipeYield || 'N/A'}</span>
+    <span className="flex w-full items-center gap-1 min-w-0 max-w-full leading-none">
+      <span className="text-xs leading-none truncate" title={recipeYield}>
+        {recipeYield || 'N/A'}
+      </span>
       <button
         type="button"
         onClick={onEdit}
         aria-label="Edit yield"
-        className="inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
+        className="
+          inline-flex items-center rounded-sm
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
       >
         <Pencil className="w-3 h-4 cursor-pointer link-blush" aria-hidden="true" />
       </button>

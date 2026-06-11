@@ -93,12 +93,15 @@ const EditableSource = ({
               target="_blank"
               rel="noreferrer"
               title={sourceLink}
-              className="link-blush text-xs leading-none text-blush-400 hover:underline truncate overflow-hidden text-ellipsis min-w-0 max-w-full"
+              className="link-blush text-xs leading-none text-blush-400 hover:underline truncate"
             >
               {sourceText}
             </a>
           ) : (
-            <span className="text-xs leading-none text-gray-600 truncate overflow-hidden text-ellipsis min-w-0 max-w-full dark:text-gray-200">
+            <span
+              className="text-xs leading-none text-gray-600 truncate dark:text-gray-200"
+              title={sourceText}
+            >
               {sourceText || '—'}
             </span>
           )}

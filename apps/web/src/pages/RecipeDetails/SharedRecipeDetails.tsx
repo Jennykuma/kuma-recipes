@@ -70,7 +70,14 @@ const SharedRecipeDetails = () => {
 
   return (
     <RecipeDetailsView
-      title={<h1 className="text-lg font-bold">{sharedRecipe.title}</h1>}
+      title={
+        <h1
+          className="max-w-125 text-lg flex-1 font-bold truncate"
+          title={sharedRecipe.title}
+        >
+          {sharedRecipe.title}
+        </h1>
+      }
       photo={
         <div className="h-[250px] w-full overflow-hidden rounded-xl border border-dashed border-sage-300 bg-surface md:w-[250px] dark:border-gray-700 dark:bg-gray-800">
           {detailImageUrl ? (
@@ -107,7 +114,9 @@ const SharedRecipeDetails = () => {
               <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Yield
             </span>
-            <span className="text-xs">{sharedRecipe.yield || 'N/A'}</span>
+            <span className="text-xs leading-none truncate" title={sharedRecipe.yield}>
+              {sharedRecipe.yield || 'N/A'}
+            </span>
           </div>
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
             <span
@@ -136,12 +145,15 @@ const SharedRecipeDetails = () => {
                   target="_blank"
                   rel="noreferrer"
                   title={sourceLink}
-                  className="link-blush text-blush-400 hover:underline"
+                  className="link-blush block max-w-full truncate text-blush-400 hover:underline"
                 >
                   {sharedRecipe.source}
                 </a>
               ) : (
-                <span className="text-gray-600 dark:text-gray-200">
+                <span
+                  className="text-gray-600 block max-w-full truncate dark:text-gray-200"
+                  title={sharedRecipe.source}
+                >
                   {sharedRecipe.source?.trim() || '—'}
                 </span>
               )}

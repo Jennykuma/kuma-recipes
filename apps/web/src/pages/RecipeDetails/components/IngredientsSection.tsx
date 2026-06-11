@@ -138,11 +138,12 @@ const IngredientsSection = ({
             return (
               <li
                 key={ingredient}
-                className="ml-4 list-disc max-w-2xl
-                                text-sm/6 text-gray-800 dark:text-gray-100
-                                marker:text-gray-400 marker:text-xs"
+                className="
+                  ml-4 list-disc max-w-2xl
+                  text-sm/6 text-gray-800 dark:text-gray-100
+                  marker:text-gray-400 marker:text-xs"
               >
-                {ingredient}
+                <span className="line-break">{ingredient}</span>
                 <input
                   type="checkbox"
                   className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"

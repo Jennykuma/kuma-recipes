@@ -72,8 +72,10 @@ const EditableTitle = ({
   }
 
   return (
-    <span className="flex w-full items-baseline gap-1">
-      <h1 className="text-lg font-bold">{title}</h1>
+    <span className="flex w-full max-w-125 items-baseline gap-1">
+      <h1 className="text-lg flex-1 font-bold truncate" title={title}>
+        {title}
+      </h1>
       <button
         type="button"
         onClick={onEdit}

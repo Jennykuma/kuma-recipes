@@ -94,7 +94,7 @@ const TagsSection = ({
           </form>
         </FormProvider>
       ) : tags?.length ? (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 max-h-15">
           {tags.map((tag: Tag) => (
             <span
               key={tag.id}

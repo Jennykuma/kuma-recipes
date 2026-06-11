@@ -155,9 +155,10 @@ const StepsSection = ({
             return (
               <li
                 key={`${step}-${index}`}
-                className="grid grid-cols-[auto_minmax(0,1fr)_auto]
-                                items-start gap-2 text-sm/7
-                                text-gray-800 dark:text-gray-100"
+                className="
+                  grid grid-cols-[auto_minmax(0,1fr)_auto]
+                  items-start gap-2 text-sm/7
+                  text-gray-800 dark:text-gray-100"
               >
                 <span
                   aria-hidden="true"
