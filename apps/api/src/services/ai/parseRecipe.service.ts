@@ -14,7 +14,9 @@ type ParsedRecipe = {
   suggestedTags: string[];
 };
 
-const SYSTEM_PROMPT = `You are a recipe parser. Given raw recipe text, extract structured data and return it as JSON with exactly this shape:
+const SYSTEM_PROMPT = `IMPORTANT: Return ONLY raw valid JSON. No markdown, no code fences, no explanation — just the JSON object itself.
+
+You are a recipe parser. Given raw recipe text, extract structured data and return it as JSON with exactly this shape:
 {
   "title": "string — recipe name",
   "yield": "string — how much it makes, e.g. '4 servings' or '12 cookies' (empty string if unknown)",
@@ -22,11 +24,11 @@ const SYSTEM_PROMPT = `You are a recipe parser. Given raw recipe text, extract s
   "notes": "string — any tips, variations, or personal notes. Keep each tip as a short sentence. Separate multiple tips with 2x newline. Empty string if none.",
   "ingredients": ["array of ingredient strings, one per item"],
   "steps": ["array of step strings, each a complete instruction"],
-  "suggestedTags": ["array of 2-5 short tag name strings, e.g. 'vegetarian', 'quick', 'dessert', 'italian'"]
+  "suggestedTags": ["array of 1-2 short tag name strings, e.g. 'vegetarian', 'quick', 'dessert', 'italian'"]
 }
 
 Rules:
-- Return ONLY valid JSON, no markdown fences, no explanation
+- Return ONLY raw valid JSON, no markdown fences, no explanation, no code fences
 - Keep ingredient strings intact with quantities (e.g. "2 cups flour")
 - Keep step strings as complete sentences
 - suggestedTags should be lowercase, concise, and useful for filtering (cuisine, diet, meal type, technique)
