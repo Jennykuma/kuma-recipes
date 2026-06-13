@@ -155,13 +155,13 @@ const NewRecipe = () => {
               <header className="mb-1 flex min-h-9 items-center justify-between">
                 <h1 className="text-lg font-bold">Create new recipe</h1>
                 <button
-                  className="px-4 py-2 rounded-xl flex gap-2 items-center
+                  className="px-4 py-1.5 rounded-xl flex gap-2 items-center button-sm
                     font-jua text-sm text-white transition-colors
                   bg-blush-400 hover:bg-blush-500 hover:text-white"
                   type="button"
                   onClick={() => setShowImporter(true)}
                 >
-                  Import from text
+                  Import a recipe
                 </button>
               </header>
               <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
@@ -194,7 +194,7 @@ const NewRecipe = () => {
                     rounded-xl shadow-sm shadow-gray-100
                     text-gray-600 dark:text-gray-300"
                 >
-                  <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
+                  <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-start">
                     <div className="flex min-w-0 flex-col space-y-2">
                       <div className="flex items-center gap-2">
                         <label
@@ -212,8 +212,7 @@ const NewRecipe = () => {
                           type="text"
                           className="
                             w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 rounded-sm
-                            placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                            border border-gray-200 focus:border-sage-300 focus:outline-none"
                           placeholder="e.g. Grandma's apple pie"
                           {...register('title', {
                             setValueAs: (value) => value.trim(),
@@ -240,8 +239,7 @@ const NewRecipe = () => {
                           type="text"
                           className="
                             w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 rounded-sm
-                            placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                            border border-gray-200 focus:border-sage-300 focus:outline-none"
                           placeholder="e.g. 4 servings or 12 cookies"
                           {...register('yield')}
                         />
@@ -280,14 +278,13 @@ const NewRecipe = () => {
                           type="text"
                           className="
                             w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 rounded-sm
-                            placeholder:text-sm focus:border-sage-300 focus:outline-none"
+                            border border-gray-200 focus:border-sage-300 focus:outline-none"
                           placeholder="Original recipe URL"
                           id="source"
                           {...register('source')}
                         ></input>
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1 mb-4">
                         <label
                           htmlFor="tags-input"
                           className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
@@ -307,10 +304,9 @@ const NewRecipe = () => {
                       </label>
                       <textarea
                         className="
-                          h-20 sm:h-24 lg:h-full w-full p-2 rounded-md text-xs
+                          h-24 lg:h-full w-full p-2 rounded-md text-xs
                           resize-none bg-white border border-gray-200
-                          placeholder:text-xs focus:border-sage-300
-                          focus:outline-none dark:border-gray-700
+                          focus:border-sage-300 focus:outline-none dark:border-gray-700
                           dark:bg-[#2a2a2a] dark:text-gray-100"
                         id="notes"
                         rows={4}
@@ -325,7 +321,7 @@ const NewRecipe = () => {
 
             <div className="grid w-full grid-cols-1 gap-6 md:min-h-0 md:flex-1 md:grid-cols-2 md:overflow-y-auto md:overflow-x-hidden md:pb-2 md:pr-2">
               <div className="order-1 flex flex-col md:order-none md:col-start-1 md:min-h-0">
-                <div className="flex w-full min-w-0 max-w-125 flex-col gap-3 md:min-h-0 md:flex-1">
+                <div className="flex w-full min-w-0 max-w-125 flex-col gap-3 mt-4 md:mt-0 md:min-h-0 md:flex-1">
                   <div className="flex flex-col md:min-h-0 md:flex-1">
                     <div className="flex flex-row items-baseline gap-1">
                       <span
@@ -354,7 +350,7 @@ const NewRecipe = () => {
                 </div>
               </div>
 
-              <div className="order-2 flex flex-col gap-3 md:order-none md:col-start-2 md:min-h-0">
+              <div className="order-2 flex flex-col gap-3 md:order-0 md:col-start-2 md:min-h-0">
                 <div className="flex w-full max-w-150 flex-col md:min-h-0 md:flex-1">
                   <div className="flex flex-row items-baseline gap-1">
                     <span

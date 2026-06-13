@@ -11,7 +11,7 @@ const DeleteModal = ({ onClose, onConfirm, title }: DeleteModalProps) => {
       <div
         role="dialog"
         aria-modal="true"
-        className="relative z-10 w-[90vw] max-w-md rounded-lg bg-white p-5 shadow-lg"
+        className="relative z-10 w-[90vw] max-w-md rounded-lg bg-white p-4 shadow-lg"
       >
         <p className="text-sm text-gray-800">
           <strong>Delete{title ? ` “${title}”` : ''}?</strong>
