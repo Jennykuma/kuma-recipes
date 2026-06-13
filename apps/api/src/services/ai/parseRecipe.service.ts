@@ -19,7 +19,7 @@ const SYSTEM_PROMPT = `You are a recipe parser. Given raw recipe text, extract s
   "title": "string — recipe name",
   "yield": "string — how much it makes, e.g. '4 servings' or '12 cookies' (empty string if unknown)",
   "source": "string — URL or attribution if present (empty string if none)",
-  "notes": "string — any tips, variations, or personal notes in the text (empty string if none)",
+  "notes": "string — any tips, variations, or personal notes. Keep each tip as a short sentence. Separate multiple tips with 2x newline. Empty string if none.",
   "ingredients": ["array of ingredient strings, one per item"],
   "steps": ["array of step strings, each a complete instruction"],
   "suggestedTags": ["array of 2-5 short tag name strings, e.g. 'vegetarian', 'quick', 'dessert', 'italian'"]

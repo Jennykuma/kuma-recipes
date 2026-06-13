@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
-import { type RecipeFormValues } from '../../types/recipeForm';
-import { useCreateRecipe, useToast } from '../../hooks';
 import BackButton from '../../components/BackButton';
 import CancelModal from './components/CancelModal';
 import Tags from '../../components/Tags';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
+import RecipeImporter from './components/RecipeImporter';
+import type { ParsedRecipe } from '../../api/ai';
+import { type RecipeFormValues } from '../../types/recipeForm';
+import { useCreateRecipe, useToast } from '../../hooks';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
 import { IdCard, PieChart, Star, Link2, TagIcon } from 'lucide-react';
 import classNames from 'classnames';
@@ -49,6 +51,7 @@ const NewRecipe = () => {
   const navigate = useNavigate();
   const { mutateAsync: createRecipe } = useCreateRecipe();
   const { showToast } = useToast();
+  const [showImporter, setShowImporter] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   // method also returns register, handleSubmit, control, setFocus, watch, etc
@@ -120,6 +123,21 @@ const NewRecipe = () => {
     navigate('/');
   };
 
+  const handleParsedRecipe = (parsedRecipe: ParsedRecipe): void => {
+    reset({
+      title: parsedRecipe.title,
+      yield: parsedRecipe.yield,
+      source: parsedRecipe.source,
+      notes: parsedRecipe.notes,
+      ingredients: parsedRecipe.ingredients.map((ingredient) => ({ ingredient })),
+      steps: parsedRecipe.steps.map((step) => ({ step })),
+      tagIds: [],
+      rating: 0,
+      photo: undefined,
+    });
+    setShowImporter(false);
+  };
+
   return (
     <div className="min-h-screen bg-white p-6 text-gray-900 md:h-dvh md:overflow-hidden dark:bg-[#1f1f1f] dark:text-gray-100">
       <div className="mx-auto flex w-full max-w-7xl flex-col md:h-full md:min-h-0">
@@ -136,6 +154,15 @@ const NewRecipe = () => {
               />
               <header className="mb-1 flex min-h-9 items-center justify-between">
                 <h1 className="text-lg font-bold">Create new recipe</h1>
+                <button
+                  className="px-4 py-2 rounded-xl flex gap-2 items-center
+                    font-jua text-sm text-white transition-colors
+                  bg-blush-400 hover:bg-blush-500 hover:text-white"
+                  type="button"
+                  onClick={() => setShowImporter(true)}
+                >
+                  Import from text
+                </button>
               </header>
               <div className="mb-6 grid w-full grid-cols-1 gap-6 md:grid-cols-[250px_minmax(0,1fr)] md:items-stretch">
                 <div className="h-full space-y-2">
@@ -282,7 +309,7 @@ const NewRecipe = () => {
                         className="
                           h-20 sm:h-24 lg:h-full w-full p-2 rounded-md text-xs
                           resize-none bg-white border border-gray-200
-                          rounded-sm placeholder:text-xs focus:border-sage-300
+                          placeholder:text-xs focus:border-sage-300
                           focus:outline-none dark:border-gray-700
                           dark:bg-[#2a2a2a] dark:text-gray-100"
                         id="notes"
@@ -385,6 +412,12 @@ const NewRecipe = () => {
           <CancelModal
             onClose={() => setShowCancelModal(false)}
             onDiscard={() => handleDiscard()}
+          />
+        )}
+        {showImporter && (
+          <RecipeImporter
+            onParsed={handleParsedRecipe}
+            onClose={() => setShowImporter(false)}
           />
         )}
       </div>
