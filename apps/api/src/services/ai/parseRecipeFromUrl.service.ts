@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import type { ParsedRecipe } from './parseRecipe.service';
+import type { ParsedRecipe } from './parseRecipe.service.js';
 
 // shape of a Recipe object from Schema.org's standard
 type SchemaRecipe = {
