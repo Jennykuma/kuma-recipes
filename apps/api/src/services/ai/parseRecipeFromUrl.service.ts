@@ -10,7 +10,14 @@ type SchemaRecipe = {
   author?: { name?: string } | string;
   description?: string;
   recipeIngredient?: string[];
-  recipeInstructions?: Array<{ '@type': string; text: string } | string>;
+  recipeInstructions?: Array<
+    | string
+    | { '@type': 'HowToStep'; text: string }
+    | {
+        '@type': 'HowToSection';
+        itemListElement: Array<{ '@type': 'HowToStep'; text: string }>;
+      }
+  >;
   keywords?: string | string[];
   recipeCuisine?: string | string[];
   recipeCategory?: string | string[];
@@ -72,12 +79,17 @@ export async function parseRecipeFromUrl(url: string): Promise<ParsedRecipe | nu
     const recipe = findRecipeInData(data);
     if (!recipe) continue;
 
-    const steps = (recipe.recipeInstructions ?? []).map((step) =>
-      typeof step === 'string' ? step : step.text
-    );
+    const steps = (recipe.recipeInstructions ?? []).flatMap((step) => {
+      if (typeof step === 'string') return [step];
+      if (step['@type'] === 'HowToSection')
+        return step.itemListElement.map((s) => s.text);
+      return [step.text];
+    });
 
     const tags = [
-      ...toArray(recipe.keywords).flatMap((k) => k.split(',').map((s) => s.trim().toLowerCase())),
+      ...toArray(recipe.keywords).flatMap((k) =>
+        k.split(',').map((s) => s.trim().toLowerCase())
+      ),
       ...toArray(recipe.recipeCuisine).map((c) => c.toLowerCase()),
       ...toArray(recipe.recipeCategory).map((c) => c.toLowerCase()),
     ]

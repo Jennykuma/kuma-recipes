@@ -127,7 +127,12 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
             id="recipe-url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleImport(); } }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleImport();
+              }
+            }}
           />
         ) : (
           <textarea
