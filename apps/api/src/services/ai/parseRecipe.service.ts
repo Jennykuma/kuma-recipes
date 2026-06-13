@@ -14,9 +14,7 @@ type ParsedRecipe = {
   suggestedTags: string[];
 };
 
-const SYSTEM_PROMPT = `IMPORTANT: Return ONLY raw valid JSON. No markdown, no code fences, no explanation — just the JSON object itself.
-
-You are a recipe parser. Given raw recipe text, extract structured data and return it as JSON with exactly this shape:
+const SYSTEM_PROMPT = `You are a recipe parser. Given raw recipe text, extract structured data and return it as JSON with exactly this shape:
 {
   "title": "string — recipe name",
   "yield": "string — how much it makes, e.g. '4 servings' or '12 cookies' (empty string if unknown)",
@@ -28,7 +26,7 @@ You are a recipe parser. Given raw recipe text, extract structured data and retu
 }
 
 Rules:
-- Return ONLY raw valid JSON, no markdown fences, no explanation, no code fences
+- IMPORTANT: Return ONLY raw valid JSON. No markdown, no code fences, no explanation — just the JSON object itself.
 - Keep ingredient strings intact with quantities (e.g. "2 cups flour")
 - Keep step strings as complete sentences
 - suggestedTags should be lowercase, concise, and useful for filtering (cuisine, diet, meal type, technique)
@@ -52,6 +50,11 @@ export async function parseRecipeText(rawText: string): Promise<ParsedRecipe> {
     throw new Error('No text response from Claude');
   }
 
-  const parsed = JSON.parse(textBlock.text) as ParsedRecipe;
+  let text = textBlock.text.trim();
+  if (text.startsWith('```')) {
+    text = text.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+  }
+
+  const parsed = JSON.parse(text) as ParsedRecipe;
   return parsed;
 }
