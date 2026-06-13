@@ -11,14 +11,14 @@ export type ParsedRecipe = {
 };
 
 const ai = {
-  async parseRecipe(rawText: string, token?: string): Promise<ParsedRecipe> {
+  async parseRecipe(recipeInput: string, token?: string): Promise<ParsedRecipe> {
     const response = await fetch(buildApiUrl('/ai/parse-recipe'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify({ rawText }),
+      body: JSON.stringify({ recipeInput }),
     });
 
     if (!response.ok) {

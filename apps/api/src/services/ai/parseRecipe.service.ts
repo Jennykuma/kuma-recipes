@@ -4,7 +4,7 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-type ParsedRecipe = {
+export type ParsedRecipe = {
   title: string;
   yield: string;
   source: string;

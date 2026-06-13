@@ -7,13 +7,13 @@ const useParseRecipe = () => {
   const { getToken } = useAuth();
 
   return useMutation({
-    mutationFn: async (rawText: string): Promise<ParsedRecipe> => {
+    mutationFn: async (recipeInput: string): Promise<ParsedRecipe> => {
       const token = await getToken();
       if (!token) {
         throw new Error('Missing auth token');
       }
 
-      const parsedRecipe = await aiApi.parseRecipe(rawText, token);
+      const parsedRecipe = await aiApi.parseRecipe(recipeInput, token);
       return parsedRecipe;
     },
   });
