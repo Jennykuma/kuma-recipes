@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeProxyHeaders } from './fastifyProxy';
+import { normalizeProxyHeaders } from './fastifyProxy.js';
 
 describe('normalizeProxyHeaders', () => {
   it('drops body headers when there is no payload', () => {
