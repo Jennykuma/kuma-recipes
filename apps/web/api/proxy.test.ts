@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'node:http';
 import { describe, expect, it } from 'vitest';
-import { toFastifyUrl } from './proxy';
+import { toFastifyUrl } from './proxy.js';
 
 function request(url: string): IncomingMessage {
   return {

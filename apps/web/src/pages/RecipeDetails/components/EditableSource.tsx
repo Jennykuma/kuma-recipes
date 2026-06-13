@@ -93,13 +93,13 @@ const EditableSource = ({
               target="_blank"
               rel="noreferrer"
               title={sourceLink}
-              className="link-blush text-xs leading-none text-blush-400 hover:underline truncate"
+              className="link-blush text-xs leading-none text-blush-400 hover:underline truncate h-4"
             >
               {sourceText}
             </a>
           ) : (
             <span
-              className="text-xs leading-none text-gray-600 truncate dark:text-gray-200"
+              className="text-xs leading-none text-gray-600 truncate dark:text-gray-200 h-4"
               title={sourceText}
             >
               {sourceText || '—'}
@@ -112,7 +112,7 @@ const EditableSource = ({
             className="inline-flex items-center shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
           >
             <Pencil
-              className="w-3 h-4 pb-0.5 cursor-pointer link-blush shrink-0"
+              className="w-3 h-4 pb-1 cursor-pointer link-blush shrink-0"
               aria-hidden="true"
             />
           </button>

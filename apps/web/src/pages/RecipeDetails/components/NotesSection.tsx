@@ -108,13 +108,13 @@ const NotesSection = ({
           Notes
         </span>
         <textarea
+          id="notes"
           ref={textareaRef}
           className="
-            h-full min-h-0 w-full flex-1 p-2 rounded-md text-xs
+            h-[180px] w-full p-2 rounded-md text-xs
             resize-none bg-white border border-gray-200
-            rounded-sm placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+            placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
             focus:border-sage-300 focus:outline-none"
-          rows={7}
           value={draftValue ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         ></textarea>
@@ -154,9 +154,9 @@ const NotesSection = ({
       </span>
       <div
         className="
-          h-full max-h-[200px] min-h-0 w-full flex-1 p-2 rounded-md text-xs
-          whitespace-pre-wrap break-words bg-white border border-gray-200
-          rounded-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+          min-h-0 max-h-[200px] w-full flex-1 p-2 rounded-md text-xs
+          whitespace-pre-wrap wrap-break-word bg-white border border-gray-200
+          dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
           overflow-scroll"
         onClick={editable ? onEdit : undefined}
         role={editable ? 'button' : undefined}

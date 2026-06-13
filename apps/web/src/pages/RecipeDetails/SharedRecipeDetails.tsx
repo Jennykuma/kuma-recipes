@@ -72,7 +72,7 @@ const SharedRecipeDetails = () => {
     <RecipeDetailsView
       title={
         <h1
-          className="w-full text-lg flex-1 font-bold truncate sm:w-max-125"
+          className="font-jua w-full text-lg flex-1 font-bold truncate sm:w-max-125"
           title={sharedRecipe.title}
         >
           {sharedRecipe.title}
@@ -114,7 +114,10 @@ const SharedRecipeDetails = () => {
               <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Yield
             </span>
-            <span className="text-xs leading-none truncate" title={sharedRecipe.yield}>
+            <span
+              className="text-xs leading-none truncate h-4"
+              title={sharedRecipe.yield}
+            >
               {sharedRecipe.yield || 'N/A'}
             </span>
           </div>
@@ -145,13 +148,13 @@ const SharedRecipeDetails = () => {
                   target="_blank"
                   rel="noreferrer"
                   title={sourceLink}
-                  className="link-blush block max-w-full truncate text-blush-400 hover:underline"
+                  className="link-blush block max-w-full truncate text-blush-400 hover:underline h-4"
                 >
                   {sharedRecipe.source}
                 </a>
               ) : (
                 <span
-                  className="text-gray-600 block max-w-full truncate dark:text-gray-200"
+                  className="text-gray-600 block max-w-full truncate dark:text-gray-200 h-4"
                   title={sharedRecipe.source}
                 >
                   {sharedRecipe.source?.trim() || '—'}
