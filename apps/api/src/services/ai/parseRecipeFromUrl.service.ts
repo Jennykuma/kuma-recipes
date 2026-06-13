@@ -12,13 +12,18 @@ type SchemaRecipe = {
   recipeIngredient?: string[];
   recipeInstructions?: Array<{ '@type': string; text: string } | string>;
   keywords?: string | string[];
-  recipeCuisine?: string;
-  recipeCategory?: string;
+  recipeCuisine?: string | string[];
+  recipeCategory?: string | string[];
 };
 
 const decodeHtml = (str: string): string => {
   const $ = cheerio.load(`<span>${str}</span>`);
   return $('span').text();
+};
+
+const toArray = (value: string | string[] | undefined): string[] => {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
 };
 
 function findRecipeInData(data: unknown): SchemaRecipe | undefined {
@@ -72,20 +77,16 @@ export async function parseRecipeFromUrl(url: string): Promise<ParsedRecipe | nu
     );
 
     const tags = [
-      ...(typeof recipe.keywords === 'string'
-        ? recipe.keywords.split(',').map((k) => k.trim().toLowerCase())
-        : (recipe.keywords ?? [])),
-      recipe.recipeCuisine?.toLowerCase(),
-      recipe.recipeCategory?.toLowerCase(),
+      ...toArray(recipe.keywords).flatMap((k) => k.split(',').map((s) => s.trim().toLowerCase())),
+      ...toArray(recipe.recipeCuisine).map((c) => c.toLowerCase()),
+      ...toArray(recipe.recipeCategory).map((c) => c.toLowerCase()),
     ]
-      .filter((t): t is string => Boolean(t))
+      .filter(Boolean)
       .slice(0, 5);
 
     return {
       title: decodeHtml(recipe.name ?? ''),
-      yield: Array.isArray(recipe.recipeYield)
-        ? decodeHtml(recipe.recipeYield.join(', '))
-        : decodeHtml(recipe.recipeYield ?? ''),
+      yield: decodeHtml(toArray(recipe.recipeYield).join(', ')),
       source: url,
       notes: decodeHtml(recipe.description ?? ''),
       ingredients: (recipe.recipeIngredient ?? []).map(decodeHtml),
