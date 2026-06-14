@@ -60,6 +60,27 @@ The `/ai/parse-recipe` endpoint accepts a single `recipeInput` string and auto-d
 - Public shared recipe route: `apps/api/src/routes/sharedRecipes.routes.ts`
 - Shared recipe service: `apps/api/src/services/recipes/sharedRecipes.service.ts`
 
+### Lab flow (Research & Design Lab tab)
+
+The Lab tab lives on the recipe details page and lets users track variants, attempts, and pins for a recipe.
+
+- Lab API routes (8 endpoints under `/recipes/:id/lab/*`): `apps/api/src/routes/lab.routes.ts`
+- Lab service logic: `apps/api/src/services/lab/lab.service.ts`
+- Lab types (LabData, CreateVariantBody, UpdateVariantBody, CreateAttemptBody, CreatePinBody): `apps/api/src/services/lab/lab.types.ts`
+- Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
+
+Endpoints:
+- `GET /recipes/:id/lab` — returns `{ variants, attempts, pins }` for a recipe
+- `POST /recipes/:id/lab/variants` — create variant; `order` auto-assigned if omitted
+- `PATCH /recipes/:id/lab/variants/:variantId` — update variant; setting `isBest: true` clears all other variants' `isBest` in a transaction
+- `DELETE /recipes/:id/lab/variants/:variantId`
+- `POST /recipes/:id/lab/attempts` — log an attempt
+- `DELETE /recipes/:id/lab/attempts/:attemptId`
+- `POST /recipes/:id/lab/pins` — create a pin annotation
+- `DELETE /recipes/:id/lab/pins/:pinId`
+
+All lab endpoints are auth-gated via `requireUser` and enforce userId ownership through the Recipe relation.
+
 ### API and data layers
 
 - Fastify app entry: `apps/api/src/app.ts`

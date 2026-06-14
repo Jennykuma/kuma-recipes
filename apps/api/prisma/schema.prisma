@@ -42,7 +42,7 @@ model RecipeVariant {
   tag         String?
   delta       Json?
   rating      Int?
-  isWinner    Boolean  @default(false)
+  isBest      Boolean  @default(false)
   ingredients Json
   steps       Json
   order       Int
