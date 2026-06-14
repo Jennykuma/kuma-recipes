@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
+import SaveCancelButtons from '../../../components/SaveCancelButtons';
 
 type EditableSourceProps = {
   source?: string;
@@ -72,18 +73,7 @@ const EditableSource = ({
               }
             }}
           />
-          <button
-            className="font-jua text-xs text-gray-400 hover:text-gray-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="font-jua text-xs text-blush-400 hover:text-blush-500 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
-            onClick={onSave}
-          >
-            Save
-          </button>
+          <SaveCancelButtons onCancel={onCancel} onSave={onSave} />
         </div>
       ) : (
         <div className="inline-flex items-center gap-1 min-w-0 max-w-full leading-none">

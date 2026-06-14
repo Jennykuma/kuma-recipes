@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import SaveCancelButtons from '../../../components/SaveCancelButtons';
 
 type NotesSectionProps = {
   notes?: string | null;
@@ -104,7 +105,7 @@ const NotesSection = ({
   if (isEditing) {
     return (
       <div className="flex h-full w-full min-w-0 flex-col">
-        <span className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300">
+        <span className="field-label text-gray-600 rounded-full dark:text-gray-300">
           Notes
         </span>
         <textarea
@@ -113,27 +114,14 @@ const NotesSection = ({
           className="
             h-[180px] w-full p-2 rounded-md text-xs
             resize-none bg-white border border-gray-200
-            placeholder:text-xs dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+            placeholder:text-xs dark:border-gray-700 dark:bg-canvas-card dark:text-gray-100
             focus:border-sage-300 focus:outline-none"
           value={draftValue ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
         ></textarea>
         {isEditing && (
           <div className="mt-1 flex justify-end gap-2">
-            <button
-              className="font-jua text-xs text-gray-400 hover:text-gray-500"
-              type="button"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={onSave}
-              className="font-jua text-xs text-blush-400 hover:text-blush-500"
-              type="submit"
-            >
-              Save
-            </button>
+            <SaveCancelButtons onCancel={onCancel!} onSave={onSave!} />
           </div>
         )}
       </div>
@@ -147,8 +135,7 @@ const NotesSection = ({
     <div className="flex h-full w-full min-w-0 flex-col">
       <span
         className="
-          text-[10px] uppercase tracking-wide
-          text-gray-600 rounded-full dark:text-gray-300"
+          field-label text-gray-600 rounded-full dark:text-gray-300"
       >
         Notes
       </span>
@@ -156,7 +143,7 @@ const NotesSection = ({
         className="
           min-h-0 max-h-[200px] w-full flex-1 p-2 rounded-md text-xs
           whitespace-pre-wrap wrap-break-word bg-white border border-gray-200
-          dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+          dark:border-gray-700 dark:bg-canvas-card dark:text-gray-100
           overflow-scroll"
         onClick={editable ? onEdit : undefined}
         role={editable ? 'button' : undefined}
