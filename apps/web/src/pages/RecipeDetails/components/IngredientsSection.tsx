@@ -146,7 +146,7 @@ const IngredientsSection = ({
                 <span className="line-break">{ingredient}</span>
                 <input
                   type="checkbox"
-                  className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
+                  className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
                 />
               </li>
             );

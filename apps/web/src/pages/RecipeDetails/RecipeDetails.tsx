@@ -241,7 +241,7 @@ const RecipeDetails = () => {
       summary={
         <>
           <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide text-gray-600 dark:text-gray-300">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-600 dark:text-gray-300">
               <CalendarPlus className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Created on
             </span>
@@ -259,7 +259,7 @@ const RecipeDetails = () => {
             )}
           </div>
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
               <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Yield
             </span>
@@ -282,7 +282,7 @@ const RecipeDetails = () => {
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
             <span
               id="recipe-rating-label"
-              className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide"
+              className="field-label inline-flex w-[110px] shrink-0 items-center gap-1"
             >
               <Star className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Rating
@@ -295,7 +295,7 @@ const RecipeDetails = () => {
             />
           </div>
           <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
-            <span className="inline-flex w-[110px] shrink-0 items-center gap-1 text-[10px] uppercase tracking-wide">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
               <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Source
             </span>

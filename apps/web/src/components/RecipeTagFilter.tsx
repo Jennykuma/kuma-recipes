@@ -83,7 +83,7 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
           rounded-xl border border-blush-200 bg-white py-1 pl-10 pr-16
           text-gray-800
           focus-within:border-blush-300 focus-within:ring-2 focus-within:ring-blush-100
-          dark:border-blush-300/70 dark:bg-[#2a2a2a] dark:text-gray-100
+          dark:border-blush-300/70 dark:bg-canvas-card dark:text-gray-100
           dark:focus-within:ring-blush-400/20"
       >
         <TagIcon
@@ -152,7 +152,7 @@ const RecipeTagFilter = ({ selectedTags, onChange }: RecipeTagFilterProps) => {
       </div>
 
       {dropdownOpen && (
-        <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-64 overflow-y-auto rounded-xl border border-blush-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none">
+        <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-64 overflow-y-auto rounded-xl border border-blush-100 bg-white shadow-sm dark:border-gray-700 dark:bg-canvas-card dark:shadow-none">
           {hasSelectedTags && (
             <button
               type="button"

@@ -53,14 +53,14 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
   return (
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm dark:bg-black/60"
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="importer-title"
         className={classNames(
-          'w-full p-4 max-w-lg rounded-xl bg-white shadow-xl dark:bg-[#2a2a2a]',
+          'w-full p-4 max-w-lg rounded-xl bg-white shadow-xl dark:bg-canvas-card',
           mode === 'text' ? 'min-h-96' : 'min-h-32'
         )}
       >

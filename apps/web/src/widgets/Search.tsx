@@ -22,7 +22,7 @@ const Search = ({ value, onChange }: SearchProps) => {
           pl-10 pr-9 py-1 rounded-xl text-sm
           outline-none focus:border-blush-300 focus:ring-2 focus:ring-blush-100
           placeholder:text-gray-400
-          dark:border-blush-300/70 dark:bg-[#2a2a2a] dark:text-gray-100
+          dark:border-blush-300/70 dark:bg-canvas-card dark:text-gray-100
           dark:placeholder:text-gray-400 dark:focus:ring-blush-400/20"
       />
       {value && (

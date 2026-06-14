@@ -29,7 +29,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
         gap-4 p-4 bg-white border border-gray-200
         rounded-xl shadow-md shadow-gray-100
         hover:shadow-none cursor-pointer
-        dark:border-gray-700 dark:bg-[#2a2a2a] dark:text-gray-100
+        dark:border-gray-700 dark:bg-canvas-card dark:text-gray-100
         dark:shadow-none dark:hover:border-gray-600"
       to={`/recipes/${id}`}
     >
@@ -76,7 +76,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                       bg-white px-3 py-2 text-left text-xs text-gray-700 break-words
                       opacity-0 shadow-lg shadow-gray-100 transition-opacity
                       group-hover:opacity-100
-                      dark:border-gray-700 dark:bg-[#333333] dark:text-gray-100 dark:shadow-none"
+                      dark:border-gray-700 dark:bg-canvas-raised dark:text-gray-100 dark:shadow-none"
                   >
                     {hiddenTags.map((tag) => tag.name).join(', ')}
                   </div>

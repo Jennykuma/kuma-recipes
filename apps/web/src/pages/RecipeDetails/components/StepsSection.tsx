@@ -173,7 +173,7 @@ const StepsSection = ({
                   type="checkbox"
                   checked={stepComplete}
                   aria-label={`Mark step ${index + 1} complete`}
-                  className="mt-2 h-3 w-3 bg-white accent-blush-200 border border-gray-300/70 dark:bg-[#2a2a2a] dark:border-gray-500"
+                  className="mt-2 h-3 w-3 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
                   onChange={() => toggleStep(index)}
                 />
               </li>

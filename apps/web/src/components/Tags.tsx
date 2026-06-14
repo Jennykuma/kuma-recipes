@@ -165,7 +165,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
   return (
     <div ref={containerRef} className="relative w-full">
       <div
-        className="min-h-[38px] w-full rounded-md border border-gray-200 bg-white px-2 py-1 flex flex-wrap gap-1 items-center dark:border-gray-700 dark:bg-[#2a2a2a]"
+        className="min-h-[38px] w-full rounded-md border border-gray-200 bg-white px-2 py-1 flex flex-wrap gap-1 items-center dark:border-gray-700 dark:bg-canvas-card"
         role="button"
         tabIndex={0}
         onClick={() => setDropdownOpen(true)}
@@ -217,7 +217,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
 
       {dropdownOpen && (
         <div
-          className={`absolute left-0 right-0 z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-[#2a2a2a] dark:shadow-none ${
+          className={`absolute left-0 right-0 z-30 overflow-y-auto rounded-md border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-canvas-card dark:shadow-none ${
             openUpward ? 'bottom-full mb-1' : 'top-full mt-1'
           }`}
           style={{ maxHeight: `${dropdownMaxHeight}px` }}

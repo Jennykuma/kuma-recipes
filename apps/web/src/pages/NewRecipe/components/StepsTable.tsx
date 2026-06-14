@@ -124,7 +124,7 @@ const StepsTable = ({
               </span>
               <input
                 className={classNames(
-                  'w-full text-sm pl-1 rounded-md border w-100 transition-colors focus:outline-none dark:bg-[#252525] dark:text-gray-100',
+                  'w-full text-sm pl-1 rounded-md border transition-colors focus:outline-none dark:bg-canvas-deep dark:text-gray-100',
                   activeIndex === index
                     ? 'border-sage-300 dark:border-sage-300'
                     : 'border-gray-200 dark:border-gray-600'
@@ -158,7 +158,7 @@ const StepsTable = ({
             'mt-2 inline-flex items-center gap-2 text-xs text-blush-400',
             'border border-blush-200 bg-white px-2.5 py-1.5 rounded-full',
             'hover:bg-blush-200 hover:text-white transition-colors disabled:cursor-not-allowed',
-            'dark:border-blush-300/60 dark:bg-[#2a2a2a] dark:text-blush-300',
+            'dark:border-blush-300/60 dark:bg-canvas-card dark:text-blush-300',
             'dark:hover:bg-blush-400 dark:hover:text-white',
             'disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
             'dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500',
