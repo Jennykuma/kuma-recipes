@@ -68,6 +68,8 @@ The Lab tab lives on the recipe details page and lets users track variants, atte
 - Lab service logic: `apps/api/src/services/lab/lab.service.ts`
 - Lab types (LabData, CreateVariantBody, UpdateVariantBody, CreateAttemptBody, CreatePinBody): `apps/api/src/services/lab/lab.types.ts`
 - Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
+- Web API client: `apps/web/src/api/lab.ts`
+- Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
 
 Endpoints:
 - `GET /recipes/:id/lab` — returns `{ variants, attempts, pins }` for a recipe
