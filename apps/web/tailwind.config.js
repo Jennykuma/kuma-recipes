@@ -24,6 +24,16 @@ export default {
         primary: '#7FB8A6',
         primarySoft: '#A7D7C5',
         accent: '#F2A1B3',
+
+        // dark mode palette
+        canvas: {
+          base: '#1f1f1f',    // page shell background
+          card: '#2a2a2a',    // cards, panels, inputs
+          deep: '#252525',    // table row inputs
+          inset: '#232323',   // badges, inset elements
+          raised: '#333333',  // tooltips, popovers
+          hover: '#303030',   // hover states
+        },
       },
       fontFamily: {
         nanum: ['"Nanum Pen Script"', 'cursive'],

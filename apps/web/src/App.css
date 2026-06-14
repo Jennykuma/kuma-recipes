@@ -37,6 +37,14 @@ html {
   @apply text-blush-400 hover:text-blush-200;
 }
 
+.input-sm {
+  @apply w-full p-1.5 rounded-md text-xs border border-gray-200 focus:border-sage-300 focus:outline-none;
+}
+
+.field-label {
+  @apply text-[10px] uppercase tracking-wide;
+}
+
 .auth-page {
   position: relative;
   min-height: 100vh;
