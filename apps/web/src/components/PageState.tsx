@@ -63,9 +63,7 @@ const PageState = ({
               )}
             </div>
 
-            <p
-              className={`mt-5 font-jua text-xs uppercase tracking-[0.32em] ${styles.eyebrow}`}
-            >
+            <p className={`mt-5 text-xs uppercase tracking-[0.32em] ${styles.eyebrow}`}>
               {variant === 'loading' ? 'One moment' : 'Something went wrong'}
             </p>
 
@@ -80,7 +78,7 @@ const PageState = ({
               <button
                 type="button"
                 onClick={onAction}
-                className="mt-6 inline-flex items-center gap-2 rounded-xl border border-blush-200 bg-white px-4 py-2 text-sm font-jua text-gray-700 shadow-sm transition-colors hover:bg-blush-50 dark:border-gray-600 dark:bg-canvas-inset dark:text-gray-100 dark:hover:bg-canvas-hover"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl border border-blush-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm transition-colors hover:bg-blush-50 dark:border-gray-600 dark:bg-canvas-inset dark:text-gray-100 dark:hover:bg-canvas-hover"
               >
                 {variant === 'error' ? (
                   <RefreshCcw className="h-4 w-4" aria-hidden="true" />

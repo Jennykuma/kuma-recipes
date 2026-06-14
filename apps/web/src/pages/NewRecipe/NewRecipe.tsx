@@ -157,7 +157,7 @@ const NewRecipe = () => {
                 <h1 className="text-lg font-bold">Create new recipe</h1>
                 <button
                   className="px-4 py-1.5 rounded-xl flex gap-2 items-center button-sm
-                    font-jua text-sm text-white transition-colors
+                    text-sm text-white transition-colors
                   bg-blush-400 hover:bg-blush-500 hover:text-white"
                   type="button"
                   onClick={() => setShowImporter(true)}
@@ -374,8 +374,7 @@ const NewRecipe = () => {
               <button
                 type="button"
                 className="
-                  font-jua text-sage-400 border border-sage-300
-                  bg-surface hover:bg-sage-100 px-4 py-1.5
+                  text-white bg-gray-300 hover:bg-gray-400 px-4 py-1.5
                   rounded-xl transition-colors"
                 onClick={() =>
                   shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
@@ -387,7 +386,6 @@ const NewRecipe = () => {
                 type="submit"
                 disabled={!canSaveRecipe}
                 className={classNames(
-                  'font-jua',
                   canSaveRecipe
                     ? 'bg-blush-400 hover:bg-blush-500'
                     : 'bg-blush-200 cursor-not-allowed',

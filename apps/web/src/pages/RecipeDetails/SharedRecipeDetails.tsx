@@ -72,7 +72,7 @@ const SharedRecipeDetails = () => {
     <RecipeDetailsView
       title={
         <h1
-          className="font-jua w-full text-lg flex-1 font-bold truncate sm:w-max-125"
+          className="w-full text-lg flex-1 font-bold truncate sm:w-max-125"
           title={sharedRecipe.title}
         >
           {sharedRecipe.title}

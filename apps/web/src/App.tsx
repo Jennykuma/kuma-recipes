@@ -72,7 +72,7 @@ const App = () => {
             tabIndex={0}
             className="
               inline-flex items-center gap-2 px-4 py-2 rounded-xl
-              font-jua text-sm text-white transition-colors
+              text-sm text-white transition-colors
               bg-blush-400 hover:bg-blush-500 hover:text-white"
             to={`/recipes/new`}
           >

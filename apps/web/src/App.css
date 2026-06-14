@@ -1,15 +1,31 @@
 @config "../tailwind.config.js";
 @import 'tailwindcss';
 
-.nanum-pen-script-regular {
-  font-family: 'Nanum Pen Script', cursive;
+.quicksand-regular {
+  font-family: 'Quicksand', sans-serif;
+  font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
 
-.jua-regular {
-  font-family: 'Jua', sans-serif;
-  font-weight: 400;
+.quicksand-medium {
+  font-family: 'Quicksand', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal
+}
+
+.quicksand-semibold {
+  font-family: 'Quicksand', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.quicksand-bold {
+  font-family: 'Quicksand', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
   font-style: normal;
 }
 

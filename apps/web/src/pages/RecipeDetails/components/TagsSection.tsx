@@ -78,14 +78,14 @@ const TagsSection = ({
             <Tags autoFocusInput />
             <div className="mt-1 flex gap-2 justify-end">
               <button
-                className="font-jua text-xs text-gray-400 hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
+                className="text-xs text-gray-400 hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
                 type="button"
                 onClick={handleCancel}
               >
                 Cancel
               </button>
               <button
-                className="font-jua text-xs text-blush-400 hover:text-blush-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
+                className="text-xs text-blush-400 hover:text-blush-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
                 type="submit"
               >
                 Save

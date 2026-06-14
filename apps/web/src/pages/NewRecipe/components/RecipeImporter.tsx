@@ -154,7 +154,6 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
           <button
             type="button"
             className={classNames(
-              'font-jua',
               'text-sm',
               'flex',
               'items-center',

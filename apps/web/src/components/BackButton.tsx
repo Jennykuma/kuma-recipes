@@ -25,14 +25,14 @@ const BackButton = ({ to, onClick }: BackButtonProps) => {
       type="button"
       tabIndex={0}
       className="
-        font-jua text-xs text-gray-400 p-0 w-fit
+        text-xs text-gray-400 p-0 w-fit font-semibold
         visited:text-gray-400 hover:text-accent
         inline-flex items-center gap-1
         transition-colors"
       onClick={handleClick}
     >
       <MoveLeft className="w-3 h-3 translate-y-[0.5px]" />
-      Back
+      Back to recipes
     </button>
   );
 };

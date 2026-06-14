@@ -37,7 +37,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
         <div className="flex min-w-0 flex-1 flex-col text-center text-sm">
           <div className="flex h-16 flex-col items-center justify-center">
             <span
-              className="font-jua text-md block w-full min-w-0 max-w-full truncate"
+              className="quicksand-bold text-md block w-full min-w-0 max-w-full truncate"
               title={title}
             >
               {title}

@@ -23,7 +23,7 @@ const AuthLoadingScreen = () => {
         ].join(' ')}
       >
         <span className="h-2 w-2 rounded-full bg-blush-400 animate-pulse" />
-        <span className="font-jua">Checking your session</span>
+        <span>Checking your session</span>
       </div>
     </main>
   );

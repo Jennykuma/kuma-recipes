@@ -7,7 +7,10 @@ type DeleteModalProps = {
 const DeleteModal = ({ onClose, onConfirm, title }: DeleteModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60"
+        aria-hidden="true"
+      />
       <div
         role="dialog"
         aria-modal="true"
@@ -20,13 +23,13 @@ const DeleteModal = ({ onClose, onConfirm, title }: DeleteModalProps) => {
         </p>
         <div className="mt-4 flex justify-end gap-2">
           <button
-            className="font-jua rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100"
+            className="rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="font-jua rounded-md bg-red-500 px-3 py-1.5 text-xs text-white hover:bg-red-600"
+            className="rounded-md bg-red-500 px-3 py-1.5 text-xs text-white hover:bg-red-600"
             onClick={onConfirm}
           >
             Delete

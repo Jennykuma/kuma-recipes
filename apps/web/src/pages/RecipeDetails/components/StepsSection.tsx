@@ -132,14 +132,14 @@ const StepsSection = ({
             <StepsTable keepAddButtonVisible />
             <div className="mt-1 flex shrink-0 gap-2 justify-end">
               <button
-                className="font-jua text-xs text-gray-400 hover:text-gray-500"
+                className="text-xs text-gray-400 hover:text-gray-500"
                 type="button"
                 onClick={handleCancel}
               >
                 Cancel
               </button>
               <button
-                className="font-jua text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
+                className="text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={!canSave}
               >
