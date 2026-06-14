@@ -60,8 +60,8 @@ const App = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
-      <div className="mx-auto flex w-full max-w-[82rem] flex-col">
+    <div className="min-h-screen bg-white p-4 sm:p-6 xl:px-10 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
+      <div className="mx-auto flex w-full max-w-[120rem] flex-col">
         <header className="flex justify-between gap-4">
           <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
             Kuma Recipes 🧸
@@ -94,8 +94,8 @@ const App = () => {
         <div
           data-testid="recipe-list"
           className="
-                        grid grid-cols-1 gap-4 pt-6 pb-6
-                        md:grid-cols-3"
+            grid grid-cols-1 gap-4 pt-6 pb-6
+            sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {filteredRecipes?.map((recipe) => (
             <RecipeCard
