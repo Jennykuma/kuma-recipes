@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useForm, FormProvider, Controller, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import PageShell from '../../components/PageShell';
 import IngredientsTable from './components/IngredientsTable';
 import Rating from '../../components/Rating';
 import StepsTable from './components/StepsTable';
@@ -139,7 +140,7 @@ const NewRecipe = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6 text-gray-900 md:h-dvh md:overflow-hidden dark:bg-[#1f1f1f] dark:text-gray-100">
+    <PageShell className="p-6 md:h-dvh md:overflow-hidden">
       <div className="mx-auto flex w-full max-w-7xl flex-col md:h-full md:min-h-0">
         <FormProvider {...methods}>
           <form
@@ -199,7 +200,7 @@ const NewRecipe = () => {
                       <div className="flex items-center gap-2">
                         <label
                           htmlFor="title"
-                          className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                          className="field-label flex gap-1 items-center"
                         >
                           <IdCard className="h-3 w-3 text-gray-400" aria-hidden="true" />
                           <span>
@@ -210,9 +211,7 @@ const NewRecipe = () => {
                         <input
                           id="title"
                           type="text"
-                          className="
-                            w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 focus:border-sage-300 focus:outline-none"
+                          className="input-sm"
                           placeholder="e.g. Grandma's apple pie"
                           {...register('title', {
                             setValueAs: (value) => value.trim(),
@@ -226,7 +225,7 @@ const NewRecipe = () => {
                       <div className="flex items-center gap-2">
                         <label
                           htmlFor="yield"
-                          className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                          className="field-label flex gap-1 items-center"
                         >
                           <PieChart
                             className="h-3 w-3 text-gray-400"
@@ -237,9 +236,7 @@ const NewRecipe = () => {
                         <input
                           id="yield"
                           type="text"
-                          className="
-                            w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 focus:border-sage-300 focus:outline-none"
+                          className="input-sm"
                           placeholder="e.g. 4 servings or 12 cookies"
                           {...register('yield')}
                         />
@@ -247,7 +244,7 @@ const NewRecipe = () => {
                       <div className="flex gap-2 items-center">
                         <span
                           id="rating-label"
-                          className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                          className="field-label flex gap-1 items-center"
                         >
                           <Star className="h-3 w-3 text-gray-400" aria-hidden="true" />
                           Rating
@@ -269,16 +266,14 @@ const NewRecipe = () => {
                       <div className="flex items-center gap-2">
                         <label
                           htmlFor="source"
-                          className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                          className="field-label flex gap-1 items-center"
                         >
                           <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
                           Source
                         </label>
                         <input
                           type="text"
-                          className="
-                            w-full p-1.5 rounded-md text-xs resize-none
-                            border border-gray-200 focus:border-sage-300 focus:outline-none"
+                          className="input-sm"
                           placeholder="Original recipe URL"
                           id="source"
                           {...register('source')}
@@ -287,7 +282,7 @@ const NewRecipe = () => {
                       <div className="space-y-1 mb-4">
                         <label
                           htmlFor="tags-input"
-                          className="flex gap-1 items-center text-[10px] text-left uppercase tracking-wide"
+                          className="field-label flex gap-1 items-center"
                         >
                           <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
                           Tags
@@ -298,7 +293,7 @@ const NewRecipe = () => {
                     <div className="flex w-full min-w-0 flex-col lg:self-stretch">
                       <label
                         htmlFor="notes"
-                        className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300"
+                        className="field-label text-gray-600 rounded-full dark:text-gray-300"
                       >
                         Notes
                       </label>
@@ -307,7 +302,7 @@ const NewRecipe = () => {
                           h-24 lg:h-full w-full p-2 rounded-md text-xs
                           resize-none bg-white border border-gray-200
                           focus:border-sage-300 focus:outline-none dark:border-gray-700
-                          dark:bg-[#2a2a2a] dark:text-gray-100"
+                          dark:bg-canvas-card dark:text-gray-100"
                         id="notes"
                         rows={4}
                         placeholder="e.g. too sweet, bake 2 min longer next time"
@@ -326,7 +321,7 @@ const NewRecipe = () => {
                     <div className="flex flex-row items-baseline gap-1">
                       <span
                         id="ingredients-label"
-                        className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300"
+                        className="field-label text-gray-500 rounded-full dark:text-gray-300"
                       >
                         Ingredients
                         <span className="align-top text-red-500">*</span>
@@ -355,7 +350,7 @@ const NewRecipe = () => {
                   <div className="flex flex-row items-baseline gap-1">
                     <span
                       id="steps-label"
-                      className="text-[10px] uppercase tracking-wide text-gray-600 rounded-full dark:text-gray-300"
+                      className="field-label text-gray-600 rounded-full dark:text-gray-300"
                     >
                       Steps
                       <span className="align-top text-red-500">*</span>
@@ -417,7 +412,7 @@ const NewRecipe = () => {
           />
         )}
       </div>
-    </div>
+    </PageShell>
   );
 };
 

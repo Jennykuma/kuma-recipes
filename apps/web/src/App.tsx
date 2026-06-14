@@ -3,6 +3,7 @@ import type { RecipeListItem } from '../../api/src/services/recipes/recipes.type
 import type { Tag } from '../../api/src/services/tags/tags.types';
 import useRecipes from './hooks/recipes/useRecipes';
 import PageState from './components/PageState';
+import PageShell from './components/PageShell';
 import RecipeCard from './components/RecipeCard';
 import RecipeTagFilter from './components/RecipeTagFilter';
 import Search from './widgets/Search';
@@ -60,7 +61,7 @@ const App = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-4 sm:p-6 xl:px-10 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
+    <PageShell className="p-4 sm:p-6 xl:px-10">
       <div className="mx-auto flex w-full max-w-[120rem] flex-col">
         <header className="flex justify-between gap-4">
           <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
@@ -109,7 +110,7 @@ const App = () => {
           ))}
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

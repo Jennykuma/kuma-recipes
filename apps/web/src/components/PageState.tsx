@@ -1,3 +1,4 @@
+import PageShell from './PageShell';
 import { CircleAlert, LoaderCircle, RefreshCcw } from 'lucide-react';
 
 type PageStateProps = {
@@ -11,18 +12,18 @@ type PageStateProps = {
 const stylesByVariant = {
   loading: {
     panel:
-      'border-blush-100/80 bg-[linear-gradient(145deg,rgba(255,249,251,0.96),rgba(246,251,248,0.96))] dark:border-gray-700 dark:bg-[#2a2a2a]',
+      'border-blush-100/80 bg-[linear-gradient(145deg,rgba(255,249,251,0.96),rgba(246,251,248,0.96))] dark:border-gray-700 dark:bg-canvas-card',
     badge:
-      'border-blush-100 bg-white/90 text-blush-400 dark:border-gray-600 dark:bg-[#232323]',
+      'border-blush-100 bg-white/90 text-blush-400 dark:border-gray-600 dark:bg-canvas-inset',
     eyebrow: 'text-blush-500/80 dark:text-blush-300',
     role: 'status' as const,
     live: 'polite' as const,
   },
   error: {
     panel:
-      'border-rose-100/80 bg-[linear-gradient(145deg,rgba(255,247,248,0.97),rgba(255,252,249,0.95))] dark:border-gray-700 dark:bg-[#2a2a2a]',
+      'border-rose-100/80 bg-[linear-gradient(145deg,rgba(255,247,248,0.97),rgba(255,252,249,0.95))] dark:border-gray-700 dark:bg-canvas-card',
     badge:
-      'border-rose-100 bg-white/90 text-rose-500 dark:border-gray-600 dark:bg-[#232323]',
+      'border-rose-100 bg-white/90 text-rose-500 dark:border-gray-600 dark:bg-canvas-inset',
     eyebrow: 'text-rose-500/80 dark:text-rose-300',
     role: 'alert' as const,
     live: 'assertive' as const,
@@ -39,7 +40,7 @@ const PageState = ({
   const styles = stylesByVariant[variant];
 
   return (
-    <div className="min-h-screen bg-white p-6 text-gray-900 dark:bg-[#1f1f1f] dark:text-gray-100">
+    <PageShell className="p-6">
       <div className="mx-auto flex w-full max-w-3xl items-center justify-center py-10 sm:py-16">
         <section
           role={styles.role}
@@ -79,7 +80,7 @@ const PageState = ({
               <button
                 type="button"
                 onClick={onAction}
-                className="mt-6 inline-flex items-center gap-2 rounded-xl border border-blush-200 bg-white px-4 py-2 text-sm font-jua text-gray-700 shadow-sm transition-colors hover:bg-blush-50 dark:border-gray-600 dark:bg-[#232323] dark:text-gray-100 dark:hover:bg-[#303030]"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl border border-blush-200 bg-white px-4 py-2 text-sm font-jua text-gray-700 shadow-sm transition-colors hover:bg-blush-50 dark:border-gray-600 dark:bg-canvas-inset dark:text-gray-100 dark:hover:bg-canvas-hover"
               >
                 {variant === 'error' ? (
                   <RefreshCcw className="h-4 w-4" aria-hidden="true" />
@@ -90,7 +91,7 @@ const PageState = ({
           </div>
         </section>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
