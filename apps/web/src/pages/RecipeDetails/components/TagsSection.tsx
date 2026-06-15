@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil, Tag as TagIcon } from 'lucide-react';
 import Tags from '../../../components/Tags';
 import type { Tag } from '../../../../../api/src/services/tags/tags.types';
+import useEditFormAutoSave from './useEditFormAutoSave';
 
 type TagsSectionProps = {
   tags?: Tag[];
@@ -17,6 +18,10 @@ type TagsFormValues = {
   tagIds: string[];
 };
 
+const getDefaultTagFormValues = (tags?: Tag[]): TagsFormValues => ({
+  tagIds: tags?.map((tag) => tag.id) ?? [],
+});
+
 const TagsSection = ({
   tags,
   editable = true,
@@ -27,67 +32,32 @@ const TagsSection = ({
 }: TagsSectionProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TagsFormValues>({
-    defaultValues: {
-      tagIds: tags?.map((tag) => tag.id) ?? [],
-    },
+    defaultValues: getDefaultTagFormValues(tags),
   });
 
-  useEffect(() => {
-    form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
-  }, [tags, form]);
+  const resetForm = useCallback(() => {
+    form.reset(getDefaultTagFormValues(tags));
+  }, [form, tags]);
 
   useEffect(() => {
-    const formElement = formRef.current;
-    if (!formElement || !isEditing) {
-      return;
-    }
+    resetForm();
+  }, [resetForm]);
 
-    let saveTimeoutId: number | null = null;
+  const handleCancel = useCallback(() => {
+    resetForm();
+    onCancel?.();
+  }, [onCancel, resetForm]);
 
-    const handleFocusOut = (event: FocusEvent) => {
-      const nextFocusedElement = event.relatedTarget as Node | null;
+  const handleSave = useCallback(() => {
+    onSave?.(form.getValues('tagIds') ?? []);
+  }, [form, onSave]);
 
-      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
-        return;
-      }
-
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      saveTimeoutId = window.setTimeout(() => {
-        if (formElement.contains(document.activeElement)) {
-          return;
-        }
-
-        onSave?.(form.getValues('tagIds') ?? []);
-      }, 0);
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') {
-        return;
-      }
-
-      event.preventDefault();
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-      form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
-      onCancel?.();
-    };
-
-    formElement.addEventListener('focusout', handleFocusOut);
-    formElement.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-      formElement.removeEventListener('focusout', handleFocusOut);
-      formElement.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [form, isEditing, onCancel, onSave, tags]);
+  useEditFormAutoSave({
+    formRef,
+    isEditing,
+    onSave: handleSave,
+    onCancel: handleCancel,
+  });
 
   return (
     <div className="w-full">

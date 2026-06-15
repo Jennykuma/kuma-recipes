@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
 import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
+import useEditFormAutoSave from './useEditFormAutoSave';
+import useEditFormViewportLimit from './useEditFormViewportLimit';
 
 type StepsSectionProps = {
   steps?: string[];
@@ -12,6 +14,13 @@ type StepsSectionProps = {
   onSave?: (steps: string[]) => void;
   onCancel?: () => void;
 };
+
+const getDefaultStepFormValues = (steps?: string[]): StepsForm => ({
+  steps: (steps ?? ['']).map((step) => ({ step })),
+});
+
+const normalizeSteps = ({ steps }: StepsForm) =>
+  steps.map((stepRow) => stepRow.step.trim()).filter((step) => step.length > 0);
 
 const StepsSection = ({
   steps,
@@ -25,119 +34,41 @@ const StepsSection = ({
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
   const form = useForm<StepsForm>({
-    defaultValues: {
-      steps: (steps ?? ['']).map((step) => ({ step })),
-    },
+    defaultValues: getDefaultStepFormValues(steps),
   });
 
-  useEffect(() => {
-    form.reset({
-      steps: (steps ?? ['']).map((step) => ({ step })),
-    });
-  }, [steps, form]);
+  const resetForm = useCallback(() => {
+    form.reset(getDefaultStepFormValues(steps));
+  }, [form, steps]);
 
   useEffect(() => {
-    if (!isEditing) return;
+    resetForm();
+  }, [resetForm]);
 
-    const updateFormMaxHeight = () => {
-      const editForm = editFormRef.current;
-      if (!editForm) return;
+  useEditFormViewportLimit(editFormRef, isEditing);
 
-      if (!window.matchMedia('(min-width: 768px)').matches) {
-        editForm.style.maxHeight = '';
-        return;
-      }
+  const handleCancel = useCallback(() => {
+    resetForm();
+    onCancel?.();
+  }, [onCancel, resetForm]);
 
-      const viewportPadding = 32;
-      const formTop = editForm.getBoundingClientRect().top;
-      const maxHeight = Math.max(160, window.innerHeight - formTop - viewportPadding);
+  const handleSave = useCallback(() => {
+    const normalizedStepValues = normalizeSteps(form.getValues());
 
-      editForm.style.maxHeight = `${maxHeight}px`;
-    };
-
-    updateFormMaxHeight();
-    window.addEventListener('resize', updateFormMaxHeight);
-    window.addEventListener('scroll', updateFormMaxHeight, true);
-
-    return () => {
-      window.removeEventListener('resize', updateFormMaxHeight);
-      window.removeEventListener('scroll', updateFormMaxHeight, true);
-    };
-  }, [isEditing]);
-
-  const normalizeSteps = (data: StepsForm) =>
-    data.steps
-      .map((stepRow) => stepRow.step.trim())
-      .filter((step) => step.length > 0);
-
-  useEffect(() => {
-    const formElement = editFormRef.current;
-    if (!formElement || !isEditing) {
+    if (normalizedStepValues.length === 0) {
+      handleCancel();
       return;
     }
 
-    let saveTimeoutId: number | null = null;
+    onSave?.(normalizedStepValues);
+  }, [form, handleCancel, onSave]);
 
-    const handleFocusOut = (event: FocusEvent) => {
-      const nextFocusedElement = event.relatedTarget as Node | null;
-
-      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
-        return;
-      }
-
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      saveTimeoutId = window.setTimeout(() => {
-        if (formElement.contains(document.activeElement)) {
-          return;
-        }
-
-        const currentValues = form.getValues();
-        const normalizedSteps = normalizeSteps(currentValues);
-
-        if (normalizedSteps.length === 0) {
-          form.reset({
-            steps: (steps ?? ['']).map((step) => ({ step })),
-          });
-          onCancel?.();
-          return;
-        }
-
-        onSave?.(normalizedSteps);
-      }, 0);
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') {
-        return;
-      }
-
-      event.preventDefault();
-
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      form.reset({
-        steps: (steps ?? ['']).map((step) => ({ step })),
-      });
-      onCancel?.();
-    };
-
-    formElement.addEventListener('focusout', handleFocusOut);
-    formElement.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      formElement.removeEventListener('focusout', handleFocusOut);
-      formElement.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [form, isEditing, onCancel, onSave, steps]);
+  useEditFormAutoSave({
+    formRef: editFormRef,
+    isEditing,
+    onSave: handleSave,
+    onCancel: handleCancel,
+  });
 
   const toggleStep = (index: number) => {
     setCompletedSteps((prev) => {

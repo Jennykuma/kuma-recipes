@@ -10,7 +10,10 @@ import {
   useToast,
   useLabData,
 } from '../../hooks';
-import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
+import {
+  type Recipe,
+  type UpdateRecipeBody,
+} from '../../../../api/src/services/recipes/recipes.types';
 import RDLabTab from '../RecipeLab/RDLabTab';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
@@ -29,6 +32,11 @@ import ShareRecipe from './components/ShareRecipe';
 import RecipeDetailsView from './RecipeDetailsView';
 import RecipeDetailsSkeleton from './RecipeDetailsSkeleton';
 import PageState from '../../components/PageState';
+
+type DraftEditableField = 'title' | 'yield' | 'source' | 'notes';
+
+const areStringListsEqual = (left: string[], right: string[]) =>
+  left.length === right.length && left.every((item, index) => item === right[index]);
 
 const RecipeDetails = () => {
   const navigate = useNavigate();
@@ -61,15 +69,61 @@ const RecipeDetails = () => {
 
   const bestVariant = labData?.variants.find((v) => v.isBest);
 
-  const areStringListsEqual = (left: string[], right: string[]) =>
-    left.length === right.length && left.every((item, index) => item === right[index]);
-
   const clearDraftField = (field: keyof Recipe) => {
     setDraft((prev) => {
       const next = { ...prev };
       delete next[field];
       return next;
     });
+  };
+
+  const closeEditor = (field?: keyof Recipe) => {
+    if (field) {
+      clearDraftField(field);
+    }
+
+    if (field === 'title') {
+      setTitleError(null);
+    }
+
+    setEditingField(null);
+  };
+
+  const beginDraftEdit = (field: DraftEditableField, value: string) => {
+    setDraft((prev) => ({ ...prev, [field]: value }));
+
+    if (field === 'title') {
+      setTitleError(null);
+    }
+
+    setEditingField(field);
+  };
+
+  const updateDraftValue = (field: DraftEditableField, value: string) => {
+    setDraft((prev) => ({ ...prev, [field]: value }));
+
+    if (field === 'title' && value.trim()) {
+      setTitleError(null);
+    }
+  };
+
+  const applyRecipeUpdate = async (
+    payload: UpdateRecipeBody,
+    {
+      onSuccess,
+      onError,
+    }: {
+      onSuccess?: () => void;
+      onError?: () => void;
+    } = {}
+  ) => {
+    try {
+      await updateRecipeAsync(payload);
+      onSuccess?.();
+    } catch (err) {
+      console.error(err);
+      onError?.();
+    }
   };
 
   const handleChangeRating = (rating: number) => {
@@ -83,11 +137,7 @@ const RecipeDetails = () => {
   };
 
   const handleCancel = (field: keyof Recipe) => {
-    clearDraftField(field);
-    if (field === 'title') {
-      setTitleError(null);
-    }
-    setEditingField(null);
+    closeEditor(field);
   };
 
   const handleDelete = () => {
@@ -111,12 +161,10 @@ const RecipeDetails = () => {
       return;
     }
 
-    try {
-      await updateRecipeAsync({ ingredients: normalizedIngredients });
-      setEditingField(null);
-    } catch (err) {
-      console.error(err);
-    }
+    await applyRecipeUpdate(
+      { ingredients: normalizedIngredients },
+      { onSuccess: () => setEditingField(null) }
+    );
   };
 
   const handleIngredientsCancel = () => {
@@ -130,12 +178,10 @@ const RecipeDetails = () => {
       return;
     }
 
-    try {
-      await updateRecipeAsync({ steps: normalizedSteps });
-      setEditingField(null);
-    } catch (err) {
-      console.error(err);
-    }
+    await applyRecipeUpdate(
+      { steps: normalizedSteps },
+      { onSuccess: () => setEditingField(null) }
+    );
   };
 
   const handleStepsCancel = () => {
@@ -144,20 +190,12 @@ const RecipeDetails = () => {
 
   const handleTagsSave = async (tagIds: string[]) => {
     const currentTagIds = recipe?.tags?.map((tag) => tag.id) ?? [];
-    if (
-      currentTagIds.length === tagIds.length &&
-      currentTagIds.every((tagId, index) => tagId === tagIds[index])
-    ) {
+    if (areStringListsEqual(currentTagIds, tagIds)) {
       setEditingField(null);
       return;
     }
 
-    try {
-      await updateRecipeAsync({ tagIds });
-      setEditingField(null);
-    } catch (err) {
-      console.error(err);
-    }
+    await applyRecipeUpdate({ tagIds }, { onSuccess: () => setEditingField(null) });
   };
 
   const handleTagsCancel = () => {
@@ -174,21 +212,17 @@ const RecipeDetails = () => {
     }
 
     if (title === currentTitle) {
-      clearDraftField('title');
-      setTitleError(null);
-      setEditingField(null);
+      closeEditor('title');
       return;
     }
 
-    try {
-      await updateRecipeAsync({ title });
-      clearDraftField('title');
-      setTitleError(null);
-      setEditingField(null);
-    } catch (err) {
-      console.error(err);
-      handleCancel('title');
-    }
+    await applyRecipeUpdate(
+      { title },
+      {
+        onSuccess: () => closeEditor('title'),
+        onError: () => handleCancel('title'),
+      }
+    );
   };
 
   const handleSave = async (field: keyof Recipe) => {
@@ -196,19 +230,14 @@ const RecipeDetails = () => {
     if (value === undefined) return;
 
     if (value === recipe?.[field]) {
-      clearDraftField(field);
-      setEditingField(null);
+      closeEditor(field);
       return;
     }
 
-    try {
-      await updateRecipeAsync({ [field]: value });
-      clearDraftField(field);
-      setEditingField(null);
-    } catch (err) {
-      console.error(err);
-      handleCancel(field);
-    }
+    await applyRecipeUpdate({ [field]: value } as UpdateRecipeBody, {
+      onSuccess: () => closeEditor(field),
+      onError: () => handleCancel(field),
+    });
   };
 
   const handlePhotoUpload = (photo: File) => {
@@ -281,17 +310,8 @@ const RecipeDetails = () => {
             isEditing={editingField === 'title'}
             draftValue={draft.title}
             error={titleError ?? undefined}
-            onEdit={() => {
-              setDraft({ ...draft, title: recipe?.title ?? '' });
-              setTitleError(null);
-              setEditingField('title');
-            }}
-            onChange={(value) => {
-              setDraft({ ...draft, title: value });
-              if (value.trim()) {
-                setTitleError(null);
-              }
-            }}
+            onEdit={() => beginDraftEdit('title', recipe?.title ?? '')}
+            onChange={(value) => updateDraftValue('title', value)}
             onSave={handleTitleSave}
             onCancel={() => handleCancel('title')}
           />
@@ -360,14 +380,8 @@ const RecipeDetails = () => {
               recipeYield={recipe?.yield}
               isEditing={editingField === 'yield'}
               draftValue={draft.yield}
-              onEdit={() => {
-                setDraft({
-                  ...draft,
-                  yield: recipe?.yield ?? '',
-                });
-                setEditingField('yield');
-              }}
-              onChange={(value) => setDraft({ ...draft, yield: value })}
+              onEdit={() => beginDraftEdit('yield', recipe?.yield ?? '')}
+              onChange={(value) => updateDraftValue('yield', value)}
               onSave={() => handleSave('yield')}
               onCancel={() => handleCancel('yield')}
             />
@@ -398,14 +412,8 @@ const RecipeDetails = () => {
                 isEditing={editingField === 'source'}
                 draftValue={draft.source}
                 hideLabel
-                onEdit={() => {
-                  setDraft({
-                    ...draft,
-                    source: recipe?.source ?? '',
-                  });
-                  setEditingField('source');
-                }}
-                onChange={(value) => setDraft({ ...draft, source: value })}
+                onEdit={() => beginDraftEdit('source', recipe?.source ?? '')}
+                onChange={(value) => updateDraftValue('source', value)}
                 onSave={() => handleSave('source')}
                 onCancel={() => handleCancel('source')}
               />
@@ -425,14 +433,8 @@ const RecipeDetails = () => {
           notes={recipe?.notes}
           isEditing={editingField === 'notes'}
           draftValue={draft.notes}
-          onEdit={() => {
-            setDraft({
-              ...draft,
-              notes: recipe?.notes ?? '',
-            });
-            setEditingField('notes');
-          }}
-          onChange={(value) => setDraft({ ...draft, notes: value })}
+          onEdit={() => beginDraftEdit('notes', recipe?.notes ?? '')}
+          onChange={(value) => updateDraftValue('notes', value)}
           onSave={() => handleSave('notes')}
           onCancel={() => handleCancel('notes')}
         />

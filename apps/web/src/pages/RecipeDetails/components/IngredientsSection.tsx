@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
 import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
+import useEditFormAutoSave from './useEditFormAutoSave';
+import useEditFormViewportLimit from './useEditFormViewportLimit';
 
 type IngredientsSectionProps = {
   ingredients?: string[];
@@ -12,6 +14,15 @@ type IngredientsSectionProps = {
   onSave?: (ingredients: string[]) => void;
   onCancel?: () => void;
 };
+
+const getDefaultIngredientFormValues = (ingredients?: string[]): IngredientsForm => ({
+  ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
+});
+
+const normalizeIngredients = ({ ingredients }: IngredientsForm) =>
+  ingredients
+    .map((ingredientRow) => ingredientRow.ingredient.trim())
+    .filter((ingredient) => ingredient.length > 0);
 
 const IngredientsSection = ({
   ingredients,
@@ -23,119 +34,41 @@ const IngredientsSection = ({
 }: IngredientsSectionProps) => {
   const editFormRef = useRef<HTMLFormElement>(null);
   const form = useForm<IngredientsForm>({
-    defaultValues: {
-      ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
-    },
+    defaultValues: getDefaultIngredientFormValues(ingredients),
   });
 
-  useEffect(() => {
-    form.reset({
-      ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
-    });
-  }, [ingredients, form]);
+  const resetForm = useCallback(() => {
+    form.reset(getDefaultIngredientFormValues(ingredients));
+  }, [form, ingredients]);
 
   useEffect(() => {
-    if (!isEditing) return;
+    resetForm();
+  }, [resetForm]);
 
-    const updateFormMaxHeight = () => {
-      const editForm = editFormRef.current;
-      if (!editForm) return;
+  useEditFormViewportLimit(editFormRef, isEditing);
 
-      if (!window.matchMedia('(min-width: 768px)').matches) {
-        editForm.style.maxHeight = '';
-        return;
-      }
+  const handleCancel = useCallback(() => {
+    resetForm();
+    onCancel?.();
+  }, [onCancel, resetForm]);
 
-      const viewportPadding = 32;
-      const formTop = editForm.getBoundingClientRect().top;
-      const maxHeight = Math.max(160, window.innerHeight - formTop - viewportPadding);
+  const handleSave = useCallback(() => {
+    const normalizedIngredientValues = normalizeIngredients(form.getValues());
 
-      editForm.style.maxHeight = `${maxHeight}px`;
-    };
-
-    updateFormMaxHeight();
-    window.addEventListener('resize', updateFormMaxHeight);
-    window.addEventListener('scroll', updateFormMaxHeight, true);
-
-    return () => {
-      window.removeEventListener('resize', updateFormMaxHeight);
-      window.removeEventListener('scroll', updateFormMaxHeight, true);
-    };
-  }, [isEditing]);
-
-  const normalizeIngredients = (data: IngredientsForm) =>
-    data.ingredients
-      .map((ingredientRow) => ingredientRow.ingredient.trim())
-      .filter((ingredient) => ingredient.length > 0);
-
-  useEffect(() => {
-    const formElement = editFormRef.current;
-    if (!formElement || !isEditing) {
+    if (normalizedIngredientValues.length === 0) {
+      handleCancel();
       return;
     }
 
-    let saveTimeoutId: number | null = null;
+    onSave?.(normalizedIngredientValues);
+  }, [form, handleCancel, onSave]);
 
-    const handleFocusOut = (event: FocusEvent) => {
-      const nextFocusedElement = event.relatedTarget as Node | null;
-
-      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
-        return;
-      }
-
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      saveTimeoutId = window.setTimeout(() => {
-        if (formElement.contains(document.activeElement)) {
-          return;
-        }
-
-        const currentValues = form.getValues();
-        const normalizedIngredients = normalizeIngredients(currentValues);
-
-        if (normalizedIngredients.length === 0) {
-          form.reset({
-            ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
-          });
-          onCancel?.();
-          return;
-        }
-
-        onSave?.(normalizedIngredients);
-      }, 0);
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') {
-        return;
-      }
-
-      event.preventDefault();
-
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      form.reset({
-        ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
-      });
-      onCancel?.();
-    };
-
-    formElement.addEventListener('focusout', handleFocusOut);
-    formElement.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      if (saveTimeoutId !== null) {
-        window.clearTimeout(saveTimeoutId);
-      }
-
-      formElement.removeEventListener('focusout', handleFocusOut);
-      formElement.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [form, ingredients, isEditing, onCancel, onSave]);
+  useEditFormAutoSave({
+    formRef: editFormRef,
+    isEditing,
+    onSave: handleSave,
+    onCancel: handleCancel,
+  });
 
   return (
     <div className="w-full max-w-125">
