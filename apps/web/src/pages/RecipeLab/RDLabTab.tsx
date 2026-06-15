@@ -20,6 +20,12 @@ type RDLabTabProps = {
   labData: LabData;
 };
 
+const NOTE_COLORS = ['#FEFCE8', '#F0FDF4', '#EFF6FF', '#FDF4FF', '#FFF7ED'];
+const randomNoteStyle = () => ({
+  color: NOTE_COLORS[Math.floor(Math.random() * NOTE_COLORS.length)],
+  rotation: parseFloat((Math.random() * 6 - 3).toFixed(1)),
+});
+
 const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
     labData.variants.find((v) => v.isBest)?.id ?? labData.variants[0]?.id ?? null
@@ -31,12 +37,6 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
   const { mutate: deleteAttempt } = useDeleteAttempt(recipeId);
   const { mutate: deletePin } = useDeletePin(recipeId);
   const { mutate: createPin } = useCreatePin(recipeId);
-
-  const NOTE_COLORS = ['#FEFCE8', '#F0FDF4', '#EFF6FF', '#FDF4FF', '#FFF7ED'];
-  const randomNoteStyle = () => ({
-    color: NOTE_COLORS[Math.floor(Math.random() * NOTE_COLORS.length)],
-    rotation: parseFloat((Math.random() * 6 - 3).toFixed(1)),
-  });
 
   const selectedVariant =
     labData.variants.find((v) => v.id === selectedVariantId) ?? null;

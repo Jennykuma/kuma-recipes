@@ -38,6 +38,77 @@ const insertAt = <T,>(arr: T[], idx: number, item: T): T[] => [
 
 const removeAt = <T,>(arr: T[], idx: number): T[] => arr.filter((_, i) => i !== idx);
 
+type EditableItemListProps = {
+  items: EditableItem[];
+  onChange: (items: EditableItem[]) => void;
+  ordered?: boolean;
+};
+
+const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) => {
+  const refs = useRef<(HTMLInputElement | null)[]>([]);
+  const Tag = ordered ? 'ol' : 'ul';
+
+  return (
+    <Tag className="mt-2 flex flex-col gap-1.5">
+      {items.map((item, idx) => (
+        <li key={idx} className={`flex gap-2 ${ordered ? 'items-start' : 'items-center'}`}>
+          {ordered && (
+            <span className="w-4 shrink-0 pt-2 text-right text-xs tabular-nums text-gray-500">
+              {idx + 1}.
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => onChange(cycleStatus(items, idx))}
+            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium transition ${STATUS_CLASS[item.status]} ${ordered ? 'mt-1' : ''}`}
+            aria-label={`Status: ${item.status}. Click to change`}
+          >
+            {item.status}
+          </button>
+          <input
+            ref={(el) => { refs.current[idx] = el; }}
+            type="text"
+            value={item.text}
+            onChange={(e) =>
+              onChange(items.map((it, i) => (i === idx ? { ...it, text: e.target.value } : it)))
+            }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && item.text.trim()) {
+                e.preventDefault();
+                onChange(insertAt(items, idx, { text: '', status: 'new' }));
+                requestAnimationFrame(() => refs.current[idx + 1]?.focus());
+              }
+              if (e.key === 'Backspace' && item.text === '' && items.length > 1) {
+                e.preventDefault();
+                onChange(removeAt(items, idx));
+                requestAnimationFrame(() => refs.current[Math.max(0, idx - 1)]?.focus());
+              }
+            }}
+            className="min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
+          />
+          {items.length > 1 && (
+            <button
+              type="button"
+              aria-label="Remove item"
+              onClick={() => onChange(removeAt(items, idx))}
+              className={ordered ? 'mt-1.5' : undefined}
+            >
+              <CircleMinus className="h-4 w-4 text-red-300 opacity-80 hover:text-red-500 hover:opacity-100" aria-hidden="true" />
+            </button>
+          )}
+        </li>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { text: '', status: 'new' }])}
+        className="mt-2 rounded-full px-2.5 py-1.5 text-xs text-sage-400 transition hover:bg-sage-400 hover:text-white"
+      >
+        + Add {ordered ? 'step' : 'ingredient'}
+      </button>
+    </Tag>
+  );
+};
+
 const NewVariantModal = ({
   recipeId,
   recipe,
@@ -53,8 +124,6 @@ const NewVariantModal = ({
   const [steps, setSteps] = useState<EditableItem[]>(
     (recipe.steps ?? []).map((text) => ({ text, status: 'original' }))
   );
-  const ingredientRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const stepRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const { mutate: createVariant, isPending } = useCreateVariant(recipeId);
 
@@ -155,174 +224,18 @@ const NewVariantModal = ({
 
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="field-label text-gray-600 dark:text-gray-300">
-                  Ingredients
-                </span>
-                <span className="text-[10px] text-gray-400">
-                  click badge to cycle status
-                </span>
+                <span className="field-label text-gray-600 dark:text-gray-300">Ingredients</span>
+                <span className="text-[10px] text-gray-400">click badge to cycle status</span>
               </div>
-              <ul className="mt-2 flex flex-col gap-1.5">
-                {ingredients.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setIngredients((prev) => cycleStatus(prev, idx))}
-                      className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium transition ${STATUS_CLASS[item.status]}`}
-                      aria-label={`Status: ${item.status}. Click to change`}
-                    >
-                      {item.status}
-                    </button>
-                    <input
-                      ref={(el) => {
-                        ingredientRefs.current[idx] = el;
-                      }}
-                      type="text"
-                      value={item.text}
-                      onChange={(e) =>
-                        setIngredients((prev) =>
-                          prev.map((it, i) =>
-                            i === idx ? { ...it, text: e.target.value } : it
-                          )
-                        )
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && item.text.trim()) {
-                          e.preventDefault();
-                          const next = idx + 1;
-                          setIngredients((prev) =>
-                            insertAt(prev, idx, { text: '', status: 'new' })
-                          );
-                          requestAnimationFrame(() =>
-                            ingredientRefs.current[next]?.focus()
-                          );
-                        }
-                        if (
-                          e.key === 'Backspace' &&
-                          item.text === '' &&
-                          ingredients.length > 1
-                        ) {
-                          e.preventDefault();
-                          setIngredients((prev) => removeAt(prev, idx));
-                          requestAnimationFrame(() =>
-                            ingredientRefs.current[Math.max(0, idx - 1)]?.focus()
-                          );
-                        }
-                      }}
-                      className="min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
-                    />
-                    {ingredients.length > 1 && (
-                      <button
-                        type="button"
-                        aria-label="Remove ingredient"
-                        onClick={() => setIngredients((prev) => removeAt(prev, idx))}
-                      >
-                        <CircleMinus
-                          className="h-4 w-4 text-red-300 opacity-80 hover:text-red-500 hover:opacity-100"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                onClick={() =>
-                  setIngredients((prev) => [...prev, { text: '', status: 'new' }])
-                }
-                className="
-                  px-2.5 py-1.5 mt-2 text-xs text-sage-400 transition rounded-full
-                  hover:text-sage-500 hover:bg-sage-400 hover:text-white"
-              >
-                + Add ingredient
-              </button>
+              <EditableItemList items={ingredients} onChange={setIngredients} />
             </div>
 
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="field-label text-gray-600 dark:text-gray-300">
-                  Steps
-                </span>
-                <span className="text-[10px] text-gray-400">
-                  click badge to cycle status
-                </span>
+                <span className="field-label text-gray-600 dark:text-gray-300">Steps</span>
+                <span className="text-[10px] text-gray-400">click badge to cycle status</span>
               </div>
-              <ol className="mt-2 flex flex-col gap-1.5">
-                {steps.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="w-4 shrink-0 pt-2 text-right text-xs tabular-nums text-gray-500">
-                      {idx + 1}.
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setSteps((prev) => cycleStatus(prev, idx))}
-                      className={`mt-1 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium transition ${STATUS_CLASS[item.status]}`}
-                      aria-label={`Status: ${item.status}. Click to change`}
-                    >
-                      {item.status}
-                    </button>
-                    <input
-                      ref={(el) => {
-                        stepRefs.current[idx] = el;
-                      }}
-                      type="text"
-                      value={item.text}
-                      onChange={(e) =>
-                        setSteps((prev) =>
-                          prev.map((it, i) =>
-                            i === idx ? { ...it, text: e.target.value } : it
-                          )
-                        )
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && item.text.trim()) {
-                          e.preventDefault();
-                          const next = idx + 1;
-                          setSteps((prev) =>
-                            insertAt(prev, idx, { text: '', status: 'new' })
-                          );
-                          requestAnimationFrame(() => stepRefs.current[next]?.focus());
-                        }
-                        if (
-                          e.key === 'Backspace' &&
-                          item.text === '' &&
-                          steps.length > 1
-                        ) {
-                          e.preventDefault();
-                          setSteps((prev) => removeAt(prev, idx));
-                          requestAnimationFrame(() =>
-                            stepRefs.current[Math.max(0, idx - 1)]?.focus()
-                          );
-                        }
-                      }}
-                      className="min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
-                    />
-                    {steps.length > 1 && (
-                      <button
-                        type="button"
-                        aria-label="Remove step"
-                        onClick={() => setSteps((prev) => removeAt(prev, idx))}
-                        className="mt-1.5"
-                      >
-                        <CircleMinus
-                          className="h-4 w-4 text-red-300 opacity-80 hover:text-red-500 hover:opacity-100"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ol>
-              <button
-                type="button"
-                onClick={() => setSteps((prev) => [...prev, { text: '', status: 'new' }])}
-                className="
-                  px-2.5 py-1.5 mt-2 text-xs text-sage-400 transition rounded-full
-                  hover:text-sage-500 hover:bg-sage-400 hover:text-white"
-              >
-                + Add step
-              </button>
+              <EditableItemList items={steps} onChange={setSteps} ordered />
             </div>
           </div>
         </div>

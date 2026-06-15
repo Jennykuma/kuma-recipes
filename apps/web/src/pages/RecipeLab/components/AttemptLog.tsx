@@ -26,13 +26,13 @@ const AttemptLog = ({
   return (
     <div>
       <div className="mb-4 flex items-center gap-2 md:justify-between">
-        <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400 dark:text-gray-300">
-          Attempt Log
+        <span className="text-xs font-bold tracking-widest text-gray-400 dark:text-gray-300">
+          ATTEMPT LOG
         </span>
         <button
           type="button"
           onClick={onLogAttempt}
-          className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-blush-500 sm:px-4 sm:py-2 sm:text-sm"
+          className="rounded-full bg-accent px-3 py-1 text-[10px] font-bold text-white shadow-sm transition hover:bg-blush-500 sm:px-4 sm:py-2 sm:text-sm"
         >
           + Log an attempt
         </button>
@@ -67,7 +67,10 @@ const AttemptLog = ({
                           className="text-sm font-bold text-gray-800 dark:text-gray-200"
                         >
                           {(() => {
-                            const [y, m, d] = String(attempt.date).split('-').map(Number);
+                            const [y, m, d] = String(attempt.date)
+                              .slice(0, 10)
+                              .split('-')
+                              .map(Number);
                             return new Date(y, m - 1, d).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',

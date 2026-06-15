@@ -23,7 +23,7 @@ const VariantBar = ({
   const startEdit = () => {
     setDeltaValue(variant.delta != null ? String(variant.delta) : '');
     setEditingDelta(true);
-    setTimeout(() => inputRef.current?.select(), 0);
+    requestAnimationFrame(() => inputRef.current?.select());
   };
 
   const commitEdit = () => {

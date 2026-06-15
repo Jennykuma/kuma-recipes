@@ -87,6 +87,92 @@ const InlineNoteEditor = ({
   );
 };
 
+type PinnedSectionProps = {
+  label: string;
+  type: 'ingredient' | 'step';
+  items: VariantItem[];
+  pins: LabPin[];
+  pendingPin: PendingPin | null;
+  onPinClick: (type: 'ingredient' | 'step', match: string) => void;
+  onCancelPin: () => void;
+  onAddPin?: (type: 'ingredient' | 'step', match: string, text: string) => void;
+  onDeletePin: (pinId: string) => void;
+};
+
+const PinnedSection = ({
+  label,
+  type,
+  items,
+  pins,
+  pendingPin,
+  onPinClick,
+  onCancelPin,
+  onAddPin,
+  onDeletePin,
+}: PinnedSectionProps) => {
+  const findPin = (text: string) =>
+    pins.find(
+      (p) =>
+        p.attachType === type &&
+        p.attachMatch &&
+        text.toLowerCase().includes(p.attachMatch.toLowerCase())
+    );
+
+  const isPending = (match: string) =>
+    pendingPin?.type === type && pendingPin.match === match;
+
+  return (
+    <div>
+      <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">{label}</p>
+      <div>
+        {items.map((item, idx) => {
+          const pin = findPin(item.text);
+          return (
+            <div
+              key={idx}
+              className={`flex items-start gap-4 py-2 ${type === 'ingredient' ? 'border-b border-gray-50 last:border-0' : ''}`}
+            >
+              <div className={`flex min-w-0 flex-1 gap-2 ${type === 'ingredient' ? 'flex-wrap items-center' : 'items-start'}`}>
+                {type === 'step' && (
+                  <span className="flex-shrink-0 font-bold leading-relaxed text-accent">
+                    {idx + 1}
+                  </span>
+                )}
+                <div className={`flex min-w-0 flex-wrap gap-2 ${type === 'step' ? 'items-start self-center' : 'items-center'}`}>
+                  <span className="text-sm text-gray-700 dark:text-gray-200">
+                    {type === 'ingredient' ? `• ${item.text}` : item.text}
+                  </span>
+                  {item.status !== 'original' && <StatusChip status={item.status} />}
+                </div>
+              </div>
+              <div className="w-52 flex-shrink-0">
+                {pin ? (
+                  <StickyNote
+                    text={pin.text}
+                    color={pin.color}
+                    rotation={pin.rotation}
+                    onRemove={() => onDeletePin(pin.id)}
+                  />
+                ) : isPending(item.text) ? (
+                  <InlineNoteEditor
+                    onSave={(text) => {
+                      onAddPin?.(type, item.text, text);
+                      onCancelPin();
+                    }}
+                    onCancel={onCancelPin}
+                  />
+                ) : (
+                  <PinButton onClick={() => onPinClick(type, item.text)} />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 const PinnedRecipePane = ({
   baseIngredients,
   baseSteps,
@@ -109,115 +195,30 @@ const PinnedRecipePane = ({
 
   const generalPins = pins.filter((p) => !p.attachType);
 
-  function findPin(type: 'ingredient' | 'step', text: string): LabPin | undefined {
-    return pins.find(
-      (p) =>
-        p.attachType === type &&
-        p.attachMatch &&
-        text.toLowerCase().includes(p.attachMatch.toLowerCase())
-    );
-  }
-
-  const isPending = (type: 'ingredient' | 'step', match: string) =>
-    pendingPin?.type === type && pendingPin.match === match;
-
   return (
     <div className="flex flex-col gap-6">
-      {/* Ingredients */}
-      <div>
-        <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">
-          INGREDIENTS
-        </p>
-        <div>
-          {ingredients.map((item, idx) => {
-            const pin = findPin('ingredient', item.text);
-            return (
-              <div
-                key={idx}
-                className="flex items-start gap-4 border-b border-gray-50 py-2 last:border-0"
-              >
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-                  <span className="text-sm text-gray-700 dark:text-gray-200">
-                    • {item.text}
-                  </span>
-                  {item.status !== 'original' && <StatusChip status={item.status} />}
-                </div>
-                <div className="w-52 flex-shrink-0">
-                  {pin ? (
-                    <StickyNote
-                      text={pin.text}
-                      color={pin.color}
-                      rotation={pin.rotation}
-                      onRemove={() => onDeletePin(pin.id)}
-                    />
-                  ) : isPending('ingredient', item.text) ? (
-                    <InlineNoteEditor
-                      onSave={(text) => {
-                        onAddPin?.('ingredient', item.text, text);
-                        setPendingPin(null);
-                      }}
-                      onCancel={() => setPendingPin(null)}
-                    />
-                  ) : (
-                    <PinButton
-                      onClick={() =>
-                        setPendingPin({ type: 'ingredient', match: item.text })
-                      }
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Steps */}
-      <div>
-        <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">STEPS</p>
-        <div>
-          {steps.map((item, idx) => {
-            const pin = findPin('step', item.text);
-            return (
-              <div key={idx} className="flex items-start gap-4 py-2">
-                <div className="flex min-w-0 flex-1 items-start gap-3">
-                  <span className="flex-shrink-0 font-bold leading-relaxed text-accent">
-                    {idx + 1}
-                  </span>
-                  <div className="flex min-w-0 flex-wrap items-start gap-2">
-                    <span className="text-sm text-gray-700 dark:text-gray-200">
-                      {item.text}
-                    </span>
-                    {item.status !== 'original' && <StatusChip status={item.status} />}
-                  </div>
-                </div>
-                <div className="w-52 flex-shrink-0">
-                  {pin ? (
-                    <StickyNote
-                      text={pin.text}
-                      color={pin.color}
-                      rotation={pin.rotation}
-                      onRemove={() => onDeletePin(pin.id)}
-                    />
-                  ) : isPending('step', item.text) ? (
-                    <InlineNoteEditor
-                      onSave={(text) => {
-                        onAddPin?.('step', item.text, text);
-                        setPendingPin(null);
-                      }}
-                      onCancel={() => setPendingPin(null)}
-                    />
-                  ) : (
-                    <PinButton
-                      onClick={() => setPendingPin({ type: 'step', match: item.text })}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <PinnedSection
+        label="INGREDIENTS"
+        type="ingredient"
+        items={ingredients}
+        pins={pins}
+        pendingPin={pendingPin}
+        onPinClick={(type, match) => setPendingPin({ type, match })}
+        onCancelPin={() => setPendingPin(null)}
+        onAddPin={onAddPin}
+        onDeletePin={onDeletePin}
+      />
+      <PinnedSection
+        label="STEPS"
+        type="step"
+        items={steps}
+        pins={pins}
+        pendingPin={pendingPin}
+        onPinClick={(type, match) => setPendingPin({ type, match })}
+        onCancelPin={() => setPendingPin(null)}
+        onAddPin={onAddPin}
+        onDeletePin={onDeletePin}
+      />
 
       {/* General notes shelf */}
       <div>
