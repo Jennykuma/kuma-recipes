@@ -55,8 +55,8 @@ export default function useIdleLogout() {
       void signOutIfIdle();
     };
 
-    void signOutIfIdle();
     updateActivity();
+    void signOutIfIdle();
 
     const events: Array<keyof WindowEventMap> = [
       'mousemove',
