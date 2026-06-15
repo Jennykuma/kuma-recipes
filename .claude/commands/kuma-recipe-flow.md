@@ -70,6 +70,12 @@ The Lab tab lives on the recipe details page and lets users track variants, atte
 - Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
 - Web API client: `apps/web/src/api/lab.ts`
 - Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
+- Lab UI root: `apps/web/src/pages/RecipeDetails/components/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the two modals
+- Lab UI components: `apps/web/src/pages/RecipeDetails/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `NewVariantModal.tsx`
+- Lab shared type: `apps/web/src/pages/RecipeDetails/components/labTypes.ts` — exports `VariantItem { text, status }` used by PinnedRecipePane and NewVariantModal
+- `VariantItem[]` is stored as the `ingredients` and `steps` fields on `LabVariant` (typed `unknown` in lab.types.ts); cast when reading in PinnedRecipePane
+- Tab bar and `activeTab` state live in `RecipeDetails.tsx`; `RecipeDetailsView.tsx` accepts `tabBar?: ReactNode` and `labTab?: ReactNode` (when provided, replaces the recipe layout)
+- Best badge (amber pill with trophy icon) renders in the recipe header `headerActions` when a variant has `isBest: true`
 
 Endpoints:
 - `GET /recipes/:id/lab` — returns `{ variants, attempts, pins }` for a recipe

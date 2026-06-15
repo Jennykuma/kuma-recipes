@@ -8,8 +8,10 @@ import {
   useUpdateRecipe,
   useUploadRecipePhoto,
   useToast,
+  useLabData,
 } from '../../hooks';
 import { type Recipe } from '../../../../api/src/services/recipes/recipes.types';
+import RDLabTab from '../RecipeLab/RDLabTab';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
@@ -49,10 +51,15 @@ const RecipeDetails = () => {
     error: deletePhotoError,
   } = useDeleteRecipePhoto();
 
+  const { data: labData } = useLabData(recipeId);
+
+  const [activeTab, setActiveTab] = useState<'recipe' | 'lab'>('recipe');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingField, setEditingField] = useState<keyof Recipe | null>(null);
   const [draft, setDraft] = useState<Partial<Recipe>>({});
   const [titleError, setTitleError] = useState<string | null>(null);
+
+  const bestVariant = labData?.variants.find((v) => v.isBest);
 
   const handleChangeRating = (rating: number) => {
     if (!recipe) {
@@ -186,29 +193,71 @@ const RecipeDetails = () => {
     );
   }
 
+  const tabBar = (
+    <div className="relative flex">
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 dark:bg-gray-700" />
+      <button
+        type="button"
+        onClick={() => setActiveTab('recipe')}
+        className={`relative border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold outline-none transition-colors ${
+          activeTab === 'recipe'
+            ? 'border-blush-400 text-accent dark:text-gray-100'
+            : 'border-transparent text-gray-500 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+        }`}
+      >
+        📖 Recipe
+      </button>
+      <button
+        type="button"
+        onClick={() => setActiveTab('lab')}
+        className={`relative inline-flex items-center gap-1.5 border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold outline-none transition-colors ${
+          activeTab === 'lab'
+            ? 'border-blush-400 text-accent dark:text-gray-100'
+            : 'border-transparent text-gray-500 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+        }`}
+      >
+        🧪 R&amp;D Lab
+      </button>
+    </div>
+  );
+
   return (
     <RecipeDetailsView
       backButton={<BackButton />}
+      tabBar={tabBar}
+      labTab={
+        activeTab === 'lab' && labData ? (
+          <RDLabTab recipeId={recipeId} recipe={recipe} labData={labData} />
+        ) : undefined
+      }
       title={
-        <EditableTitle
-          title={recipe?.title}
-          isEditing={editingField === 'title'}
-          draftValue={draft.title}
-          error={titleError ?? undefined}
-          onEdit={() => {
-            setDraft({ ...draft, title: recipe?.title ?? '' });
-            setTitleError(null);
-            setEditingField('title');
-          }}
-          onChange={(value) => {
-            setDraft({ ...draft, title: value });
-            if (value.trim()) {
+        <div className="flex flex-wrap items-center gap-2">
+          <EditableTitle
+            title={recipe?.title}
+            isEditing={editingField === 'title'}
+            draftValue={draft.title}
+            error={titleError ?? undefined}
+            onEdit={() => {
+              setDraft({ ...draft, title: recipe?.title ?? '' });
               setTitleError(null);
-            }
-          }}
-          onSave={handleTitleSave}
-          onCancel={() => handleCancel('title')}
-        />
+              setEditingField('title');
+            }}
+            onChange={(value) => {
+              setDraft({ ...draft, title: value });
+              if (value.trim()) {
+                setTitleError(null);
+              }
+            }}
+            onSave={handleTitleSave}
+            onCancel={() => handleCancel('title')}
+          />
+          {bestVariant && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700">
+              <Star className="h-3 w-3" aria-hidden="true" />
+              Best version: {bestVariant.name}
+            </span>
+          )}
+        </div>
       }
       headerActions={
         <>
@@ -241,8 +290,8 @@ const RecipeDetails = () => {
       summary={
         <>
           <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-600 dark:text-gray-300">
-              <CalendarPlus className="h-3 w-3 text-gray-400" aria-hidden="true" />
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+              <CalendarPlus className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Created on
             </span>
             {recipe?.createdAt ? (
@@ -259,8 +308,8 @@ const RecipeDetails = () => {
             )}
           </div>
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
-              <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+              <PieChart className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Yield
             </span>
             <EditableYield
@@ -282,9 +331,9 @@ const RecipeDetails = () => {
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
             <span
               id="recipe-rating-label"
-              className="field-label inline-flex w-[110px] shrink-0 items-center gap-1"
+              className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300"
             >
-              <Star className="h-3 w-3 text-gray-400" aria-hidden="true" />
+              <Star className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Rating
             </span>
             <Rating
@@ -295,8 +344,8 @@ const RecipeDetails = () => {
             />
           </div>
           <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
-              <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+              <Link2 className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Source
             </span>
             <div className="-mt-0.5 min-w-0 flex-1 text-xs">

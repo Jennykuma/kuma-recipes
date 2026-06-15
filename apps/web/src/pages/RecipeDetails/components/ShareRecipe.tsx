@@ -33,12 +33,13 @@ const ShareRecipe = (props: ShareRecipeProps) => {
     <button
       onClick={() => handleClickShare()}
       className="
-        inline-flex h-9 w-9 items-center justify-center rounded-full
+        inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-2 md:px-3
         text-blush-400 hover:text-blush-500 hover:bg-pink-50"
       aria-label="Share recipe"
       title="Share recipe"
     >
       <Share className="h-4 w-4" aria-hidden="true" />
+      <span className="hidden text-sm md:inline">Share</span>
     </button>
   );
 };

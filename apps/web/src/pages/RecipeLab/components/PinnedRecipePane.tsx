@@ -1,0 +1,261 @@
+import { useState } from 'react';
+import type { LabVariant, LabPin } from '../../../../../api/src/services/lab/lab.types';
+import type { VariantItem } from '../labTypes';
+import StickyNote from './StickyNote';
+
+type PinnedRecipePaneProps = {
+  baseIngredients: string[];
+  baseSteps: string[];
+  variant: LabVariant | null;
+  pins: LabPin[];
+  onDeletePin: (pinId: string) => void;
+  onAddPin?: (
+    attachType: 'ingredient' | 'step',
+    attachMatch: string,
+    text: string
+  ) => void;
+  onAddGeneralNote?: (text: string) => void;
+};
+
+type PendingPin = { type: 'ingredient' | 'step'; match: string };
+
+const StatusChip = ({ status }: { status: 'tweaked' | 'new' }) => (
+  <span
+    className={`ml-1.5 inline-flex rounded-full border px-2 py-0.5 text-[11px] font-bold ${
+      status === 'tweaked'
+        ? 'border-amber-200 bg-amber-50 text-amber-600'
+        : 'border-sage-200 bg-sage-100 text-primary'
+    }`}
+  >
+    {status}
+  </span>
+);
+
+const PinButton = ({ onClick }: { onClick: () => void }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="pt-0.5 text-sm font-semibold text-blush-200 transition-colors hover:text-accent"
+  >
+    + pin a note
+  </button>
+);
+
+const InlineNoteEditor = ({
+  onSave,
+  onCancel,
+}: {
+  onSave: (text: string) => void;
+  onCancel: () => void;
+}) => {
+  const [text, setText] = useState('');
+  return (
+    <div className="w-52 min-h-20 rounded-xl border border-gray-200 bg-white p-3 shadow-sm flex flex-col gap-2">
+      <textarea
+        autoFocus
+        className="w-full flex-1 resize-none outline-none text-sm leading-snug text-gray-800"
+        placeholder="Add a note…"
+        rows={3}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onCancel();
+          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && text.trim())
+            onSave(text.trim());
+        }}
+      />
+      <div className="flex gap-2 justify-end">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-xs text-gray-400 hover:text-gray-600"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          disabled={!text.trim()}
+          onClick={() => {
+            if (text.trim()) onSave(text.trim());
+          }}
+          className="text-xs font-semibold text-accent disabled:opacity-40"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const PinnedRecipePane = ({
+  baseIngredients,
+  baseSteps,
+  variant,
+  pins,
+  onDeletePin,
+  onAddPin,
+  onAddGeneralNote,
+}: PinnedRecipePaneProps) => {
+  const [pendingPin, setPendingPin] = useState<PendingPin | null>(null);
+  const [addingGeneralNote, setAddingGeneralNote] = useState(false);
+
+  const ingredients: VariantItem[] = variant
+    ? ((variant.ingredients as VariantItem[] | null) ?? [])
+    : baseIngredients.map((text) => ({ text, status: 'original' }));
+
+  const steps: VariantItem[] = variant
+    ? ((variant.steps as VariantItem[] | null) ?? [])
+    : baseSteps.map((text) => ({ text, status: 'original' }));
+
+  const generalPins = pins.filter((p) => !p.attachType);
+
+  function findPin(type: 'ingredient' | 'step', text: string): LabPin | undefined {
+    return pins.find(
+      (p) =>
+        p.attachType === type &&
+        p.attachMatch &&
+        text.toLowerCase().includes(p.attachMatch.toLowerCase())
+    );
+  }
+
+  const isPending = (type: 'ingredient' | 'step', match: string) =>
+    pendingPin?.type === type && pendingPin.match === match;
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Ingredients */}
+      <div>
+        <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">
+          INGREDIENTS
+        </p>
+        <div>
+          {ingredients.map((item, idx) => {
+            const pin = findPin('ingredient', item.text);
+            return (
+              <div
+                key={idx}
+                className="flex items-start gap-4 border-b border-gray-50 py-2 last:border-0"
+              >
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                  <span className="text-sm text-gray-700 dark:text-gray-200">
+                    • {item.text}
+                  </span>
+                  {item.status !== 'original' && <StatusChip status={item.status} />}
+                </div>
+                <div className="w-52 flex-shrink-0">
+                  {pin ? (
+                    <StickyNote
+                      text={pin.text}
+                      color={pin.color}
+                      rotation={pin.rotation}
+                      onRemove={() => onDeletePin(pin.id)}
+                    />
+                  ) : isPending('ingredient', item.text) ? (
+                    <InlineNoteEditor
+                      onSave={(text) => {
+                        onAddPin?.('ingredient', item.text, text);
+                        setPendingPin(null);
+                      }}
+                      onCancel={() => setPendingPin(null)}
+                    />
+                  ) : (
+                    <PinButton
+                      onClick={() =>
+                        setPendingPin({ type: 'ingredient', match: item.text })
+                      }
+                    />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Steps */}
+      <div>
+        <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">STEPS</p>
+        <div>
+          {steps.map((item, idx) => {
+            const pin = findPin('step', item.text);
+            return (
+              <div key={idx} className="flex items-start gap-4 py-2">
+                <div className="flex min-w-0 flex-1 items-start gap-3">
+                  <span className="flex-shrink-0 font-bold leading-relaxed text-accent">
+                    {idx + 1}
+                  </span>
+                  <div className="flex min-w-0 flex-wrap items-start gap-2">
+                    <span className="text-sm text-gray-700 dark:text-gray-200">
+                      {item.text}
+                    </span>
+                    {item.status !== 'original' && <StatusChip status={item.status} />}
+                  </div>
+                </div>
+                <div className="w-52 flex-shrink-0">
+                  {pin ? (
+                    <StickyNote
+                      text={pin.text}
+                      color={pin.color}
+                      rotation={pin.rotation}
+                      onRemove={() => onDeletePin(pin.id)}
+                    />
+                  ) : isPending('step', item.text) ? (
+                    <InlineNoteEditor
+                      onSave={(text) => {
+                        onAddPin?.('step', item.text, text);
+                        setPendingPin(null);
+                      }}
+                      onCancel={() => setPendingPin(null)}
+                    />
+                  ) : (
+                    <PinButton
+                      onClick={() => setPendingPin({ type: 'step', match: item.text })}
+                    />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* General notes shelf */}
+      <div>
+        <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">
+          GENERAL NOTES
+        </p>
+        <div className="flex flex-wrap gap-3 items-start">
+          {generalPins.map((pin) => (
+            <StickyNote
+              key={pin.id}
+              text={pin.text}
+              color={pin.color}
+              rotation={pin.rotation}
+              showPinnedLabel={false}
+              onRemove={() => onDeletePin(pin.id)}
+            />
+          ))}
+          {addingGeneralNote ? (
+            <InlineNoteEditor
+              onSave={(text) => {
+                onAddGeneralNote?.(text);
+                setAddingGeneralNote(false);
+              }}
+              onCancel={() => setAddingGeneralNote(false)}
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setAddingGeneralNote(true)}
+              className="w-36 min-h-20 rounded-xl border-2 border-dashed border-gray-200 p-3 text-sm text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors flex items-center justify-center"
+            >
+              + Add a note
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PinnedRecipePane;

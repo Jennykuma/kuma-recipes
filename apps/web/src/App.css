@@ -58,7 +58,7 @@ html {
 }
 
 .field-label {
-  @apply text-[10px] uppercase tracking-wide;
+  @apply text-[10px] uppercase font-bold tracking-widest;
 }
 
 .auth-page {
