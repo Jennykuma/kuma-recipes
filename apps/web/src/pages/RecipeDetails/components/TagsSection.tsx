@@ -48,7 +48,7 @@ const TagsSection = ({
   return (
     <div className="w-full">
       <div className="flex flex-row items-baseline gap-1 mb-1 text-gray-600 dark:text-gray-300">
-        <span className="inline-flex text-[10px] items-center gap-1 uppercase tracking-wide rounded-full">
+        <span className="inline-flex text-[10px] items-center gap-1 uppercase font-bold text-gray-500 dark:text-gray-300 tracking-widest rounded-full">
           <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
           Tags
         </span>

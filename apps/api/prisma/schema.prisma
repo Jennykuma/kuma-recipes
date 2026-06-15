@@ -26,10 +26,66 @@ model Recipe {
   tags        Tag[]
   yield       String?
   shareLinks  RecipeShareLink[]
+  variants    RecipeVariant[]
+  attempts    RecipeAttempt[]
+  pins        RecipePin[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([userId, createdAt])
+}
+
+model RecipeVariant {
+  id          String   @id @default(uuid())
+  recipeId    String
+  name        String
+  tag         String?
+  delta       Json?
+  rating      Int?
+  isBest      Boolean  @default(false)
+  ingredients Json
+  steps       Json
+  order       Int
+  attempts    RecipeAttempt[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId, order])
+}
+
+model RecipeAttempt {
+  id        String   @id @default(uuid())
+  recipeId  String
+  variantId String?
+  date      DateTime
+  changes   String[]
+  note      String?
+  rating    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe  Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  variant RecipeVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([recipeId])
+}
+
+model RecipePin {
+  id          String  @id @default(uuid())
+  recipeId    String
+  attachType  String?
+  attachMatch String?
+  text        String
+  color       String
+  rotation    Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
 }
 
 model Tag {

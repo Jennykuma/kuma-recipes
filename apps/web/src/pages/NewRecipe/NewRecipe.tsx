@@ -156,9 +156,9 @@ const NewRecipe = () => {
               <header className="mb-1 flex min-h-9 items-center justify-between">
                 <h1 className="text-lg font-bold">Create new recipe</h1>
                 <button
-                  className="px-4 py-1.5 rounded-xl flex gap-2 items-center button-sm
-                    text-sm text-white transition-colors
-                  bg-blush-400 hover:bg-blush-500 hover:text-white"
+                  className="px-4 py-1.5 rounded-full flex gap-2 items-center
+                    button-sm bg-accent text-sm font-bold text-white
+                    shadow-sm transition hover:bg-blush-500"
                   type="button"
                   onClick={() => setShowImporter(true)}
                 >
@@ -374,8 +374,8 @@ const NewRecipe = () => {
               <button
                 type="button"
                 className="
-                  text-white bg-gray-300 hover:bg-gray-400 px-4 py-1.5
-                  rounded-xl transition-colors"
+                  text-white font-bold bg-gray-300 hover:bg-gray-400 px-4 py-1.5
+                  rounded-full transition-colors text-sm shadow-sm"
                 onClick={() =>
                   shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
                 }
@@ -387,9 +387,9 @@ const NewRecipe = () => {
                 disabled={!canSaveRecipe}
                 className={classNames(
                   canSaveRecipe
-                    ? 'bg-blush-400 hover:bg-blush-500'
+                    ? 'bg-accent hover:bg-blush-500'
                     : 'bg-blush-200 cursor-not-allowed',
-                  'px-4 py-1.5 rounded-xl text-white transition-colors'
+                  'font-bold px-4 py-1.5 rounded-full text-white transition-colors text-sm shadow-sm'
                 )}
               >
                 Save recipe

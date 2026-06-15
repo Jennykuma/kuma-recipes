@@ -65,7 +65,7 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
         )}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 id="importer-title" className="font-bold text-sm">
+          <h2 id="importer-title" className="font-bold text-md">
             Import a recipe
           </h2>
           <button type="button" onClick={onClose} aria-label="Close importer">
@@ -77,7 +77,7 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
           {(['url', 'text'] as const).map((importMode) => (
             <label
               key={importMode}
-              className="flex items-center gap-1.5 cursor-pointer text-xs"
+              className="flex items-center gap-1.5 cursor-pointer text-sm"
             >
               <input
                 type="radio"
@@ -154,14 +154,15 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
           <button
             type="button"
             className={classNames(
+              'font-bold',
               'text-sm',
               'flex',
               'items-center',
               'gap-2',
               canImportRecipe
-                ? 'bg-blush-400 hover:bg-blush-500'
+                ? 'bg-accent hover:bg-blush-500'
                 : 'bg-blush-200 cursor-not-allowed',
-              'px-4 py-1.5 rounded-xl text-white transition-colors'
+              'px-4 py-1.5 rounded-full text-white transition-colors shadow-sm'
             )}
             disabled={isPending || !canImportRecipe}
             onClick={handleImport}

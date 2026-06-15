@@ -60,6 +60,35 @@ The `/ai/parse-recipe` endpoint accepts a single `recipeInput` string and auto-d
 - Public shared recipe route: `apps/api/src/routes/sharedRecipes.routes.ts`
 - Shared recipe service: `apps/api/src/services/recipes/sharedRecipes.service.ts`
 
+### Lab flow (Research & Design Lab tab)
+
+The Lab tab lives on the recipe details page and lets users track variants, attempts, and pins for a recipe.
+
+- Lab API routes (8 endpoints under `/recipes/:id/lab/*`): `apps/api/src/routes/lab.routes.ts`
+- Lab service logic: `apps/api/src/services/lab/lab.service.ts`
+- Lab types (LabData, CreateVariantBody, UpdateVariantBody, CreateAttemptBody, CreatePinBody): `apps/api/src/services/lab/lab.types.ts`
+- Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
+- Web API client: `apps/web/src/api/lab.ts`
+- Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
+- Lab UI root: `apps/web/src/pages/RecipeDetails/components/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the two modals
+- Lab UI components: `apps/web/src/pages/RecipeDetails/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `NewVariantModal.tsx`
+- Lab shared type: `apps/web/src/pages/RecipeDetails/components/labTypes.ts` — exports `VariantItem { text, status }` used by PinnedRecipePane and NewVariantModal
+- `VariantItem[]` is stored as the `ingredients` and `steps` fields on `LabVariant` (typed `unknown` in lab.types.ts); cast when reading in PinnedRecipePane
+- Tab bar and `activeTab` state live in `RecipeDetails.tsx`; `RecipeDetailsView.tsx` accepts `tabBar?: ReactNode` and `labTab?: ReactNode` (when provided, replaces the recipe layout)
+- Best badge (amber pill with trophy icon) renders in the recipe header `headerActions` when a variant has `isBest: true`
+
+Endpoints:
+- `GET /recipes/:id/lab` — returns `{ variants, attempts, pins }` for a recipe
+- `POST /recipes/:id/lab/variants` — create variant; `order` auto-assigned if omitted
+- `PATCH /recipes/:id/lab/variants/:variantId` — update variant; setting `isBest: true` clears all other variants' `isBest` in a transaction
+- `DELETE /recipes/:id/lab/variants/:variantId`
+- `POST /recipes/:id/lab/attempts` — log an attempt
+- `DELETE /recipes/:id/lab/attempts/:attemptId`
+- `POST /recipes/:id/lab/pins` — create a pin annotation
+- `DELETE /recipes/:id/lab/pins/:pinId`
+
+All lab endpoints are auth-gated via `requireUser` and enforce userId ownership through the Recipe relation.
+
 ### API and data layers
 
 - Fastify app entry: `apps/api/src/app.ts`

@@ -88,7 +88,11 @@ const IngredientsSection = ({
   return (
     <div className="w-full max-w-125">
       <div className="flex flex-row items-baseline gap-1">
-        <span className="text-[10px] uppercase tracking-wide text-gray-500 rounded-full dark:text-gray-300">
+        <span
+          className="
+            text-[10px] uppercase font-bold text-gray-500
+            rounded-full dark:text-gray-300 tracking-widest"
+        >
           Ingredients
         </span>
         {editable && !isEditing && (
