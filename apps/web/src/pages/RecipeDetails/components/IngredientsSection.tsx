@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
 import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -27,13 +27,6 @@ const IngredientsSection = ({
       ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
     },
   });
-  const watchedIngredients = useWatch({
-    control: form.control,
-    name: 'ingredients',
-  });
-  const canSave = watchedIngredients.some(
-    (ingredientRow) => ingredientRow.ingredient.trim() !== ''
-  );
 
   useEffect(() => {
     form.reset({
@@ -70,20 +63,79 @@ const IngredientsSection = ({
     };
   }, [isEditing]);
 
-  const handleSubmit = (data: IngredientsForm) => {
-    const normalizedIngredients = data.ingredients
+  const normalizeIngredients = (data: IngredientsForm) =>
+    data.ingredients
       .map((ingredientRow) => ingredientRow.ingredient.trim())
       .filter((ingredient) => ingredient.length > 0);
 
-    onSave?.(normalizedIngredients);
-  };
+  useEffect(() => {
+    const formElement = editFormRef.current;
+    if (!formElement || !isEditing) {
+      return;
+    }
 
-  const handleCancel = () => {
-    form.reset({
-      ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
-    });
-    onCancel?.();
-  };
+    let saveTimeoutId: number | null = null;
+
+    const handleFocusOut = (event: FocusEvent) => {
+      const nextFocusedElement = event.relatedTarget as Node | null;
+
+      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
+        return;
+      }
+
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      saveTimeoutId = window.setTimeout(() => {
+        if (formElement.contains(document.activeElement)) {
+          return;
+        }
+
+        const currentValues = form.getValues();
+        const normalizedIngredients = normalizeIngredients(currentValues);
+
+        if (normalizedIngredients.length === 0) {
+          form.reset({
+            ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
+          });
+          onCancel?.();
+          return;
+        }
+
+        onSave?.(normalizedIngredients);
+      }, 0);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      form.reset({
+        ingredients: (ingredients ?? ['']).map((ingredient) => ({ ingredient })),
+      });
+      onCancel?.();
+    };
+
+    formElement.addEventListener('focusout', handleFocusOut);
+    formElement.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      formElement.removeEventListener('focusout', handleFocusOut);
+      formElement.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [form, ingredients, isEditing, onCancel, onSave]);
 
   return (
     <div className="w-full max-w-125">
@@ -112,28 +164,8 @@ const IngredientsSection = ({
 
       {isEditing ? (
         <FormProvider {...form}>
-          <form
-            ref={editFormRef}
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col md:min-h-0 md:overflow-hidden"
-          >
+          <form ref={editFormRef} className="flex flex-col md:min-h-0 md:overflow-hidden">
             <IngredientsTable keepAddButtonVisible />
-            <div className="mt-1 flex shrink-0 gap-2 justify-end">
-              <button
-                className="text-xs text-gray-400 hover:text-gray-500"
-                type="button"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
-                type="submit"
-                disabled={!canSave}
-              >
-                Save
-              </button>
-            </div>
           </form>
         </FormProvider>
       ) : (

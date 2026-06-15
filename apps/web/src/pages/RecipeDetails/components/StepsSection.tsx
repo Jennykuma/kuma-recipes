@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
 import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
@@ -29,13 +29,6 @@ const StepsSection = ({
       steps: (steps ?? ['']).map((step) => ({ step })),
     },
   });
-
-  const watchedSteps = useWatch({
-    control: form.control,
-    name: 'steps',
-  });
-
-  const canSave = watchedSteps.some((stepRow) => stepRow.step.trim() !== '');
 
   useEffect(() => {
     form.reset({
@@ -72,20 +65,79 @@ const StepsSection = ({
     };
   }, [isEditing]);
 
-  const handleSubmit = (data: StepsForm) => {
-    const normalizedSteps = data.steps
+  const normalizeSteps = (data: StepsForm) =>
+    data.steps
       .map((stepRow) => stepRow.step.trim())
       .filter((step) => step.length > 0);
 
-    onSave?.(normalizedSteps);
-  };
+  useEffect(() => {
+    const formElement = editFormRef.current;
+    if (!formElement || !isEditing) {
+      return;
+    }
 
-  const handleCancel = () => {
-    form.reset({
-      steps: (steps ?? ['']).map((step) => ({ step })),
-    });
-    onCancel?.();
-  };
+    let saveTimeoutId: number | null = null;
+
+    const handleFocusOut = (event: FocusEvent) => {
+      const nextFocusedElement = event.relatedTarget as Node | null;
+
+      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
+        return;
+      }
+
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      saveTimeoutId = window.setTimeout(() => {
+        if (formElement.contains(document.activeElement)) {
+          return;
+        }
+
+        const currentValues = form.getValues();
+        const normalizedSteps = normalizeSteps(currentValues);
+
+        if (normalizedSteps.length === 0) {
+          form.reset({
+            steps: (steps ?? ['']).map((step) => ({ step })),
+          });
+          onCancel?.();
+          return;
+        }
+
+        onSave?.(normalizedSteps);
+      }, 0);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      form.reset({
+        steps: (steps ?? ['']).map((step) => ({ step })),
+      });
+      onCancel?.();
+    };
+
+    formElement.addEventListener('focusout', handleFocusOut);
+    formElement.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      formElement.removeEventListener('focusout', handleFocusOut);
+      formElement.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [form, isEditing, onCancel, onSave, steps]);
 
   const toggleStep = (index: number) => {
     setCompletedSteps((prev) => {
@@ -124,28 +176,8 @@ const StepsSection = ({
 
       {isEditing ? (
         <FormProvider {...form}>
-          <form
-            ref={editFormRef}
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col md:min-h-0 md:overflow-hidden"
-          >
+          <form ref={editFormRef} className="flex flex-col md:min-h-0 md:overflow-hidden">
             <StepsTable keepAddButtonVisible />
-            <div className="mt-1 flex shrink-0 gap-2 justify-end">
-              <button
-                className="text-xs text-gray-400 hover:text-gray-500"
-                type="button"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="text-xs text-blush-400 hover:text-blush-500 disabled:text-gray-300 disabled:cursor-not-allowed"
-                type="submit"
-                disabled={!canSave}
-              >
-                Save
-              </button>
-            </div>
           </form>
         </FormProvider>
       ) : (

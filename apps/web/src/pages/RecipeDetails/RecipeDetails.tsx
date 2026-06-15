@@ -61,6 +61,17 @@ const RecipeDetails = () => {
 
   const bestVariant = labData?.variants.find((v) => v.isBest);
 
+  const areStringListsEqual = (left: string[], right: string[]) =>
+    left.length === right.length && left.every((item, index) => item === right[index]);
+
+  const clearDraftField = (field: keyof Recipe) => {
+    setDraft((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
   const handleChangeRating = (rating: number) => {
     if (!recipe) {
       return;
@@ -72,11 +83,7 @@ const RecipeDetails = () => {
   };
 
   const handleCancel = (field: keyof Recipe) => {
-    setDraft((prev) => {
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
+    clearDraftField(field);
     if (field === 'title') {
       setTitleError(null);
     }
@@ -98,6 +105,12 @@ const RecipeDetails = () => {
   };
 
   const handleIngredientsSave = async (normalizedIngredients: string[]) => {
+    const currentIngredients = recipe?.ingredients ?? [];
+    if (areStringListsEqual(currentIngredients, normalizedIngredients)) {
+      setEditingField(null);
+      return;
+    }
+
     try {
       await updateRecipeAsync({ ingredients: normalizedIngredients });
       setEditingField(null);
@@ -111,6 +124,12 @@ const RecipeDetails = () => {
   };
 
   const handleStepsSave = async (normalizedSteps: string[]) => {
+    const currentSteps = recipe?.steps ?? [];
+    if (areStringListsEqual(currentSteps, normalizedSteps)) {
+      setEditingField(null);
+      return;
+    }
+
     try {
       await updateRecipeAsync({ steps: normalizedSteps });
       setEditingField(null);
@@ -124,6 +143,15 @@ const RecipeDetails = () => {
   };
 
   const handleTagsSave = async (tagIds: string[]) => {
+    const currentTagIds = recipe?.tags?.map((tag) => tag.id) ?? [];
+    if (
+      currentTagIds.length === tagIds.length &&
+      currentTagIds.every((tagId, index) => tagId === tagIds[index])
+    ) {
+      setEditingField(null);
+      return;
+    }
+
     try {
       await updateRecipeAsync({ tagIds });
       setEditingField(null);
@@ -138,14 +166,23 @@ const RecipeDetails = () => {
 
   const handleTitleSave = async () => {
     const title = (draft.title ?? recipe?.title ?? '').trim();
+    const currentTitle = (recipe?.title ?? '').trim();
+
     if (!title) {
       setTitleError('Title is required');
       return;
     }
 
+    if (title === currentTitle) {
+      clearDraftField('title');
+      setTitleError(null);
+      setEditingField(null);
+      return;
+    }
+
     try {
       await updateRecipeAsync({ title });
-      setDraft((prev) => ({ ...prev, title }));
+      clearDraftField('title');
       setTitleError(null);
       setEditingField(null);
     } catch (err) {
@@ -158,8 +195,15 @@ const RecipeDetails = () => {
     const value = draft[field] ?? recipe?.[field];
     if (value === undefined) return;
 
+    if (value === recipe?.[field]) {
+      clearDraftField(field);
+      setEditingField(null);
+      return;
+    }
+
     try {
       await updateRecipeAsync({ [field]: value });
+      clearDraftField(field);
       setEditingField(null);
     } catch (err) {
       console.error(err);

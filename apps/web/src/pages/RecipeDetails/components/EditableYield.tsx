@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
-import SaveCancelButtons from '../../../components/SaveCancelButtons';
 
 type EditableYieldProps = {
   recipeYield?: string;
@@ -41,6 +40,7 @@ const EditableYield = ({
             value={draftValue ?? ''}
             aria-invalid={error ? 'true' : undefined}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={() => onSave()}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
@@ -52,7 +52,6 @@ const EditableYield = ({
               }
             }}
           />
-          <SaveCancelButtons onCancel={onCancel} onSave={onSave} />
         </span>
         {error ? <p className="mt-1 text-xs text-red-500">{error}</p> : null}
       </div>

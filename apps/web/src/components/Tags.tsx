@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useCreateTag from '../hooks/tags/useCreateTag';
 import useDeleteTag from '../hooks/tags/useDeleteTag';
@@ -111,6 +111,15 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
       .filter((tag): tag is Tag => Boolean(tag));
   }, [options, selectedIds, selectedIdSet]);
 
+  const keepInputFocused = (event: ReactMouseEvent<HTMLElement>) => {
+    event.preventDefault();
+  };
+
+  const focusInput = () => {
+    setDropdownOpen(true);
+    inputRef.current?.focus();
+  };
+
   const selectTag = (tag: Tag) => {
     if (selectedIdSet.has(tag.id)) return;
     setValue('tagIds', [...selectedIds, tag.id], {
@@ -119,6 +128,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     });
     selectedTagCacheRef.current.set(tag.id, tag);
     setQuery('');
+    focusInput();
   };
 
   const removeTag = (id: string) => {
@@ -127,6 +137,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
       selectedIds.filter((tagId) => tagId !== id),
       { shouldDirty: true, shouldTouch: true }
     );
+    focusInput();
   };
 
   const updateQuery = (value: string) => {
@@ -153,6 +164,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
     } finally {
       setQuery('');
       setShowTagNameLimitMessage(false);
+      focusInput();
     }
   };
 
@@ -180,6 +192,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
             key={tag.id}
             type="button"
             className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+            onMouseDown={keepInputFocused}
             onClick={(event) => {
               event.stopPropagation();
               removeTag(tag.id);
@@ -242,6 +255,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
             <button
               type="button"
               className="w-full text-left px-3 py-2 text-xs text-blush-400 hover:bg-blush-50 dark:text-blush-300 dark:hover:bg-blush-400/10"
+              onMouseDown={keepInputFocused}
               onClick={createTagFromQuery}
             >
               <Plus className="w-3 h-3 mr-1 mb-0.5 inline" /> Create &quot;
@@ -258,6 +272,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                 <button
                   type="button"
                   className="flex-1 text-left"
+                  onMouseDown={keepInputFocused}
                   onClick={() => selectTag(tag)}
                   disabled={isSelected}
                 >
@@ -270,6 +285,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
                   <button
                     type="button"
                     className="text-[15px] text-gray-400 hover:text-red-400"
+                    onMouseDown={keepInputFocused}
                     onClick={() => {
                       void handleDeleteTag(tag.id);
                     }}

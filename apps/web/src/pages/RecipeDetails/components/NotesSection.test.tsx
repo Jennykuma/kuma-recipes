@@ -51,7 +51,7 @@ describe('NotesSection', () => {
     expect(textarea).toHaveProperty('selectionEnd', 'plain note'.length);
   });
 
-  it('does not save when cancel is clicked', async () => {
+  it('cancels editing when escape is pressed', async () => {
     const user = userEvent.setup();
     const onSave = vi.fn();
     const onCancel = vi.fn();
@@ -66,23 +66,26 @@ describe('NotesSection', () => {
       />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await user.keyboard('{Escape}');
 
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(onSave).not.toHaveBeenCalled();
   });
 
-  it('does not save on blur', async () => {
+  it('saves on blur', async () => {
     const user = userEvent.setup();
     const onSave = vi.fn();
 
     render(
-      <NotesSection {...defaultProps} isEditing draftValue="plain note" onSave={onSave} />
+      <>
+        <NotesSection {...defaultProps} isEditing draftValue="plain note" onSave={onSave} />
+        <button type="button">Outside</button>
+      </>
     );
 
     await user.tab();
 
-    expect(onSave).not.toHaveBeenCalled();
+    expect(onSave).toHaveBeenCalledTimes(1);
   });
 
   it('starts editing when the saved notes area is clicked', async () => {

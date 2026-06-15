@@ -1,17 +1,17 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import IngredientsSection from './IngredientsSection';
+import StepsSection from './StepsSection';
 
-describe('IngredientsSection', () => {
-  it('saves in one click when there is a trailing empty row', async () => {
+describe('StepsSection', () => {
+  it('saves on blur when there is a trailing empty row', async () => {
     const user = userEvent.setup();
     const onSave = vi.fn();
 
     render(
       <>
-        <IngredientsSection
-          ingredients={['Sugar']}
+        <StepsSection
+          steps={['Whisk']}
           isEditing
           onEdit={vi.fn()}
           onSave={onSave}
@@ -21,13 +21,13 @@ describe('IngredientsSection', () => {
       </>
     );
 
-    await user.click(screen.getByRole('button', { name: /add ingredient/i }));
+    await user.click(screen.getByRole('button', { name: /add step/i }));
     await user.click(screen.getByRole('button', { name: 'Outside' }));
 
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledTimes(1);
     });
-    expect(onSave).toHaveBeenCalledWith(['Sugar']);
+    expect(onSave).toHaveBeenCalledWith(['Whisk']);
   });
 
   it('cancels editing on escape without saving', async () => {
@@ -36,8 +36,8 @@ describe('IngredientsSection', () => {
     const onCancel = vi.fn();
 
     render(
-      <IngredientsSection
-        ingredients={['Sugar']}
+      <StepsSection
+        steps={['Whisk']}
         isEditing
         onEdit={vi.fn()}
         onSave={onSave}
@@ -45,7 +45,7 @@ describe('IngredientsSection', () => {
       />
     );
 
-    await user.click(screen.getByDisplayValue('Sugar'));
+    await user.click(screen.getByDisplayValue('Whisk'));
     await user.keyboard('{Escape}');
 
     expect(onCancel).toHaveBeenCalledTimes(1);

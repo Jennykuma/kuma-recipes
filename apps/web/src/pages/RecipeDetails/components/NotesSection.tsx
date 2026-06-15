@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { ScrollText } from 'lucide-react';
-import SaveCancelButtons from '../../../components/SaveCancelButtons';
 
 type NotesSectionProps = {
   notes?: string | null;
@@ -120,12 +119,14 @@ const NotesSection = ({
             focus:border-sage-300 focus:outline-none"
           value={draftValue ?? ''}
           onChange={(e) => onChange?.(e.target.value)}
+          onBlur={() => onSave?.()}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') {
+              event.preventDefault();
+              onCancel?.();
+            }
+          }}
         ></textarea>
-        {isEditing && (
-          <div className="mt-1 flex justify-end gap-2">
-            <SaveCancelButtons onCancel={onCancel!} onSave={onSave!} />
-          </div>
-        )}
       </div>
     );
   }

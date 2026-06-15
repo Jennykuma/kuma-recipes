@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil, Tag as TagIcon } from 'lucide-react';
 import Tags from '../../../components/Tags';
 import type { Tag } from '../../../../../api/src/services/tags/tags.types';
@@ -25,25 +25,69 @@ const TagsSection = ({
   onSave,
   onCancel,
 }: TagsSectionProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<TagsFormValues>({
     defaultValues: {
       tagIds: tags?.map((tag) => tag.id) ?? [],
     },
   });
-  const selectedTagIds = useWatch({ control: form.control, name: 'tagIds' }) ?? [];
 
   useEffect(() => {
     form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
   }, [tags, form]);
 
-  const handleCancel = () => {
-    form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
-    onCancel?.();
-  };
+  useEffect(() => {
+    const formElement = formRef.current;
+    if (!formElement || !isEditing) {
+      return;
+    }
 
-  const handleSave = () => {
-    onSave?.(selectedTagIds);
-  };
+    let saveTimeoutId: number | null = null;
+
+    const handleFocusOut = (event: FocusEvent) => {
+      const nextFocusedElement = event.relatedTarget as Node | null;
+
+      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
+        return;
+      }
+
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+
+      saveTimeoutId = window.setTimeout(() => {
+        if (formElement.contains(document.activeElement)) {
+          return;
+        }
+
+        onSave?.(form.getValues('tagIds') ?? []);
+      }, 0);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      event.preventDefault();
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+      form.reset({ tagIds: tags?.map((tag) => tag.id) ?? [] });
+      onCancel?.();
+    };
+
+    formElement.addEventListener('focusout', handleFocusOut);
+    formElement.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      if (saveTimeoutId !== null) {
+        window.clearTimeout(saveTimeoutId);
+      }
+      formElement.removeEventListener('focusout', handleFocusOut);
+      formElement.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [form, isEditing, onCancel, onSave, tags]);
 
   return (
     <div className="w-full">
@@ -69,28 +113,8 @@ const TagsSection = ({
 
       {isEditing ? (
         <FormProvider {...form}>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              handleSave();
-            }}
-          >
+          <form ref={formRef}>
             <Tags autoFocusInput />
-            <div className="mt-1 flex gap-2 justify-end">
-              <button
-                className="text-xs text-gray-400 hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 rounded-sm"
-                type="button"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="text-xs text-blush-400 hover:text-blush-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 rounded-sm"
-                type="submit"
-              >
-                Save
-              </button>
-            </div>
           </form>
         </FormProvider>
       ) : tags?.length ? (
