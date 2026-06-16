@@ -1,4 +1,4 @@
-# AGENTS.md
+# CLAUDE.md
 
 Repo-specific guidance for coding agents working in `kuma-recipes`.
 
