@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { LabVariant, LabPin, VariantItem } from '../../../../../api/src/services/lab/lab.types';
+﻿import { useState } from 'react';
+import type { LabVariant, LabPin, VariantItem } from 'shared';
 import StickyNote from './StickyNote';
 
 type PinnedRecipePaneProps = {

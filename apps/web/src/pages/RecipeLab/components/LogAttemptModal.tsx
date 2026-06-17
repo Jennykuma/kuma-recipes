@@ -1,6 +1,6 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { X } from 'lucide-react';
-import type { LabVariant } from '../../../../../api/src/services/lab/lab.types';
+import type { LabVariant } from 'shared';
 import { useLogAttempt } from '../../../hooks';
 import Rating from '../../../components/Rating';
 
@@ -89,7 +89,9 @@ const LogAttemptModal = ({
 
           {variants.length > 0 && (
             <div>
-              <label className="field-label text-gray-600 dark:text-gray-300">Variant</label>
+              <label className="field-label text-gray-600 dark:text-gray-300">
+                Variant
+              </label>
               <select
                 value={variantId}
                 onChange={(e) => setVariantId(e.target.value)}
@@ -106,7 +108,9 @@ const LogAttemptModal = ({
           )}
 
           <div>
-            <label className="field-label text-gray-600 dark:text-gray-300">Changes</label>
+            <label className="field-label text-gray-600 dark:text-gray-300">
+              Changes
+            </label>
             <div className="mt-1 flex gap-1">
               <input
                 type="text"
@@ -139,7 +143,9 @@ const LogAttemptModal = ({
                     {change}
                     <button
                       type="button"
-                      onClick={() => setChanges((prev) => prev.filter((c) => c !== change))}
+                      onClick={() =>
+                        setChanges((prev) => prev.filter((c) => c !== change))
+                      }
                       aria-label={`Remove ${change}`}
                       className="text-blush-400 hover:text-blush-600"
                     >

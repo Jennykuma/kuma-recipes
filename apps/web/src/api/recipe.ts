@@ -1,10 +1,10 @@
-import type {
+﻿import type {
   Recipe,
   RecipeListItem,
   NewRecipeBody,
   UpdateRecipeBody,
   ShareLinkItem,
-} from '../../../api/src/services/recipes/recipes.types';
+} from 'shared';
 import { buildApiUrl } from './client';
 
 type GetRecipeDetailsResponse = {

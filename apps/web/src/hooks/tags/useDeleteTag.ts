@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import tagsApi from '../../api/tags';
-import type { Tag } from '../../../../api/src/services/tags/tags.types';
+import type { Tag } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
 
 const useDeleteTag = () => {

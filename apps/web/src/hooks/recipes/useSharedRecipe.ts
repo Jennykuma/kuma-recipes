@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
-import type { Recipe } from '../../../../api/src/services/recipes/recipes.types';
+import type { Recipe } from 'shared';
 
 const useSharedRecipe = (token: string) => {
   const {

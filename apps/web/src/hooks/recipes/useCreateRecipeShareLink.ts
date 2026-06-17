@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
+﻿import { useMutation } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
-import type { ShareLinkItem } from '../../../../api/src/services/recipes/recipes.types';
+import type { ShareLinkItem } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
 
 const useCreateRecipeShareLink = () => {

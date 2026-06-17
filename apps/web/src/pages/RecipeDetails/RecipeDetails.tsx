@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CalendarPlus, Link2, Star, PieChart } from 'lucide-react';
 import {
@@ -10,10 +10,7 @@ import {
   useToast,
   useLabData,
 } from '../../hooks';
-import {
-  type Recipe,
-  type UpdateRecipeBody,
-} from '../../../../api/src/services/recipes/recipes.types';
+import { type Recipe, type UpdateRecipeBody } from 'shared';
 import RDLabTab from '../RecipeLab/RDLabTab';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
@@ -278,7 +275,7 @@ const RecipeDetails = () => {
             : 'border-transparent text-gray-500 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
         }`}
       >
-        📖 Recipe
+        📝 Recipe
       </button>
       <button
         type="button"

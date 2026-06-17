@@ -98,8 +98,9 @@ All lab endpoints are auth-gated via `requireUser` and enforce userId ownership 
 - Prisma schema: `apps/api/prisma/schema.prisma`
 - Prisma migrations: `apps/api/prisma/migrations`
 - Prisma client setup: `apps/api/src/prisma.ts`
-- All API `*.types.ts` files use Zod schemas for runtime validation of network input. Schema naming convention: `<Concept>Schema` (e.g. `NewRecipeBodySchema`, `CreateTagBodySchema`, `ParsedRecipeSchema`, `VariantItemSchema`). Types are derived via `z.infer<>` — do not maintain separate type definitions alongside a schema.
-- Shared recipe and tag types live under `apps/api/src/services/.../*.types.ts`
+- Canonical domain types and Zod schemas live in `packages/shared/src/` (`recipes.ts`, `tags.ts`, `lab.ts`). Both apps import from `'shared'`. Schema naming convention: `<Concept>Schema` (e.g. `NewRecipeBodySchema`, `CreateTagBodySchema`, `VariantItemSchema`). Types are derived via `z.infer<>`.
+- API `*.types.ts` files (`apps/api/src/services/*/`) are thin re-exports from `shared` — add new types to `packages/shared/src/`, not here.
+- `ParsedRecipe` and `ParsedRecipeSchema` are AI-specific and live in `apps/api/src/services/ai/parseRecipe.service.ts` (not in shared — the web never imports them directly).
 
 ### Auth and environment
 

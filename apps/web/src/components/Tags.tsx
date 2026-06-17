@@ -1,9 +1,15 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+﻿import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+} from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import useCreateTag from '../hooks/tags/useCreateTag';
 import useDeleteTag from '../hooks/tags/useDeleteTag';
 import useTagsQuery from '../hooks/tags/useTagsQuery';
-import type { Tag } from '../../../api/src/services/tags/tags.types';
+import type { Tag } from 'shared';
 import { Plus, X } from 'lucide-react';
 
 const EMPTY_SELECTED_IDS: string[] = [];

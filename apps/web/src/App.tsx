@@ -1,6 +1,6 @@
-import { Link, useSearchParams } from 'react-router-dom';
-import type { RecipeListItem } from '../../api/src/services/recipes/recipes.types';
-import type { Tag } from '../../api/src/services/tags/tags.types';
+﻿import { Link, useSearchParams } from 'react-router-dom';
+import type { RecipeListItem } from 'shared';
+import type { Tag } from 'shared';
 import useRecipes from './hooks/recipes/useRecipes';
 import PageState from './components/PageState';
 import PageShell from './components/PageShell';
@@ -65,7 +65,7 @@ const App = () => {
       <div className="mx-auto flex w-full max-w-[120rem] flex-col">
         <header className="flex justify-between gap-4">
           <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
-            Kuma Recipes 🧸
+            Kuma Recipes 🐻‍❄️
           </Link>
           <Link
             role="link"

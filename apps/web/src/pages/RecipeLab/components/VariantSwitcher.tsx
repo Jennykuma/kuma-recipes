@@ -1,5 +1,5 @@
-import { Star } from 'lucide-react';
-import type { LabVariant } from '../../../../../api/src/services/lab/lab.types';
+﻿import { Star } from 'lucide-react';
+import type { LabVariant } from 'shared';
 
 type VariantSwitcherProps = {
   variants: LabVariant[];

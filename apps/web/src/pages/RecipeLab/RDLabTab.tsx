@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import type { LabData } from '../../../../api/src/services/lab/lab.types';
-import type { Recipe } from '../../../../api/src/services/recipes/recipes.types';
+﻿import { useState } from 'react';
+import type { LabData } from 'shared';
+import type { Recipe } from 'shared';
 import {
   useUpdateVariant,
   useDeleteAttempt,
@@ -71,7 +71,10 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           onMarkBest={handleMarkBest}
           onClearBest={handleClearBest}
           onUpdateDelta={(delta) =>
-            updateVariant({ variantId: selectedVariant.id, body: { delta: delta || null } })
+            updateVariant({
+              variantId: selectedVariant.id,
+              body: { delta: delta || null },
+            })
           }
         />
       )}

@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   LabData,
   LabVariant,
   LabAttempt,
@@ -7,7 +7,7 @@ import type {
   UpdateVariantBody,
   CreateAttemptBody,
   CreatePinBody,
-} from '../../../api/src/services/lab/lab.types';
+} from 'shared';
 import { buildApiUrl } from './client';
 
 const lab = {
@@ -30,7 +30,11 @@ const lab = {
     return response.json();
   },
 
-  async createVariant(recipeId: string, body: CreateVariantBody, token: string): Promise<LabVariant> {
+  async createVariant(
+    recipeId: string,
+    body: CreateVariantBody,
+    token: string
+  ): Promise<LabVariant> {
     const response = await fetch(buildApiUrl(`/recipes/${recipeId}/lab/variants`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -48,11 +52,14 @@ const lab = {
     body: UpdateVariantBody,
     token: string
   ): Promise<LabVariant> {
-    const response = await fetch(buildApiUrl(`/recipes/${recipeId}/lab/variants/${variantId}`), {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      buildApiUrl(`/recipes/${recipeId}/lab/variants/${variantId}`),
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      }
+    );
     if (!response.ok) {
       throw await this.parseError(response, 'Failed to update variant');
     }
@@ -60,16 +67,23 @@ const lab = {
   },
 
   async deleteVariant(recipeId: string, variantId: string, token: string): Promise<void> {
-    const response = await fetch(buildApiUrl(`/recipes/${recipeId}/lab/variants/${variantId}`), {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(
+      buildApiUrl(`/recipes/${recipeId}/lab/variants/${variantId}`),
+      {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     if (!response.ok) {
       throw await this.parseError(response, 'Failed to delete variant');
     }
   },
 
-  async logAttempt(recipeId: string, body: CreateAttemptBody, token: string): Promise<LabAttempt> {
+  async logAttempt(
+    recipeId: string,
+    body: CreateAttemptBody,
+    token: string
+  ): Promise<LabAttempt> {
     const response = await fetch(buildApiUrl(`/recipes/${recipeId}/lab/attempts`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -82,10 +96,13 @@ const lab = {
   },
 
   async deleteAttempt(recipeId: string, attemptId: string, token: string): Promise<void> {
-    const response = await fetch(buildApiUrl(`/recipes/${recipeId}/lab/attempts/${attemptId}`), {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(
+      buildApiUrl(`/recipes/${recipeId}/lab/attempts/${attemptId}`),
+      {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     if (!response.ok) {
       throw await this.parseError(response, 'Failed to delete attempt');
     }

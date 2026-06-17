@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
+﻿import { useCallback, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import IngredientsTable from '../../NewRecipe/components/IngredientsTable';
-import type { IngredientsForm } from '../../../../../api/src/services/recipes/recipes.types';
+import type { IngredientsForm } from 'shared';
 import useEditFormAutoSave from './useEditFormAutoSave';
 import useEditFormViewportLimit from './useEditFormViewportLimit';
 

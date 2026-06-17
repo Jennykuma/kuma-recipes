@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@clerk/clerk-react';
-import type { LabData } from '../../../../api/src/services/lab/lab.types';
+import type { LabData } from 'shared';
 import { lab as labApi } from '../../api';
 
 const useLabData = (recipeId: string) => {

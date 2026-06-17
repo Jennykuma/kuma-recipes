@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@clerk/clerk-react';
-import type { UpdateVariantBody } from '../../../../api/src/services/lab/lab.types';
+import type { UpdateVariantBody } from 'shared';
 import { lab as labApi } from '../../api';
 
 type UpdateVariantParams = {

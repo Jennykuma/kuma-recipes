@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
+﻿import { useCallback, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil, Tag as TagIcon } from 'lucide-react';
 import Tags from '../../../components/Tags';
-import type { Tag } from '../../../../../api/src/services/tags/tags.types';
+import type { Tag } from 'shared';
 import useEditFormAutoSave from './useEditFormAutoSave';
 
 type TagsSectionProps = {

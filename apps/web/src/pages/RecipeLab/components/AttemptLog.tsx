@@ -1,8 +1,5 @@
-import { Trash2 } from 'lucide-react';
-import type {
-  LabAttempt,
-  LabVariant,
-} from '../../../../../api/src/services/lab/lab.types';
+﻿import { Trash2 } from 'lucide-react';
+import type { LabAttempt, LabVariant } from 'shared';
 import Rating from '../../../components/Rating';
 
 type AttemptLogProps = {

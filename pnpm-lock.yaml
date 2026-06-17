@@ -82,6 +82,9 @@ importers:
       pg:
         specifier: ^8.16.3
         version: 8.16.3
+      shared:
+        specifier: workspace:*
+        version: link:../../packages/shared
       ws:
         specifier: ^8.19.0
         version: 8.19.0
@@ -149,9 +152,15 @@ importers:
       react-router-dom:
         specifier: ^7.12.0
         version: 7.12.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      shared:
+        specifier: workspace:*
+        version: link:../../packages/shared
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.1
@@ -206,6 +215,10 @@ importers:
         version: 4.0.16(@types/node@24.10.4)(jiti@2.6.1)(jsdom@26.1.0)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.9.0)
 
   packages/shared:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       typescript:
         specifier: ~5.9.3

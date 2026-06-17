@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Tag as TagIcon, X } from 'lucide-react';
-import type { Tag } from '../../../api/src/services/tags/tags.types';
+import type { Tag } from 'shared';
 import useTagsQuery from '../hooks/tags/useTagsQuery';
 
 type RecipeTagFilterProps = {

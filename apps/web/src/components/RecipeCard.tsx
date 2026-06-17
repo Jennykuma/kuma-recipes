@@ -1,7 +1,7 @@
-import Rating from './Rating';
+﻿import Rating from './Rating';
 import { Link } from 'react-router-dom';
 import { getRecipePhotoUrl } from '../api/supabaseStorage';
-import type { Tag } from '../../../api/src/services/tags/tags.types';
+import type { Tag } from 'shared';
 import { Cookie } from 'lucide-react';
 
 interface RecipeCardProps {

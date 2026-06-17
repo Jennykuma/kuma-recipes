@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import StepsTable from '../../NewRecipe/components/StepsTable';
-import type { StepsForm } from '../../../../../api/src/services/recipes/recipes.types';
+import type { StepsForm } from 'shared';
 import useEditFormAutoSave from './useEditFormAutoSave';
 import useEditFormViewportLimit from './useEditFormViewportLimit';
 

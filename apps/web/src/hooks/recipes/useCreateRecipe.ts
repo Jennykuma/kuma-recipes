@@ -1,9 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
-import type {
-  NewRecipeBody,
-  Recipe,
-} from '../../../../api/src/services/recipes/recipes.types';
+import type { NewRecipeBody, Recipe } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
 import {
   MAX_SOURCE_PHOTO_SIZE,

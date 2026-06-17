@@ -1,10 +1,6 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+﻿import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
-import type {
-  UpdateRecipeBody,
-  Recipe,
-  RecipeListItem,
-} from '../../../../api/src/services/recipes/recipes.types';
+import type { UpdateRecipeBody, Recipe, RecipeListItem } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
 
 const useUpdateRecipe = (id: string) => {

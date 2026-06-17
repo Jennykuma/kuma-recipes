@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import { Pencil } from 'lucide-react';
-import type { LabVariant } from '../../../../../api/src/services/lab/lab.types';
+import type { LabVariant } from 'shared';
 import Rating from '../../../components/Rating';
 
 type VariantBarProps = {
@@ -68,9 +68,11 @@ const VariantBar = ({
             className="mt-0.5 w-full sm:w-1/2 flex items-center gap-1 text-left text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 group overflow-hidden"
           >
             <span className="truncate">
-              {variant.delta != null && String(variant.delta)
-                ? String(variant.delta)
-                : <span className="italic">+ Add change summary</span>}
+              {variant.delta != null && String(variant.delta) ? (
+                String(variant.delta)
+              ) : (
+                <span className="italic">+ Add change summary</span>
+              )}
             </span>
             <Pencil
               className="w-3 h-3 shrink-0 link-blush opacity-0 group-hover:opacity-100 transition-opacity"

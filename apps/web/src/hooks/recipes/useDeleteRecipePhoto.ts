@@ -1,10 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@clerk/clerk-react';
 import { recipe as recipeApi } from '../../api';
-import type {
-  Recipe,
-  RecipeListItem,
-} from '../../../../api/src/services/recipes/recipes.types';
+import type { Recipe, RecipeListItem } from 'shared';
 
 type DeleteRecipePhotoParams = {
   recipeId: string;

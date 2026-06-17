@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import { X, CircleMinus } from 'lucide-react';
-import type { LabVariant, VariantItem } from '../../../../../api/src/services/lab/lab.types';
-import type { Recipe } from '../../../../../api/src/services/recipes/recipes.types';
+import type { LabVariant, VariantItem } from 'shared';
+import type { Recipe } from 'shared';
 import { useCreateVariant } from '../../../hooks';
 
 type NewVariantModalProps = {
@@ -50,7 +50,10 @@ const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) =
   return (
     <Tag className="mt-2 flex flex-col gap-1.5">
       {items.map((item, idx) => (
-        <li key={idx} className={`flex gap-2 ${ordered ? 'items-start' : 'items-center'}`}>
+        <li
+          key={idx}
+          className={`flex gap-2 ${ordered ? 'items-start' : 'items-center'}`}
+        >
           {ordered && (
             <span className="w-4 shrink-0 pt-2 text-right text-xs tabular-nums text-gray-500">
               {idx + 1}.
@@ -65,11 +68,15 @@ const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) =
             {item.status}
           </button>
           <input
-            ref={(el) => { refs.current[idx] = el; }}
+            ref={(el) => {
+              refs.current[idx] = el;
+            }}
             type="text"
             value={item.text}
             onChange={(e) =>
-              onChange(items.map((it, i) => (i === idx ? { ...it, text: e.target.value } : it)))
+              onChange(
+                items.map((it, i) => (i === idx ? { ...it, text: e.target.value } : it))
+              )
             }
             onKeyDown={(e) => {
               if (e.key === 'Enter' && item.text.trim()) {
@@ -92,7 +99,10 @@ const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) =
               onClick={() => onChange(removeAt(items, idx))}
               className={ordered ? 'mt-1.5' : undefined}
             >
-              <CircleMinus className="h-4 w-4 text-red-300 opacity-80 hover:text-red-500 hover:opacity-100" aria-hidden="true" />
+              <CircleMinus
+                className="h-4 w-4 text-red-300 opacity-80 hover:text-red-500 hover:opacity-100"
+                aria-hidden="true"
+              />
             </button>
           )}
         </li>
@@ -223,16 +233,24 @@ const NewVariantModal = ({
 
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="field-label text-gray-600 dark:text-gray-300">Ingredients</span>
-                <span className="text-[10px] text-gray-400">click badge to cycle status</span>
+                <span className="field-label text-gray-600 dark:text-gray-300">
+                  Ingredients
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  click badge to cycle status
+                </span>
               </div>
               <EditableItemList items={ingredients} onChange={setIngredients} />
             </div>
 
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="field-label text-gray-600 dark:text-gray-300">Steps</span>
-                <span className="text-[10px] text-gray-400">click badge to cycle status</span>
+                <span className="field-label text-gray-600 dark:text-gray-300">
+                  Steps
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  click badge to cycle status
+                </span>
               </div>
               <EditableItemList items={steps} onChange={setSteps} ordered />
             </div>
