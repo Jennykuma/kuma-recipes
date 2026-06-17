@@ -96,6 +96,7 @@ All lab endpoints are auth-gated via `requireUser` and enforce userId ownership 
 - Prisma schema: `apps/api/prisma/schema.prisma`
 - Prisma migrations: `apps/api/prisma/migrations`
 - Prisma client setup: `apps/api/src/prisma.ts`
+- All API `*.types.ts` files use Zod schemas for runtime validation of network input. Schema naming convention: `<Concept>Schema` (e.g. `NewRecipeBodySchema`, `CreateTagBodySchema`, `ParsedRecipeSchema`, `VariantItemSchema`). Types are derived via `z.infer<>` — do not maintain separate type definitions alongside a schema.
 - Shared recipe and tag types live under `apps/api/src/services/.../*.types.ts`
 
 ### Auth and environment
@@ -120,6 +121,7 @@ All lab endpoints are auth-gated via `requireUser` and enforce userId ownership 
 - Recipe and tag data are scoped per authenticated user.
 - Shared recipe lookup is public and uses a token rather than the authenticated recipe routes.
 - If a task changes request or response shapes, treat it as cross-stack and inspect both the web client and API route/service files.
+- All API input validation uses Zod; parse in the service (not the route) so validation applies even in tests that call the service directly. The route's existing `try/catch` catches `ZodError` and returns a 400.
 
 ---
 

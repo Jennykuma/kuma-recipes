@@ -1,18 +1,21 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { z } from 'zod';
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-export type ParsedRecipe = {
-  title: string;
-  yield: string;
-  source: string;
-  notes: string;
-  ingredients: string[];
-  steps: string[];
-  suggestedTags: string[];
-};
+export const ParsedRecipeSchema = z.object({
+  title: z.string(),
+  yield: z.string(),
+  source: z.string(),
+  notes: z.string(),
+  ingredients: z.array(z.string()),
+  steps: z.array(z.string()),
+  suggestedTags: z.array(z.string()),
+});
+
+export type ParsedRecipe = z.infer<typeof ParsedRecipeSchema>;
 
 const SYSTEM_PROMPT = `You are a recipe parser. Given raw recipe text, extract structured data and return it as JSON with exactly this shape:
 {
@@ -55,6 +58,5 @@ export async function parseRecipeText(rawText: string): Promise<ParsedRecipe> {
     text = text.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
   }
 
-  const parsed = JSON.parse(text) as ParsedRecipe;
-  return parsed;
+  return ParsedRecipeSchema.parse(JSON.parse(text));
 }

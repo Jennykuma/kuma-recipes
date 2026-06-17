@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import type { ParsedRecipe } from './parseRecipe.service.js';
+import { ParsedRecipeSchema, type ParsedRecipe } from './parseRecipe.service.js';
 
 // shape of a Recipe object from Schema.org's standard
 type SchemaRecipe = {
@@ -96,7 +96,7 @@ export async function parseRecipeFromUrl(url: string): Promise<ParsedRecipe | nu
       .filter(Boolean)
       .slice(0, 5);
 
-    return {
+    const result = {
       title: decodeHtml(recipe.name ?? ''),
       yield: decodeHtml(toArray(recipe.recipeYield).join(', ')),
       source: url,
@@ -105,6 +105,8 @@ export async function parseRecipeFromUrl(url: string): Promise<ParsedRecipe | nu
       steps: steps.map(decodeHtml),
       suggestedTags: tags,
     };
+
+    return ParsedRecipeSchema.parse(result);
   }
 
   return null;

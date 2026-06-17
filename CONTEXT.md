@@ -58,6 +58,14 @@ User
 
 ---
 
+## Validation convention
+
+All API input boundaries use Zod schemas for runtime validation. The schema is the canonical source of truth; TypeScript types are derived from it via `z.infer<>`. Schemas live alongside their types in `*.types.ts` files and are named `<Concept>Schema` (e.g. `NewRecipeBodySchema`, `VariantItemSchema`, `ParsedRecipeSchema`).
+
+Validated at write time → no `as` casts needed at read time.
+
+---
+
 ## What this file is for
 
 Architecture reviews and grilling sessions use this vocabulary. When a new concept is named during a review, add it here. The goal is one name per thing — drift in naming (e.g. "version" vs "variant", "note" vs "pin") is a signal that a seam may be unclear.

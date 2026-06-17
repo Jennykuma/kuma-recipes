@@ -1,5 +1,10 @@
 import { FastifyPluginAsync, FastifyReply } from 'fastify';
+import { z } from 'zod';
 import { requireUser } from '../auth/require-user.js';
+
+const ParseRecipeBodySchema = z.object({
+  recipeInput: z.string().min(1, 'rawText or URL is required'),
+});
 
 const isUrl = (input: string) => {
   try {
@@ -16,12 +21,8 @@ const aiRoutes: FastifyPluginAsync = async (fastify) => {
     const userId = await requireUser(request, reply);
     if (!userId) return;
 
-    const { recipeInput } = request.body as { recipeInput?: string };
-    if (
-      !recipeInput ||
-      typeof recipeInput !== 'string' ||
-      recipeInput.trim().length === 0
-    ) {
+    const result = ParseRecipeBodySchema.safeParse(request.body);
+    if (!result.success) {
       return reply.status(400).send({ error: 'rawText or URL is required' });
     }
 
@@ -29,12 +30,13 @@ const aiRoutes: FastifyPluginAsync = async (fastify) => {
       await import('../services/ai/parseRecipeFromUrl.service.js');
     const { parseRecipeText } = await import('../services/ai/parseRecipe.service.js');
 
-    const trimmed = recipeInput.trim();
+    const trimmed = result.data.recipeInput.trim();
     if (isUrl(trimmed)) {
       const parsed = await parseRecipeFromUrl(trimmed);
       if (!parsed) {
         return reply.status(422).send({
-          error: "We couldn't extract a recipe from that URL. Try copying and pasting the recipe text instead.",
+          error:
+            "We couldn't extract a recipe from that URL. Try copying and pasting the recipe text instead.",
         });
       }
       return reply.send(parsed);

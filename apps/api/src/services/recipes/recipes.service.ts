@@ -1,8 +1,10 @@
 import { prisma } from '../../prisma.js';
 import {
-  RecipeListItem,
-  NewRecipeBody,
-  UpdateRecipeBody,
+  NewRecipeBodySchema,
+  UpdateRecipeBodySchema,
+  type RecipeListItem,
+  type NewRecipeBody,
+  type UpdateRecipeBody,
 } from '../recipes/recipes.types.js';
 import { randomBytes } from 'node:crypto';
 
@@ -77,7 +79,7 @@ export async function createNewRecipe(recipeParams: NewRecipeBody, userId: strin
     tagIds,
     source,
     yield: recipeYield,
-  } = recipeParams;
+  } = NewRecipeBodySchema.parse(recipeParams);
   const ownedTagIds = await resolveOwnedTagIds(userId, tagIds);
   const normalizedTitle = normalizeTitle(title);
   const normalizedSource = source?.trim();
@@ -106,7 +108,7 @@ export async function updateRecipe(
   updatedRecipe: UpdateRecipeBody,
   userId: string
 ) {
-  const { tagIds, ...rest } = updatedRecipe;
+  const { tagIds, ...rest } = UpdateRecipeBodySchema.parse(updatedRecipe);
   const { yield: recipeYield, ...otherUpdates } = rest;
   const ownedTagIds = tagIds ? await resolveOwnedTagIds(userId, tagIds) : null;
   const normalizedTitle =
