@@ -1,0 +1,3 @@
+pnpm lint-staged
+pnpm --filter web test
+pnpm --filter api test
