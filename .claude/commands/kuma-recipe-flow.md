@@ -46,10 +46,11 @@ When working in this repo:
 - Web API client: `apps/web/src/api/ai.ts`
 - Parse recipe hook: `apps/web/src/hooks/ai/useParseRecipe.ts`
 - AI route (POST /ai/parse-recipe): `apps/api/src/routes/ai.routes.ts`
+- Parse Request service (owns URL-vs-text detection): `apps/api/src/services/ai/parseRequest.service.ts`
 - Parse from URL service: `apps/api/src/services/ai/parseRecipeFromUrl.service.ts`
 - Parse from raw text service: `apps/api/src/services/ai/parseRecipe.service.ts`
 
-The `/ai/parse-recipe` endpoint accepts a single `recipeInput` string and auto-detects whether it is a URL or raw text, routing to the appropriate service.
+The `/ai/parse-recipe` endpoint accepts a single `recipeInput` string. The route delegates entirely to `parseRequest.service.ts`, which owns the URL-vs-text detection (`isUrl`) and dispatches to the appropriate service. Returns `{ ok: true, recipe }` or `{ ok: false, reason: 'url_no_recipe' }`.
 
 ### Share flow
 
@@ -78,6 +79,7 @@ The Lab tab lives on the recipe details page and lets users track variants, atte
 - Best badge (amber pill with trophy icon) renders in the recipe header `headerActions` when a variant has `isBest: true`
 
 Endpoints:
+
 - `GET /recipes/:id/lab` — returns `{ variants, attempts, pins }` for a recipe
 - `POST /recipes/:id/lab/variants` — create variant; `order` auto-assigned if omitted
 - `PATCH /recipes/:id/lab/variants/:variantId` — update variant; setting `isBest: true` clears all other variants' `isBest` in a transaction
