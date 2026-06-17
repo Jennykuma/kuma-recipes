@@ -14,7 +14,7 @@ export const supabase = createClient(supabaseUrl, serviceRoleKey, {
     persistSession: false,
   },
   realtime: {
-    transport: ws,
+    transport: ws as unknown as typeof WebSocket,
   },
 });
 export const recipePhotosBucket =

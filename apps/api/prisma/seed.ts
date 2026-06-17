@@ -4,6 +4,7 @@ async function main() {
   await prisma.recipe.create({
     data: {
       title: 'Test Recipe',
+      userId: 'seed-user',
     },
   });
 
