@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "build:shared": "pnpm --filter shared build",
     "typecheck": "pnpm -r exec tsc --noEmit",
     "prepare": "husky"
   },
