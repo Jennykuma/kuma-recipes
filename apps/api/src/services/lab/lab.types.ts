@@ -1,13 +1,48 @@
+import { z } from 'zod';
+
+export const VariantItemSchema = z.object({
+  text: z.string(),
+  status: z.enum(['original', 'tweaked', 'new']),
+});
+
+export const CreateVariantBodySchema = z.object({
+  name: z.string(),
+  tag: z.string().optional(),
+  delta: z.string().optional(),
+  rating: z.number().int().optional(),
+  isBest: z.boolean().optional(),
+  ingredients: z.array(VariantItemSchema),
+  steps: z.array(VariantItemSchema),
+  order: z.number().int().optional(),
+});
+
+export const UpdateVariantBodySchema = z
+  .object({
+    name: z.string(),
+    tag: z.string().nullable(),
+    delta: z.string().nullable(),
+    rating: z.number().int().nullable(),
+    isBest: z.boolean(),
+    ingredients: z.array(VariantItemSchema),
+    steps: z.array(VariantItemSchema),
+    order: z.number().int(),
+  })
+  .partial();
+
+export type VariantItem = z.infer<typeof VariantItemSchema>;
+export type CreateVariantBody = z.infer<typeof CreateVariantBodySchema>;
+export type UpdateVariantBody = z.infer<typeof UpdateVariantBodySchema>;
+
 export type LabVariant = {
   id: string;
   recipeId: string;
   name: string;
   tag: string | null;
-  delta: unknown;
+  delta: string | null;
   rating: number | null;
   isBest: boolean;
-  ingredients: unknown;
-  steps: unknown;
+  ingredients: VariantItem[];
+  steps: VariantItem[];
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -42,28 +77,6 @@ export type LabData = {
   attempts: LabAttempt[];
   pins: LabPin[];
 };
-
-export type CreateVariantBody = {
-  name: string;
-  tag?: string;
-  delta?: unknown;
-  rating?: number;
-  isBest?: boolean;
-  ingredients: unknown;
-  steps: unknown;
-  order?: number;
-};
-
-export type UpdateVariantBody = Partial<{
-  name: string;
-  tag: string | null;
-  delta: unknown;
-  rating: number | null;
-  isBest: boolean;
-  ingredients: unknown;
-  steps: unknown;
-  order: number;
-}>;
 
 export type CreateAttemptBody = {
   variantId?: string;

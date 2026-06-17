@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import type { LabVariant, LabPin } from '../../../../../api/src/services/lab/lab.types';
-import type { VariantItem } from '../labTypes';
+import type { LabVariant, LabPin, VariantItem } from '../../../../../api/src/services/lab/lab.types';
 import StickyNote from './StickyNote';
 
 type PinnedRecipePaneProps = {
@@ -175,11 +174,11 @@ const PinnedRecipePane = ({
   const [addingGeneralNote, setAddingGeneralNote] = useState(false);
 
   const ingredients: VariantItem[] = variant
-    ? ((variant.ingredients as VariantItem[] | null) ?? [])
+    ? (variant.ingredients ?? [])
     : baseIngredients.map((text) => ({ text, status: 'original' }));
 
   const steps: VariantItem[] = variant
-    ? ((variant.steps as VariantItem[] | null) ?? [])
+    ? (variant.steps ?? [])
     : baseSteps.map((text) => ({ text, status: 'original' }));
 
   const generalPins = pins.filter((p) => !p.attachType);

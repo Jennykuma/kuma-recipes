@@ -49,7 +49,7 @@ importers:
     dependencies:
       '@anthropic-ai/sdk':
         specifier: ^0.104.1
-        version: 0.104.1(zod@4.3.5)
+        version: 0.104.1(zod@4.4.3)
       '@clerk/backend':
         specifier: ^3.4.4
         version: 3.4.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -80,6 +80,9 @@ importers:
       ws:
         specifier: ^8.19.0
         version: 8.19.0
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -3093,16 +3096,19 @@ packages:
   zod@4.3.5:
     resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@adobe/css-tools@4.4.4': {}
 
-  '@anthropic-ai/sdk@0.104.1(zod@4.3.5)':
+  '@anthropic-ai/sdk@0.104.1(zod@4.4.3)':
     dependencies:
       json-schema-to-ts: 3.1.1
       standardwebhooks: 1.0.0
     optionalDependencies:
-      zod: 4.3.5
+      zod: 4.4.3
 
   '@asamuzakjp/css-color@3.2.0':
     dependencies:
@@ -6142,3 +6148,5 @@ snapshots:
       zod: 4.3.5
 
   zod@4.3.5: {}
+
+  zod@4.4.3: {}

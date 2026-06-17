@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 import { X, CircleMinus } from 'lucide-react';
-import type { LabVariant } from '../../../../../api/src/services/lab/lab.types';
+import type { LabVariant, VariantItem } from '../../../../../api/src/services/lab/lab.types';
 import type { Recipe } from '../../../../../api/src/services/recipes/recipes.types';
 import { useCreateVariant } from '../../../hooks';
-import type { VariantItem } from '../labTypes';
 
 type NewVariantModalProps = {
   recipeId: string;
