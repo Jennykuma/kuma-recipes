@@ -89,7 +89,8 @@ describe('App recipe search', () => {
     expect(screen.getByTestId('recipe-list')).toHaveClass(
       'grid',
       'grid-cols-1',
-      'md:grid-cols-3'
+      'sm:grid-cols-2',
+      'lg:grid-cols-3'
     );
     expect(screen.getByText('Cookie Latte')).toBeInTheDocument();
   });
