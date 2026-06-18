@@ -7,6 +7,7 @@ import {
   MAX_UPLOAD_PHOTO_SIZE,
   resizeImageFile,
 } from '../../utils/resizeImageFile';
+import { queryKeys } from '../../lib/queryKeys';
 
 type CreateRecipeParams = {
   recipe: NewRecipeBody;
@@ -51,9 +52,11 @@ const useCreateRecipe = () => {
       return createdRecipe;
     },
     onSuccess: (createdRecipe: Recipe) => {
-      queryClient.invalidateQueries({ queryKey: ['recipe', createdRecipe.id] });
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.recipe.detail(createdRecipe.id),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.tags.all });
     },
   });
 };

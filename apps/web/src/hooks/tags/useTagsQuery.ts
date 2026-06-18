@@ -1,13 +1,14 @@
 ﻿import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import tagsApi from '../../api/tags';
 import type { Tag } from 'shared';
+import { queryKeys } from '../../lib/queryKeys';
 import { useAuth } from '@clerk/clerk-react';
 
 const useTagsQuery = (query: string, enabled = true) => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
 
   return useQuery<Tag[]>({
-    queryKey: ['tags', query],
+    queryKey: queryKeys.tags.list(query),
     enabled: isLoaded && isSignedIn && enabled,
     queryFn: async () => {
       const token = await getToken();

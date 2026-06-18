@@ -2,6 +2,7 @@
 import tagsApi from '../../api/tags';
 import type { Tag } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useDeleteTag = () => {
   const queryClient = useQueryClient();
@@ -17,12 +18,13 @@ const useDeleteTag = () => {
       return tagsApi.deleteTag(id, token);
     },
     onSuccess: (_, id) => {
-      queryClient.setQueriesData<Tag[]>({ queryKey: ['tags'] }, (existing = []) =>
-        existing.filter((tag) => tag.id !== id)
+      queryClient.setQueriesData<Tag[]>(
+        { queryKey: queryKeys.tags.all },
+        (existing = []) => existing.filter((tag) => tag.id !== id)
       );
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      queryClient.invalidateQueries({ queryKey: ['recipe'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.tags.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipe.all });
     },
   });
 };

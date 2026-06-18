@@ -2,6 +2,7 @@
 import type { RecipeListItem } from 'shared';
 import { recipe as recipeApi } from '../../api';
 import { useAuth } from '@clerk/clerk-react';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useRecipes = (tagSlugs: string[] = []) => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
@@ -12,7 +13,7 @@ const useRecipes = (tagSlugs: string[] = []) => {
     error,
     refetch,
   } = useQuery<RecipeListItem[]>({
-    queryKey: ['recipes', tagSlugs],
+    queryKey: queryKeys.recipes.list(tagSlugs),
     enabled: isLoaded && isSignedIn,
     placeholderData: keepPreviousData,
     queryFn: async () => {

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@clerk/clerk-react';
 import { lab as labApi } from '../../api';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useDeleteVariant = (recipeId: string) => {
   const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ const useDeleteVariant = (recipeId: string) => {
       return labApi.deleteVariant(recipeId, variantId, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lab', recipeId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.lab.detail(recipeId) });
     },
   });
 };

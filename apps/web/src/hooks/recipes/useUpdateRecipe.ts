@@ -2,6 +2,7 @@
 import { recipe as recipeApi } from '../../api';
 import type { UpdateRecipeBody, Recipe, RecipeListItem } from 'shared';
 import { useAuth } from '@clerk/clerk-react';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useUpdateRecipe = (id: string) => {
   const queryClient = useQueryClient();
@@ -18,16 +19,20 @@ const useUpdateRecipe = (id: string) => {
     },
     onMutate: async (updatedRecipe) => {
       // cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ['recipe', id] });
-      await queryClient.cancelQueries({ queryKey: ['recipes'] });
+      await queryClient.cancelQueries({ queryKey: queryKeys.recipe.detail(id) });
+      await queryClient.cancelQueries({ queryKey: queryKeys.recipes.all });
 
       // snapshot the previous recipe/recipes
-      const previousRecipe = queryClient.getQueryData<Recipe>(['recipe', id]);
-      const previousRecipes = queryClient.getQueryData<RecipeListItem[]>(['recipes']);
+      const previousRecipe = queryClient.getQueryData<Recipe>(
+        queryKeys.recipe.detail(id)
+      );
+      const previousRecipes = queryClient.getQueryData<RecipeListItem[]>(
+        queryKeys.recipes.all
+      );
 
       // optimistically update to the new recipe
       if (previousRecipe) {
-        queryClient.setQueryData<Recipe>(['recipe', id], {
+        queryClient.setQueryData<Recipe>(queryKeys.recipe.detail(id), {
           ...previousRecipe,
           ...updatedRecipe,
         });
@@ -36,7 +41,7 @@ const useUpdateRecipe = (id: string) => {
       // optimistically update the recipe in the recipes list
       if (previousRecipes) {
         queryClient.setQueryData<RecipeListItem[]>(
-          ['recipes'],
+          queryKeys.recipes.all,
           previousRecipes.map((item) =>
             item.id === id
               ? {
@@ -62,17 +67,23 @@ const useUpdateRecipe = (id: string) => {
     // if the mutation fails, roll back to the previous recipe/recipes
     onError: (_error, _updatedRecipe, context) => {
       if (context?.previousRecipe) {
-        queryClient.setQueryData<Recipe>(['recipe', id], context.previousRecipe);
+        queryClient.setQueryData<Recipe>(
+          queryKeys.recipe.detail(id),
+          context.previousRecipe
+        );
       }
       if (context?.previousRecipes) {
-        queryClient.setQueryData<RecipeListItem[]>(['recipes'], context.previousRecipes);
+        queryClient.setQueryData<RecipeListItem[]>(
+          queryKeys.recipes.all,
+          context.previousRecipes
+        );
       }
     },
     // always refetch after error/success
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['recipe', id] });
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipe.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.tags.all });
     },
   });
 };

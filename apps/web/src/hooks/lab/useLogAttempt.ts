@@ -2,6 +2,7 @@
 import { useAuth } from '@clerk/clerk-react';
 import type { CreateAttemptBody } from 'shared';
 import { lab as labApi } from '../../api';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useLogAttempt = (recipeId: string) => {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ const useLogAttempt = (recipeId: string) => {
       return labApi.logAttempt(recipeId, body, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lab', recipeId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.lab.detail(recipeId) });
     },
   });
 };

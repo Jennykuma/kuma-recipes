@@ -6,6 +6,7 @@ import {
   MAX_UPLOAD_PHOTO_SIZE,
   resizeImageFile,
 } from '../../utils/resizeImageFile';
+import { queryKeys } from '../../lib/queryKeys';
 
 type UploadRecipePhotoParams = {
   recipeId: string;
@@ -35,8 +36,8 @@ const useUploadRecipePhoto = () => {
       return recipeApi.uploadRecipePhoto(recipeId, resizedPhoto, token);
     },
     onSuccess: (_data, { recipeId }) => {
-      queryClient.invalidateQueries({ queryKey: ['recipe', recipeId] });
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipe.detail(recipeId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.all });
     },
   });
 };

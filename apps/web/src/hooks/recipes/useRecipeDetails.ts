@@ -2,6 +2,7 @@
 import type { Recipe } from 'shared';
 import { recipe as recipeApi } from '../../api';
 import { useAuth } from '@clerk/clerk-react';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useRecipeDetails = (id: string) => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
@@ -12,7 +13,7 @@ const useRecipeDetails = (id: string) => {
     error,
     refetch,
   } = useQuery<Recipe>({
-    queryKey: ['recipe', id],
+    queryKey: queryKeys.recipe.detail(id),
     enabled: Boolean(id) && isLoaded && isSignedIn,
     queryFn: async () => {
       const token = await getToken();

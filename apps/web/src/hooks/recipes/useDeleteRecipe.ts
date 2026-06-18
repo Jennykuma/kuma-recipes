@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
 import { useAuth } from '@clerk/clerk-react';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useDeleteRecipe = (id: string) => {
   const queryClient = useQueryClient();
@@ -17,8 +18,8 @@ const useDeleteRecipe = (id: string) => {
       return recipeApi.deleteRecipe(id, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recipes.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.tags.all });
     },
   });
 };

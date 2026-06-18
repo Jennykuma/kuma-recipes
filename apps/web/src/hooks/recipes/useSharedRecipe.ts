@@ -1,6 +1,7 @@
 ﻿import { useQuery } from '@tanstack/react-query';
 import { recipe as recipeApi } from '../../api';
 import type { Recipe } from 'shared';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useSharedRecipe = (token: string) => {
   const {
@@ -9,7 +10,7 @@ const useSharedRecipe = (token: string) => {
     error,
     refetch,
   } = useQuery<Recipe>({
-    queryKey: ['sharedRecipe', token],
+    queryKey: queryKeys.sharedRecipe.detail(token),
     queryFn: async () => {
       if (!token) throw new Error('Missing recipe token');
 

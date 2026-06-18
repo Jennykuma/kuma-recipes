@@ -2,6 +2,7 @@
 import { useAuth } from '@clerk/clerk-react';
 import type { UpdateVariantBody } from 'shared';
 import { lab as labApi } from '../../api';
+import { queryKeys } from '../../lib/queryKeys';
 
 type UpdateVariantParams = {
   variantId: string;
@@ -19,7 +20,7 @@ const useUpdateVariant = (recipeId: string) => {
       return labApi.updateVariant(recipeId, variantId, body, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lab', recipeId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.lab.detail(recipeId) });
     },
   });
 };

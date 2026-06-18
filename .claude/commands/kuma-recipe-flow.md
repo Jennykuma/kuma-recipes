@@ -91,6 +91,11 @@ Endpoints:
 
 All lab endpoints are auth-gated via `requireUser` and enforce userId ownership through the Recipe relation.
 
+### React Query cache keys
+
+- Central registry: `apps/web/src/lib/queryKeys.ts` — `queryKeys.recipes.all/.list(tagSlugs)`, `queryKeys.recipe.all/.detail(id)`, `queryKeys.sharedRecipe.detail(token)`, `queryKeys.tags.all/.list(query)`, `queryKeys.lab.detail(recipeId)`
+- All hooks under `apps/web/src/hooks/` import from this registry instead of inline string arrays — new query/mutation hooks should add a key here rather than hardcoding a string
+
 ### API and data layers
 
 - Fastify app entry: `apps/api/src/app.ts`

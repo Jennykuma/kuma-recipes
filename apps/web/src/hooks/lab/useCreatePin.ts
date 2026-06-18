@@ -2,6 +2,7 @@
 import { useAuth } from '@clerk/clerk-react';
 import type { CreatePinBody } from 'shared';
 import { lab as labApi } from '../../api';
+import { queryKeys } from '../../lib/queryKeys';
 
 const useCreatePin = (recipeId: string) => {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ const useCreatePin = (recipeId: string) => {
       return labApi.createPin(recipeId, body, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lab', recipeId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.lab.detail(recipeId) });
     },
   });
 };
