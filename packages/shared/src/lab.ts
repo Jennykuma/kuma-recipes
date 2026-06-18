@@ -13,7 +13,6 @@ export const CreateVariantBodySchema = z.object({
   isBest: z.boolean().optional(),
   ingredients: z.array(VariantItemSchema),
   steps: z.array(VariantItemSchema),
-  order: z.number().int().optional(),
 });
 
 export const UpdateVariantBodySchema = z

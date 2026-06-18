@@ -44,11 +44,7 @@ export async function createVariant(
   });
   if (!recipe) return null;
 
-  let order = parsed.order;
-  if (order === undefined) {
-    const count = await prisma.recipeVariant.count({ where: { recipeId } });
-    order = count;
-  }
+  const order = await prisma.recipeVariant.count({ where: { recipeId } });
 
   return prisma.recipeVariant.create({
     data: {

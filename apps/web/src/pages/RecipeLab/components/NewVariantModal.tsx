@@ -154,7 +154,6 @@ const NewVariantModal = ({
         delta: delta.trim() || undefined,
         ingredients: variantIngredients,
         steps: variantSteps,
-        order: 0,
       },
       {
         onSuccess: (variant) => {
