@@ -105,8 +105,8 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
         <NewVariantModal
           recipeId={recipeId}
           recipe={recipe}
+          onCreated={(variantId) => setSelectedVariantId(variantId)}
           onClose={() => setShowNewVariant(false)}
-          onSuccess={(variant) => setSelectedVariantId(variant.id)}
         />
       )}
       {showLogAttempt && (

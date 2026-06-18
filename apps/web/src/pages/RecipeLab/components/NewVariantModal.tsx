@@ -1,14 +1,14 @@
 ﻿import { useState, useRef } from 'react';
 import { X, CircleMinus } from 'lucide-react';
-import type { LabVariant, VariantItem } from 'shared';
+import type { VariantItem } from 'shared';
 import type { Recipe } from 'shared';
 import { useCreateVariant } from '../../../hooks';
 
 type NewVariantModalProps = {
   recipeId: string;
   recipe: Recipe;
+  onCreated: (variantId: string) => void;
   onClose: () => void;
-  onSuccess?: (variant: LabVariant) => void;
 };
 
 type ItemStatus = VariantItem['status'];
@@ -121,8 +121,8 @@ const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) =
 const NewVariantModal = ({
   recipeId,
   recipe,
+  onCreated,
   onClose,
-  onSuccess,
 }: NewVariantModalProps) => {
   const [name, setName] = useState('');
   const [tag, setTag] = useState('');
@@ -158,7 +158,7 @@ const NewVariantModal = ({
       },
       {
         onSuccess: (variant) => {
-          onSuccess?.(variant);
+          onCreated(variant.id);
           onClose();
         },
       }
