@@ -1,5 +1,5 @@
 ﻿import { useState, useRef } from 'react';
-import { Pencil } from 'lucide-react';
+import { Pencil, Star, Trash2 } from 'lucide-react';
 import type { LabVariant } from 'shared';
 import Rating from '../../../components/Rating';
 
@@ -8,6 +8,7 @@ type VariantBarProps = {
   onMarkBest: () => void;
   onClearBest: () => void;
   onUpdateDelta: (delta: string) => void;
+  onDelete: () => void;
 };
 
 const VariantBar = ({
@@ -15,6 +16,7 @@ const VariantBar = ({
   onMarkBest,
   onClearBest,
   onUpdateDelta,
+  onDelete,
 }: VariantBarProps) => {
   const [editingDelta, setEditingDelta] = useState(false);
   const [deltaValue, setDeltaValue] = useState('');
@@ -94,20 +96,31 @@ const VariantBar = ({
           <button
             type="button"
             onClick={onClearBest}
-            className="flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-700 transition hover:bg-amber-100"
+            aria-label="Clear best variant"
+            title="Best variant"
+            className="flex items-center justify-center rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-500 transition hover:bg-amber-100"
           >
-            <span className="text-amber-400">★</span>
-            Best
+            <Star className="h-4 w-4 fill-amber-400" aria-hidden="true" />
           </button>
         ) : (
           <button
             type="button"
             onClick={onMarkBest}
-            className="rounded-full border border-amber-200 bg-white px-4 py-2 text-sm font-bold text-amber-600 transition hover:bg-amber-50 dark:bg-canvas-card"
+            aria-label="Mark as best"
+            title="Mark as best"
+            className="flex items-center justify-center rounded-full border border-amber-200 bg-white p-2 text-amber-500 transition hover:bg-amber-50 dark:bg-canvas-card"
           >
-            ☆ Mark as best
+            <Star className="h-4 w-4" aria-hidden="true" />
           </button>
         )}
+        <button
+          type="button"
+          onClick={() => onDelete()}
+          aria-label="Delete variant"
+          className="flex shrink-0 items-center justify-center rounded-full p-2 text-red-500 transition hover:bg-red-100 hover:text-red-600 dark:text-red-300 dark:hover:bg-red-400/20 dark:hover:text-red-200"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import {
   useDeleteAttempt,
   useDeletePin,
   useCreatePin,
+  useDeleteVariant,
 } from '../../hooks';
 import VariantSwitcher from './components/VariantSwitcher';
 import VariantBar from './components/VariantBar';
@@ -13,6 +14,7 @@ import PinnedRecipePane from './components/PinnedRecipePane';
 import AttemptLog from './components/AttemptLog';
 import LogAttemptModal from './components/LogAttemptModal';
 import NewVariantModal from './components/NewVariantModal';
+import DeleteModal from '../../components/DeleteModal';
 
 type RDLabTabProps = {
   recipeId: string;
@@ -32,11 +34,13 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
   );
   const [showNewVariant, setShowNewVariant] = useState(false);
   const [showLogAttempt, setShowLogAttempt] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { mutate: updateVariant } = useUpdateVariant(recipeId);
   const { mutate: deleteAttempt } = useDeleteAttempt(recipeId);
   const { mutate: deletePin } = useDeletePin(recipeId);
   const { mutate: createPin } = useCreatePin(recipeId);
+  const { mutate: deleteVariant } = useDeleteVariant(recipeId);
 
   const selectedVariant =
     labData.variants.find((v) => v.id === selectedVariantId) ?? null;
@@ -55,6 +59,16 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
   const handleClearBest = () => {
     if (!selectedVariantId) return;
     updateVariant({ variantId: selectedVariantId, body: { isBest: false } });
+  };
+
+  const handleDelete = () => {
+    if (!selectedVariantId) return;
+    const index = labData.variants.findIndex((v) => v.id === selectedVariantId);
+    const remaining = labData.variants.filter((v) => v.id !== selectedVariantId);
+    const nextIndex = Math.min(index, remaining.length - 1);
+    deleteVariant(selectedVariantId);
+    setSelectedVariantId(remaining[nextIndex]?.id ?? null);
+    setShowDeleteModal(false);
   };
 
   return (
@@ -76,6 +90,7 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
               body: { delta: delta || null },
             })
           }
+          onDelete={() => setShowDeleteModal(true)}
         />
       )}
       <div className="flex items-start gap-6 flex-wrap lg:flex-nowrap">
@@ -115,6 +130,13 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           variants={labData.variants}
           selectedVariantId={selectedVariantId}
           onClose={() => setShowLogAttempt(false)}
+        />
+      )}
+      {showDeleteModal && selectedVariant && (
+        <DeleteModal
+          title={selectedVariant.name}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
         />
       )}
     </div>

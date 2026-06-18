@@ -32,7 +32,7 @@ const RecipeDetailsView = ({
     <PageShell className="p-6">
       <div className="mx-auto w-full max-w-7xl">
         {backButton}
-        <header className="mb-1 flex items-center justify-between gap-4">
+        <header className="mb-1 flex min-h-9 items-center justify-between gap-4">
           <div className="min-w-0 flex-1">{title}</div>
           {headerActions ? (
             <div className="ml-2 flex shrink-0 items-center">{headerActions}</div>

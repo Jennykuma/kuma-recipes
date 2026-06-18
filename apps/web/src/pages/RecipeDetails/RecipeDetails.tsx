@@ -15,7 +15,7 @@ import RDLabTab from '../RecipeLab/RDLabTab';
 import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
-import DeleteModal from './components/DeleteModal';
+import DeleteModal from '../../components/DeleteModal';
 import EditableTitle from './components/EditableTitle';
 import EditableSource from './components/EditableSource';
 import IngredientsSection from './components/IngredientsSection';
@@ -304,13 +304,14 @@ const RecipeDetails = () => {
         <div className="flex flex-wrap items-center gap-2">
           <EditableTitle
             title={recipe?.title}
-            isEditing={editingField === 'title'}
+            isEditing={activeTab === 'recipe' && editingField === 'title'}
             draftValue={draft.title}
             error={titleError ?? undefined}
             onEdit={() => beginDraftEdit('title', recipe?.title ?? '')}
             onChange={(value) => updateDraftValue('title', value)}
             onSave={handleTitleSave}
             onCancel={() => handleCancel('title')}
+            readOnly={activeTab !== 'recipe'}
           />
           {bestVariant && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700">
@@ -321,10 +322,12 @@ const RecipeDetails = () => {
         </div>
       }
       headerActions={
-        <>
-          <ShareRecipe id={recipeId} />
-          <DeleteRecipe onDelete={() => setShowDeleteModal(true)} />
-        </>
+        activeTab === 'recipe' ? (
+          <>
+            <ShareRecipe id={recipeId} />
+            <DeleteRecipe onDelete={() => setShowDeleteModal(true)} />
+          </>
+        ) : undefined
       }
       modal={
         showDeleteModal ? (

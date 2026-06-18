@@ -10,6 +10,7 @@ type EditableTitleProps = {
   onChange: (value: string) => void;
   onSave: () => void;
   onCancel: () => void;
+  readOnly?: boolean;
 };
 
 const EditableTitle = ({
@@ -21,6 +22,7 @@ const EditableTitle = ({
   onChange,
   onSave,
   onCancel,
+  readOnly = false,
 }: EditableTitleProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -67,7 +69,11 @@ const EditableTitle = ({
         type="button"
         onClick={onEdit}
         aria-label="Edit title"
-        className="inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300"
+        aria-hidden={readOnly}
+        tabIndex={readOnly ? -1 : undefined}
+        className={`inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 ${
+          readOnly ? 'invisible' : ''
+        }`}
       >
         <Pencil className="w-3 h-4 pt-1 cursor-pointer link-blush" aria-hidden="true" />
       </button>
