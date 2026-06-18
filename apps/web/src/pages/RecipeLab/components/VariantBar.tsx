@@ -43,7 +43,7 @@ const VariantBar = ({
             {variant.name}
           </span>
           {variant.tag && (
-            <span className="rounded-full bg-sage-100 px-3 py-0.5 text-sm font-bold text-primary">
+            <span className="rounded-full bg-sage-100 px-3 py-0.5 text-sm font-bold text-primary border-sage-200">
               {variant.tag}
             </span>
           )}

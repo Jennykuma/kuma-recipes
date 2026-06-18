@@ -23,7 +23,7 @@ const VariantSwitcher = ({
           onClick={() => onSelect(variant.id)}
           className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium transition ${
             selectedVariantId === variant.id
-              ? 'bg-sage-300 text-gray-800'
+              ? 'bg-sage-300 text-white'
               : 'bg-sage-100 text-gray-600 hover:bg-sage-200 dark:bg-canvas-inset dark:text-gray-300 dark:hover:bg-canvas-hover'
           }`}
         >
@@ -32,7 +32,7 @@ const VariantSwitcher = ({
           )}
           {variant.name}
           {variant.tag && (
-            <span className="ml-1 rounded-full bg-white/60 px-1.5 py-0.5 text-[10px] dark:bg-black/20">
+            <span className="ml-1 rounded-full text-gray-600 px-1.5 py-0.5 text-[10px]  bg-white/60 dark:bg-black/20">
               {variant.tag}
             </span>
           )}
@@ -42,9 +42,9 @@ const VariantSwitcher = ({
         type="button"
         onClick={onNew}
         className="
-          rounded-full border bg-sage-300 text-white
-          border-sage-300 px-3 py-1 text-xs
-          transition hover:border-sage-400 hover:bg-sage-400
+          rounded-full border bg-accent text-white
+          font-bold px-3 py-1 text-xs
+          transition hover:bg-blush-500
           dark:border-gray-600 dark:text-gray-400"
       >
         + New variant

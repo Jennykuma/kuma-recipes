@@ -71,8 +71,9 @@ The Lab tab lives on the recipe details page and lets users track variants, atte
 - Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
 - Web API client: `apps/web/src/api/lab.ts`
 - Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
-- Lab UI root: `apps/web/src/pages/RecipeDetails/components/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the two modals
-- Lab UI components: `apps/web/src/pages/RecipeDetails/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `NewVariantModal.tsx`
+- Lab UI root: `apps/web/src/pages/RecipeLab/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the two modals
+- Lab UI components: `apps/web/src/pages/RecipeLab/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `NewVariantModal.tsx`
+- `NewVariantModal` takes `onCreated(variantId: string)` — a plain callback, not the `selectedVariantId` setter — so `RDLabTab` owns wiring it to its own state instead of the setter leaking through the modal's props
 - `VariantItem` (`{ text, status }`) is defined in `apps/api/src/services/lab/lab.types.ts` via Zod (`VariantItemSchema`) and imported directly by PinnedRecipePane and NewVariantModal — `labTypes.ts` was deleted
 - `VariantItem[]` is the typed shape of `ingredients` and `steps` on `LabVariant`; Zod validates these at write time in `createVariant`/`updateVariant`, so no cast is needed when reading in PinnedRecipePane
 - Tab bar and `activeTab` state live in `RecipeDetails.tsx`; `RecipeDetailsView.tsx` accepts `tabBar?: ReactNode` and `labTab?: ReactNode` (when provided, replaces the recipe layout)
