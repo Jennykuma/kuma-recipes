@@ -197,7 +197,7 @@ const Tags = ({ autoFocusInput = false }: TagsProps) => {
           <button
             key={tag.id}
             type="button"
-            className="inline-flex items-center gap-1 rounded-full bg-sage-50 px-2 py-0.5 text-xs text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+            className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
             onMouseDown={keepInputFocused}
             onClick={(event) => {
               event.stopPropagation();

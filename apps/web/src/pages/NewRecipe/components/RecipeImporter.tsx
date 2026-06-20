@@ -68,7 +68,12 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
           <h2 id="importer-title" className="font-bold text-md">
             Import a recipe
           </h2>
-          <button type="button" onClick={onClose} aria-label="Close importer">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close importer"
+            className="text-gray-400 hover:text-gray-600"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -77,7 +82,7 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
           {(['url', 'text'] as const).map((importMode) => (
             <label
               key={importMode}
-              className="flex items-center gap-1.5 cursor-pointer text-sm"
+              className="flex items-center gap-1.5 cursor-pointer field-label text-gray-600 dark:text-gray-300"
             >
               <input
                 type="radio"
@@ -93,11 +98,11 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
               <span
                 className={classNames(
                   'w-3.5 h-3.5 rounded-full border flex items-center justify-center',
-                  mode === importMode ? 'border-blush-400' : 'border-gray-300'
+                  mode === importMode ? 'border-sage-400' : 'border-gray-300'
                 )}
               >
                 {mode === importMode && (
-                  <span className="w-2 h-2 rounded-full bg-blush-400" />
+                  <span className="w-2 h-2 rounded-full bg-sage-400" />
                 )}
               </span>
               {importMode === 'url' ? (
@@ -153,17 +158,9 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
         <div className="flex justify-end mt-2">
           <button
             type="button"
-            className={classNames(
-              'font-bold',
-              'text-sm',
-              'flex',
-              'items-center',
-              'gap-2',
-              canImportRecipe
-                ? 'bg-accent hover:bg-blush-500'
-                : 'bg-blush-200 cursor-not-allowed',
-              'px-4 py-1.5 rounded-full text-white transition-colors shadow-sm'
-            )}
+            className="
+              rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50
+            "
             disabled={isPending || !canImportRecipe}
             onClick={handleImport}
           >

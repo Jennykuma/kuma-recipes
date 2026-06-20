@@ -9,8 +9,8 @@ const DeleteRecipe = ({ onDelete }: DeleteRecipeProps) => {
     <button
       onClick={onDelete}
       className="
-        ml-1 inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-2 md:px-3
-        text-red-500 hover:bg-red-50 hover:text-red-600
+        ml-1 inline-flex h-9 items-center justify-center gap-1.5 rounded-md px-2 md:px-3
+        text-red-500 hover:bg-red-50 hover:text-red-600 text-xs
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
         dark:text-red-300 dark:hover:bg-red-400/10 dark:hover:text-red-200"
       aria-label="Delete recipe"

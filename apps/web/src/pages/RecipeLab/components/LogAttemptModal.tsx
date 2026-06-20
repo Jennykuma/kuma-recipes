@@ -158,7 +158,7 @@ const LogAttemptModal = ({
                 {changes.map((change) => (
                   <span
                     key={change}
-                    className="inline-flex items-center gap-1 rounded-full bg-blush-100 px-2 py-0.5 text-xs text-blush-600"
+                    className="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
                   >
                     {change}
                     <button
@@ -167,7 +167,7 @@ const LogAttemptModal = ({
                         setChanges((prev) => prev.filter((c) => c !== change))
                       }
                       aria-label={`Remove ${change}`}
-                      className="text-blush-600 hover:text-blush-700"
+                      className="text-gray-400 hover:text-gray-600"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -225,7 +225,7 @@ const LogAttemptModal = ({
             type="button"
             onClick={handleSubmit}
             disabled={!date || isPending}
-            className="font-jua rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? 'Saving…' : 'Save'}
           </button>

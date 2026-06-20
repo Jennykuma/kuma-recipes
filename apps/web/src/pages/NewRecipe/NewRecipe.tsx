@@ -14,7 +14,7 @@ import type { ParsedRecipe } from '../../api/ai';
 import { type RecipeFormValues } from '../../types/recipeForm';
 import { useCreateRecipe, useToast } from '../../hooks';
 import { MAX_SOURCE_PHOTO_SIZE } from '../../utils/resizeImageFile';
-import { IdCard, PieChart, Star, Link2, TagIcon } from 'lucide-react';
+import { IdCard, PieChart, Star, Link2, TagIcon, ScrollText } from 'lucide-react';
 import classNames from 'classnames';
 
 const defaultRecipeFormValues: RecipeFormValues = {
@@ -156,8 +156,8 @@ const NewRecipe = () => {
               <header className="mb-1 flex min-h-9 items-center justify-between">
                 <h1 className="text-lg font-bold">Create new recipe</h1>
                 <button
-                  className="px-4 py-1.5 rounded-full flex gap-2 items-center
-                    button-sm bg-accent text-sm font-bold text-white
+                  className="px-4 py-1.5 rounded-md flex gap-2 items-center
+                    button-sm bg-accent text-xs font-bold text-white
                     shadow-sm transition hover:bg-blush-500"
                   type="button"
                   onClick={() => setShowImporter(true)}
@@ -293,8 +293,12 @@ const NewRecipe = () => {
                     <div className="flex w-full min-w-0 flex-col lg:self-stretch">
                       <label
                         htmlFor="notes"
-                        className="field-label text-gray-600 rounded-full dark:text-gray-300"
+                        className="field-label flex gap-1 text-gray-600 rounded-full dark:text-gray-300"
                       >
+                        <ScrollText
+                          className="h-3 w-3 text-gray-400"
+                          aria-hidden="true"
+                        />
                         Notes
                       </label>
                       <textarea
@@ -318,10 +322,10 @@ const NewRecipe = () => {
               <div className="order-1 flex flex-col md:order-none md:col-start-1 md:min-h-0">
                 <div className="flex w-full min-w-0 max-w-125 flex-col gap-3 mt-4 md:mt-0 md:min-h-0 md:flex-1">
                   <div className="flex flex-col md:min-h-0 md:flex-1">
-                    <div className="flex flex-row items-baseline gap-1">
+                    <div className="flex flex-row items-baseline gap-1 mb-2">
                       <span
                         id="ingredients-label"
-                        className="field-label text-gray-500 rounded-full dark:text-gray-300"
+                        className="field-label text-gray-600 rounded-full dark:text-gray-300"
                       >
                         Ingredients
                         <span className="align-top text-red-500">*</span>
@@ -347,7 +351,7 @@ const NewRecipe = () => {
 
               <div className="order-2 flex flex-col gap-3 md:order-0 md:col-start-2 md:min-h-0">
                 <div className="flex w-full max-w-150 flex-col md:min-h-0 md:flex-1">
-                  <div className="flex flex-row items-baseline gap-1">
+                  <div className="flex flex-row items-baseline gap-1 mb-2">
                     <span
                       id="steps-label"
                       className="field-label text-gray-600 rounded-full dark:text-gray-300"
@@ -374,8 +378,9 @@ const NewRecipe = () => {
               <button
                 type="button"
                 className="
-                  text-white font-bold bg-gray-300 hover:bg-gray-400 px-4 py-1.5
-                  rounded-full transition-colors text-sm shadow-sm"
+                  text-gray-700 hover:bg-gray-100 px-4 py-1.5
+                  rounded-md transition-colors text-xs
+                  dark:text-gray-300 dark:hover:bg-canvas-hover"
                 onClick={() =>
                   shouldConfirmCancel ? setShowCancelModal(true) : navigate(-1)
                 }
@@ -389,7 +394,7 @@ const NewRecipe = () => {
                   canSaveRecipe
                     ? 'bg-accent hover:bg-blush-500'
                     : 'bg-blush-200 cursor-not-allowed',
-                  'font-bold px-4 py-1.5 rounded-full text-white transition-colors text-sm shadow-sm'
+                  'font-bold px-4 py-1.5 rounded-md text-white transition-colors text-xs'
                 )}
               >
                 Save recipe

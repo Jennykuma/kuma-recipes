@@ -71,8 +71,8 @@ const App = () => {
             role="link"
             tabIndex={0}
             className="
-              inline-flex items-center gap-2 rounded-full
-              bg-accent px-4 py-2 text-sm font-bold
+              inline-flex items-center gap-2 rounded-md
+              bg-accent px-4 py-2 text-xs font-bold
               text-white shadow-sm transition hover:bg-blush-500"
             to={`/recipes/new`}
           >

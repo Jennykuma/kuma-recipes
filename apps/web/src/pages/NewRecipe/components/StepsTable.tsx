@@ -154,16 +154,15 @@ const StepsTable = ({
         })}
         <button
           type="button"
-          className={classNames(
-            'mt-2 inline-flex items-center gap-2 text-xs text-blush-400',
-            'border border-blush-200 bg-white px-2.5 py-1.5 rounded-full',
-            'hover:bg-blush-200 hover:text-white transition-colors disabled:cursor-not-allowed',
-            'dark:border-blush-300/60 dark:bg-canvas-card dark:text-blush-300',
-            'dark:hover:bg-blush-400 dark:hover:text-white',
-            'disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
-            'dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500',
-            'self-start'
-          )}
+          className="
+            mt-2 inline-flex items-center gap-2 text-xs text-white
+            bg-accent px-2.5 py-1.5 rounded-md
+            hover:bg-blush-500 hover:text-white transition-colors disabled:cursor-not-allowed
+            dark:border-blush-300/60 dark:bg-canvas-card dark:text-blush-300
+            dark:hover:bg-blush-400 dark:hover:text-white'
+            disabled:border-gray-200 disabled:bg-blush-200 disabled:hover-none'
+            dark:disabled:border-gray-700 dark:disabled:bg-gray-800 dark:disabled:text-gray-500'
+            self-start"
           onClick={() => {
             if (isAddDisabled) return;
             append({ step: '' }, { shouldFocus: true });

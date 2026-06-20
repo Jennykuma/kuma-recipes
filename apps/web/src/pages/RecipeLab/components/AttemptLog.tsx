@@ -1,4 +1,4 @@
-﻿import { Trash2 } from 'lucide-react';
+﻿import { Trash2, Plus, Star } from 'lucide-react';
 import type { LabAttempt, LabVariant } from 'shared';
 import Rating from '../../../components/Rating';
 
@@ -29,9 +29,10 @@ const AttemptLog = ({
         <button
           type="button"
           onClick={onLogAttempt}
-          className="rounded-full bg-accent px-3 py-1 text-[10px] font-bold text-white shadow-sm transition hover:bg-blush-500 sm:px-4 sm:py-2 sm:text-sm"
+          className="flex gap-1 rounded-md bg-accent text-xs font-bold text-white shadow-sm transition hover:bg-blush-500 sm:px-4 sm:py-2"
         >
-          + Log an attempt
+          <Plus className="w-4 h-4" />
+          Log an attempt
         </button>
       </div>
 
@@ -78,7 +79,13 @@ const AttemptLog = ({
                           })()}
                         </time>
                         {variant && (
-                          <span className="rounded-full bg-sage-300 px-2.5 py-0.5 text-xs font-bold text-white whitespace-nowrap">
+                          <span className="flex gap-1 items-center rounded-full bg-sage-300 px-2.5 py-0.5 text-xs font-bold text-white whitespace-nowrap">
+                            {variant.isBest && (
+                              <Star
+                                className="h-3 w-3 text-amber-500 fill-amber-500"
+                                aria-hidden="true"
+                              />
+                            )}
                             {variant.name}
                           </span>
                         )}
@@ -88,7 +95,7 @@ const AttemptLog = ({
                           {attempt.changes.map((change, i) => (
                             <span
                               key={i}
-                              className="rounded-lg bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500 whitespace-nowrap dark:bg-canvas-inset dark:text-gray-400"
+                              className="rounded-lg bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-600 whitespace-nowrap dark:bg-canvas-inset dark:text-gray-400"
                             >
                               {change}
                             </span>

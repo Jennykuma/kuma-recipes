@@ -33,8 +33,8 @@ const ShareRecipe = (props: ShareRecipeProps) => {
     <button
       onClick={() => handleClickShare()}
       className="
-        inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-2 md:px-3
-        text-blush-400 hover:text-blush-500 hover:bg-pink-50"
+        inline-flex h-9 items-center justify-center gap-1.5 rounded-md px-2 md:px-3
+        text-blush-400 hover:text-blush-500 hover:bg-pink-50 text-xs"
       aria-label="Share recipe"
       title="Share recipe"
     >
