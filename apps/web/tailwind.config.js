@@ -17,6 +17,8 @@ export default {
           300: '#F5B4C3',
           400: '#F2A1B3',
           500: '#E97F97',
+          600: '#A83A66',
+          700: '#832950',
         },
 
         // semantic tokens

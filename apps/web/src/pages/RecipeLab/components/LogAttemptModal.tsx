@@ -77,22 +77,35 @@ const LogAttemptModal = ({
 
         <div className="flex flex-col gap-3">
           <div>
-            <label className="field-label text-gray-600 dark:text-gray-300">Date</label>
+            <label
+              htmlFor="attempt-date"
+              className="field-label text-gray-600 dark:text-gray-300"
+            >
+              Date
+            </label>
             <input
+              id="attempt-date"
               type="date"
               value={date}
               max={today}
               onChange={(e) => setDate(e.target.value)}
-              className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
+              className="
+                mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs
+                dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100
+                focus:border-sage-300 focus:outline-none"
             />
           </div>
 
           {variants.length > 0 && (
             <div>
-              <label className="field-label text-gray-600 dark:text-gray-300">
+              <label
+                htmlFor="attempt-variant"
+                className="field-label text-gray-600 dark:text-gray-300"
+              >
                 Variant
               </label>
               <select
+                id="attempt-variant"
                 value={variantId}
                 onChange={(e) => setVariantId(e.target.value)}
                 className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
@@ -108,11 +121,15 @@ const LogAttemptModal = ({
           )}
 
           <div>
-            <label className="field-label text-gray-600 dark:text-gray-300">
+            <label
+              htmlFor="attempt-change"
+              className="field-label text-gray-600 dark:text-gray-300"
+            >
               Changes
             </label>
             <div className="mt-1 flex gap-1">
               <input
+                id="attempt-change"
                 type="text"
                 value={changeInput}
                 onChange={(e) => setChangeInput(e.target.value)}
@@ -123,7 +140,10 @@ const LogAttemptModal = ({
                   }
                 }}
                 placeholder="Type a change, press Enter"
-                className="min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
+                className="
+                  min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs
+                  placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100
+                  focus:border-sage-300 focus:outline-none"
               />
               <button
                 type="button"
@@ -138,7 +158,7 @@ const LogAttemptModal = ({
                 {changes.map((change) => (
                   <span
                     key={change}
-                    className="inline-flex items-center gap-1 rounded-full bg-blush-100 px-2 py-0.5 text-[10px] text-blush-500"
+                    className="inline-flex items-center gap-1 rounded-full bg-blush-100 px-2 py-0.5 text-xs text-blush-600"
                   >
                     {change}
                     <button
@@ -147,9 +167,9 @@ const LogAttemptModal = ({
                         setChanges((prev) => prev.filter((c) => c !== change))
                       }
                       aria-label={`Remove ${change}`}
-                      className="text-blush-400 hover:text-blush-600"
+                      className="text-blush-600 hover:text-blush-700"
                     >
-                      ×
+                      <X className="w-3 h-3" />
                     </button>
                   </span>
                 ))}
@@ -158,19 +178,38 @@ const LogAttemptModal = ({
           </div>
 
           <div>
-            <label className="field-label text-gray-600 dark:text-gray-300">Note</label>
+            <label
+              htmlFor="attempt-note"
+              className="field-label text-gray-600 dark:text-gray-300"
+            >
+              Note
+            </label>
             <textarea
+              id="attempt-note"
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={3}
               placeholder="How did it go?"
-              className="mt-1 w-full resize-none rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
+              className="
+                mt-1 w-full resize-none rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs
+                placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100
+                focus:border-sage-300 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="field-label text-gray-600 dark:text-gray-300">Rating</label>
-            <Rating value={rating} onChange={setRating} className="mt-1 justify-start" />
+            <label
+              htmlFor="attempt-rating"
+              className="field-label text-gray-600 dark:text-gray-300"
+            >
+              Rating
+            </label>
+            <Rating
+              id="attempt-rating"
+              value={rating}
+              onChange={setRating}
+              className="mt-1 justify-start"
+            />
           </div>
         </div>
 

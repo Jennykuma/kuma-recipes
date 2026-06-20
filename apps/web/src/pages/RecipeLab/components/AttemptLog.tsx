@@ -76,7 +76,7 @@ const AttemptLog = ({
                           })()}
                         </time>
                         {variant && (
-                          <span className="rounded-full bg-blush-100 px-2.5 py-0.5 text-xs font-bold text-blush-500 whitespace-nowrap">
+                          <span className="rounded-full bg-blush-100 px-2.5 py-0.5 text-xs font-bold text-blush-600 whitespace-nowrap">
                             {variant.name}
                           </span>
                         )}

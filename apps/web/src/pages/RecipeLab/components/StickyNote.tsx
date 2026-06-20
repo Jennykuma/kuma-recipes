@@ -1,3 +1,5 @@
+import { X } from 'lucide-react';
+
 type StickyNoteProps = {
   text: string;
   color: string;
@@ -23,9 +25,9 @@ const StickyNote = ({
           type="button"
           onClick={onRemove}
           aria-label="Remove note"
-          className="absolute top-1 right-2 text-sm leading-none text-gray-500/60 hover:text-gray-700"
+          className="absolute top-1 right-2 text-gray-500/60 hover:text-gray-700"
         >
-          ×
+          <X className="w-4 h-4" />
         </button>
       )}
       {showPinnedLabel && (

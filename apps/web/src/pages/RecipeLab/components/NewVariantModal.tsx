@@ -194,10 +194,14 @@ const NewVariantModal = ({
         <div className="flex-1 overflow-y-auto px-5 py-4">
           <div className="flex flex-col gap-4">
             <div>
-              <label className="field-label text-gray-600 dark:text-gray-300">
+              <label
+                htmlFor="variant-name"
+                className="field-label text-gray-600 dark:text-gray-300"
+              >
                 Name <span className="text-red-400">*</span>
               </label>
               <input
+                id="variant-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -218,10 +222,14 @@ const NewVariantModal = ({
             </div>
 
             <div>
-              <label className="field-label text-gray-600 dark:text-gray-300">
+              <label
+                htmlFor="variant-summary"
+                className="field-label text-gray-600 dark:text-gray-300"
+              >
                 Summary of changes
               </label>
               <textarea
+                id="variant-summary"
                 value={delta}
                 onChange={(e) => setDelta(e.target.value)}
                 rows={2}
