@@ -50,9 +50,7 @@ export async function createVariant(
     data: {
       recipeId,
       name: parsed.name,
-      tag: parsed.tag ?? null,
       ...(parsed.delta !== undefined ? { delta: parsed.delta as InputJsonValue } : {}),
-      rating: parsed.rating ?? null,
       isBest: parsed.isBest ?? false,
       ingredients: parsed.ingredients as InputJsonValue,
       steps: parsed.steps as InputJsonValue,

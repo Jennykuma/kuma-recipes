@@ -7,9 +7,7 @@ export const VariantItemSchema = z.object({
 
 export const CreateVariantBodySchema = z.object({
   name: z.string(),
-  tag: z.string().optional(),
   delta: z.string().optional(),
-  rating: z.number().int().optional(),
   isBest: z.boolean().optional(),
   ingredients: z.array(VariantItemSchema),
   steps: z.array(VariantItemSchema),
@@ -18,9 +16,7 @@ export const CreateVariantBodySchema = z.object({
 export const UpdateVariantBodySchema = z
   .object({
     name: z.string(),
-    tag: z.string().nullable(),
     delta: z.string().nullable(),
-    rating: z.number().int().nullable(),
     isBest: z.boolean(),
     ingredients: z.array(VariantItemSchema),
     steps: z.array(VariantItemSchema),
@@ -36,9 +32,7 @@ export type LabVariant = {
   id: string;
   recipeId: string;
   name: string;
-  tag: string | null;
   delta: string | null;
-  rating: number | null;
   isBest: boolean;
   ingredients: VariantItem[];
   steps: VariantItem[];

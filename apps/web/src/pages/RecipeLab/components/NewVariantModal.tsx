@@ -125,7 +125,6 @@ const NewVariantModal = ({
   onClose,
 }: NewVariantModalProps) => {
   const [name, setName] = useState('');
-  const [tag, setTag] = useState('');
   const [delta, setDelta] = useState('');
   const [ingredients, setIngredients] = useState<EditableItem[]>(
     (recipe.ingredients ?? []).map((text) => ({ text, status: 'original' }))
@@ -150,7 +149,6 @@ const NewVariantModal = ({
     createVariant(
       {
         name: name.trim(),
-        tag: tag.trim() || undefined,
         delta: delta.trim() || undefined,
         ingredients: variantIngredients,
         steps: variantSteps,
@@ -206,17 +204,6 @@ const NewVariantModal = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Brown Butter Version"
-                className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="field-label text-gray-600 dark:text-gray-300">Tag</label>
-              <input
-                type="text"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-                placeholder="e.g. dairy-free"
                 className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100 focus:border-sage-300 focus:outline-none"
               />
             </div>

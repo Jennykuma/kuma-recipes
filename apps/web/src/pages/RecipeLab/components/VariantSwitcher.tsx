@@ -31,11 +31,6 @@ const VariantSwitcher = ({
             <Star className="h-3 w-3 text-amber-500 fill-amber-500" aria-hidden="true" />
           )}
           {variant.name}
-          {variant.tag && (
-            <span className="ml-1 rounded-full text-gray-600 px-1.5 py-0.5 text-[10px]  bg-white/60 dark:bg-black/20">
-              {variant.tag}
-            </span>
-          )}
         </button>
       ))}
       <button

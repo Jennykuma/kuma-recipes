@@ -39,9 +39,7 @@ model RecipeVariant {
   id          String   @id @default(uuid())
   recipeId    String
   name        String
-  tag         String?
   delta       Json?
-  rating      Int?
   isBest      Boolean  @default(false)
   ingredients Json
   steps       Json

@@ -1,7 +1,6 @@
 ﻿import { useState, useRef } from 'react';
 import { Pencil, Star, Trash2 } from 'lucide-react';
 import type { LabVariant } from 'shared';
-import Rating from '../../../components/Rating';
 
 type VariantBarProps = {
   variant: LabVariant;
@@ -44,11 +43,6 @@ const VariantBar = ({
           <span className="text-xl font-bold text-gray-800 dark:text-gray-100">
             {variant.name}
           </span>
-          {variant.tag && (
-            <span className="rounded-full bg-sage-100 px-3 py-0.5 text-sm font-bold text-primary border-sage-200">
-              {variant.tag}
-            </span>
-          )}
         </div>
         {editingDelta ? (
           <input
@@ -84,14 +78,6 @@ const VariantBar = ({
         )}
       </div>
       <div className="flex flex-shrink-0 flex-wrap items-center gap-4">
-        {variant.rating != null && (
-          <div className="flex flex-col items-end">
-            <span className="text-[11px] font-bold tracking-widest text-gray-400">
-              RATING
-            </span>
-            <Rating value={variant.rating} readOnly className="gap-0.5" />
-          </div>
-        )}
         {variant.isBest ? (
           <button
             type="button"
