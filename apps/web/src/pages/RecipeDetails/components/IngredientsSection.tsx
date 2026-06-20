@@ -108,15 +108,18 @@ const IngredientsSection = ({
               <li
                 key={ingredient}
                 className="
-                  ml-4 list-disc max-w-2xl
-                  text-sm/6 text-gray-800 dark:text-gray-100
+                  ml-4.5 list-disc max-w-2xl
+                  text-sm/7 md:my-2 text-gray-800 dark:text-gray-100
                   marker:text-gray-400 marker:text-xs"
               >
-                <span className="line-break">{ingredient}</span>
-                <input
-                  type="checkbox"
-                  className="ml-2 h-3 w-3 pt-1 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
-                />
+                <div className="grid grid-cols-[minmax(0,1fr)_auto]">
+                  <span className="line-break">{ingredient}</span>
+                  <input
+                    type="checkbox"
+                    className="
+                      relative top-1 ml-2 h-4 w-4 md:h-5 md:w-5 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
+                  />
+                </div>
               </li>
             );
           })}

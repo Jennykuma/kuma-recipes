@@ -120,7 +120,7 @@ const StepsSection = ({
                 key={`${step}-${index}`}
                 className="
                   grid grid-cols-[auto_minmax(0,1fr)_auto]
-                  items-start gap-2 text-sm/7
+                  items-start gap-2 text-sm/7 md:my-2
                   text-gray-800 dark:text-gray-100"
               >
                 <span
@@ -136,7 +136,7 @@ const StepsSection = ({
                   type="checkbox"
                   checked={stepComplete}
                   aria-label={`Mark step ${index + 1} complete`}
-                  className="mt-2 h-3 w-3 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
+                  className="mt-1 h-4 w-4 md:h-5 md:w-5 bg-white accent-blush-200 border border-gray-300/70 dark:bg-canvas-card dark:border-gray-500"
                   onChange={() => toggleStep(index)}
                 />
               </li>
