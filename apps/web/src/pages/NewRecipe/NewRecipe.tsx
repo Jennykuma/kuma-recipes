@@ -180,7 +180,7 @@ const NewRecipe = () => {
                           if (!file) return true;
                           return (
                             file.size <= MAX_SOURCE_PHOTO_SIZE ||
-                            'Photo must be 15 MB or smaller'
+                            `Photo must be ${MAX_SOURCE_PHOTO_SIZE / (1024 * 1024)} MB or smaller`
                           );
                         },
                       }),
