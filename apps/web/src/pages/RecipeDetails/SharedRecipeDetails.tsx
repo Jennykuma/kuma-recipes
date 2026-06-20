@@ -96,7 +96,7 @@ const SharedRecipeDetails = () => {
       summary={
         <>
           <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-600 dark:text-gray-300">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-400 dark:text-gray-300">
               <CalendarPlus className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Created on
             </span>
@@ -109,8 +109,8 @@ const SharedRecipeDetails = () => {
               })}
             </time>
           </div>
-          <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
+          <div className="flex items-center gap-4 text-gray-600 dark:text-gray-600">
+            <span className="field-label inline-flex w-[110px] text-gray-400 shrink-0 items-center gap-1">
               <PieChart className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Yield
             </span>
@@ -121,7 +121,7 @@ const SharedRecipeDetails = () => {
               {sharedRecipe.yield || 'N/A'}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+          <div className="flex items-center gap-4 text-gray-400 dark:text-gray-300">
             <span
               id="shared-recipe-rating-label"
               className="field-label inline-flex w-[110px] shrink-0 items-center gap-1"
@@ -136,12 +136,12 @@ const SharedRecipeDetails = () => {
               className="justify-start"
             />
           </div>
-          <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
+          <div className="flex items-center gap-4 text-gray-400 dark:text-gray-300">
             <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1">
               <Link2 className="h-3 w-3 text-gray-400" aria-hidden="true" />
               Source
             </span>
-            <div className="-mt-0.5 min-w-0 flex-1 text-xs">
+            <div className="min-w-0 flex-1 text-xs">
               {sourceLink ? (
                 <a
                   href={sourceLink}

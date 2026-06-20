@@ -105,7 +105,7 @@ const NotesSection = ({
   if (isEditing) {
     return (
       <div className="flex h-full w-full min-w-0 flex-col">
-        <span className="field-label inline-flex items-center gap-1 text-gray-500 rounded-full dark:text-gray-300">
+        <span className="field-label inline-flex items-center gap-1 text-gray-400 rounded-full dark:text-gray-300">
           <ScrollText className="h-3 w-3" aria-hidden="true" />
           Notes
         </span>
@@ -138,7 +138,7 @@ const NotesSection = ({
     <div className="flex h-full md:h-[215px] w-full min-w-0 flex-col">
       <span
         className="
-          field-label inline-flex items-center gap-1 text-gray-500 rounded-full dark:text-gray-300"
+          field-label inline-flex items-center gap-1 text-gray-400 rounded-full dark:text-gray-300"
       >
         <ScrollText className="h-3 w-3" aria-hidden="true" />
         Notes

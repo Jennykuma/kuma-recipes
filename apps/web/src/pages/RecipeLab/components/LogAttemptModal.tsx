@@ -139,7 +139,7 @@ const LogAttemptModal = ({
                     addChange();
                   }
                 }}
-                placeholder="Type a change, press Enter"
+                placeholder="Type a change, press Enter (e.g. 1 bump vanilla)"
                 className="
                   min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1.5 text-xs
                   placeholder:text-gray-400 dark:border-gray-700 dark:bg-canvas-deep dark:text-gray-100
@@ -148,7 +148,7 @@ const LogAttemptModal = ({
               <button
                 type="button"
                 onClick={addChange}
-                className="rounded-md bg-sage-200 px-2 py-1.5 text-xs text-gray-700 transition hover:bg-sage-300"
+                className="rounded-md bg-sage-200 px-2 py-1.5 text-xs text-gray-700 transition hover:bg-sage-300 hover:text-white"
               >
                 Add
               </button>
@@ -225,7 +225,7 @@ const LogAttemptModal = ({
             type="button"
             onClick={handleSubmit}
             disabled={!date || isPending}
-            className="font-jua rounded-md bg-sage-300 px-3 py-1.5 text-xs text-gray-800 transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="font-jua rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? 'Saving…' : 'Save'}
           </button>

@@ -121,7 +121,7 @@ const PinnedSection = ({
               >
                 {type === 'step' && (
                   <span className="flex-shrink-0 font-bold leading-relaxed text-accent">
-                    {idx + 1}
+                    {idx + 1}.
                   </span>
                 )}
                 <div

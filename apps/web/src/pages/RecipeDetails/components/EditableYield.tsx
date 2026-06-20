@@ -33,7 +33,7 @@ const EditableYield = ({
   if (isEditing) {
     return (
       <div className="w-full">
-        <span className="flex w-full items-baseline gap-2">
+        <span className="flex w-full items-center gap-2">
           <input
             ref={inputRef}
             className="text-xs w-full max-w-125 border-b border-gray-300 bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm"

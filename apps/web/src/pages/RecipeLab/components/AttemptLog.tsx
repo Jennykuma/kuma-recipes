@@ -47,7 +47,7 @@ const AttemptLog = ({
             return (
               <div key={attempt.id} className="relative">
                 <div
-                  className="absolute -left-[27.5px] top-4 h-3 w-3 rounded-full border-2 border-white dark:border-canvas-bg"
+                  className="absolute -left-[27.005px] top-4.5 h-3 w-3 rounded-full border-2 border-white dark:border-canvas-bg"
                   style={{ backgroundColor: isBest ? '#f59e0b' : '#F2A1B3' }}
                 />
                 <div
@@ -76,7 +76,7 @@ const AttemptLog = ({
                           })()}
                         </time>
                         {variant && (
-                          <span className="rounded-full bg-blush-100 px-2.5 py-0.5 text-xs font-bold text-blush-600 whitespace-nowrap">
+                          <span className="rounded-full bg-sage-300 px-2.5 py-0.5 text-xs font-bold text-white whitespace-nowrap">
                             {variant.name}
                           </span>
                         )}

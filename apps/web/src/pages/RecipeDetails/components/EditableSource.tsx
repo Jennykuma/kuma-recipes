@@ -48,14 +48,14 @@ const EditableSource = ({
   })();
 
   return (
-    <span className="flex items-baseline gap-2 w-full">
+    <span className="flex items-center gap-2 w-full">
       {!hideLabel && (
         <span className="text-xs uppercase tracking-wide text-gray-600 rounded-full shrink-0">
           Source
         </span>
       )}
       {isEditing ? (
-        <div className="flex w-full items-baseline gap-2">
+        <div className="flex w-full items-center gap-2">
           <input
             ref={inputRef}
             className="w-full max-w-125 border-b border-gray-300 bg-transparent text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blush-300 focus-visible:ring-offset-1 rounded-sm dark:border-gray-600 dark:text-gray-100"

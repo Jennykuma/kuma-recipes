@@ -358,7 +358,7 @@ const RecipeDetails = () => {
       summary={
         <>
           <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-400 dark:text-gray-300">
               <CalendarPlus className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Created on
             </span>
@@ -376,7 +376,7 @@ const RecipeDetails = () => {
             )}
           </div>
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-400 dark:text-gray-300">
               <PieChart className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Yield
             </span>
@@ -393,7 +393,7 @@ const RecipeDetails = () => {
           <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
             <span
               id="recipe-rating-label"
-              className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300"
+              className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-400 dark:text-gray-300"
             >
               <Star className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Rating
@@ -405,12 +405,12 @@ const RecipeDetails = () => {
               className="justify-start"
             />
           </div>
-          <div className="flex items-start gap-4 text-gray-600 dark:text-gray-300">
-            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-500 dark:text-gray-300">
+          <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+            <span className="field-label inline-flex w-[110px] shrink-0 items-center gap-1 text-gray-400 dark:text-gray-300">
               <Link2 className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Source
             </span>
-            <div className="-mt-0.5 min-w-0 flex-1 text-xs">
+            <div className="mt-0.5 min-w-0 flex-1 text-xs">
               <EditableSource
                 source={recipe?.source}
                 isEditing={editingField === 'source'}

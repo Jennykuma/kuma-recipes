@@ -77,14 +77,14 @@ const VariantBar = ({
           </button>
         )}
       </div>
-      <div className="flex flex-shrink-0 flex-wrap items-center gap-4">
+      <div className="flex shrink-0 flex-wrap items-center gap-4">
         {variant.isBest ? (
           <button
             type="button"
             onClick={onClearBest}
             aria-label="Clear best variant"
             title="Best variant"
-            className="flex items-center justify-center rounded-full border border-amber-200 bg-amber-50 p-2 text-amber-500 transition hover:bg-amber-100"
+            className="flex items-center justify-center rounded-full p-2 text-amber-500 transition hover:bg-amber-100"
           >
             <Star className="h-4 w-4 fill-amber-400" aria-hidden="true" />
           </button>
@@ -94,7 +94,7 @@ const VariantBar = ({
             onClick={onMarkBest}
             aria-label="Mark as best"
             title="Mark as best"
-            className="flex items-center justify-center rounded-full border border-amber-200 bg-white p-2 text-amber-500 transition hover:bg-amber-50 dark:bg-canvas-card"
+            className="flex items-center justify-center rounded-full border border-amber-500 bg-white p-2 text-amber-500 transition hover:bg-amber-100 dark:bg-canvas-card"
           >
             <Star className="h-4 w-4" aria-hidden="true" />
           </button>

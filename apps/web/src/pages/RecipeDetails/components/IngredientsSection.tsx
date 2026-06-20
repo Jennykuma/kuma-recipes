@@ -75,7 +75,7 @@ const IngredientsSection = ({
       <div className="flex flex-row items-baseline gap-1">
         <span
           className="
-            text-[10px] uppercase font-bold text-gray-500
+            text-[10px] uppercase font-bold text-gray-400
             rounded-full dark:text-gray-300 tracking-widest"
         >
           Ingredients

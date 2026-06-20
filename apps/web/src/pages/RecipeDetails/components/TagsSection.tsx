@@ -62,7 +62,7 @@ const TagsSection = ({
   return (
     <div className="w-full">
       <div className="flex flex-row items-baseline gap-1 mb-1 text-gray-600 dark:text-gray-300">
-        <span className="inline-flex text-[10px] items-center gap-1 uppercase font-bold text-gray-500 dark:text-gray-300 tracking-widest rounded-full">
+        <span className="inline-flex text-[10px] items-center gap-1 uppercase font-bold text-gray-400 dark:text-gray-300 tracking-widest rounded-full">
           <TagIcon className="h-3 w-3 text-gray-400" aria-hidden="true" />
           Tags
         </span>
@@ -92,7 +92,10 @@ const TagsSection = ({
           {tags.map((tag: Tag) => (
             <span
               key={tag.id}
-              className="inline-flex min-h-6 items-center rounded-full bg-sage-50 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+              className="
+                inline-flex min-h-6 items-center rounded-full bg-sage-100
+                px-2.5 py-0.5 text-xs font-semibold leading-tight text-gray-700
+                dark:bg-sage-300/20 dark:text-sage-100"
             >
               {tag.name}
             </span>

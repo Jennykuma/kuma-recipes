@@ -54,7 +54,10 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                 <span
                   key={tag.id}
                   title={tag.name}
-                  className="inline-flex min-h-6 min-w-0 max-w-24 items-center rounded-full bg-sage-50 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
+                  className="
+                    inline-flex min-h-6 min-w-0 max-w-24 items-center rounded-full
+                    bg-sage-100 px-2.5 py-0.5 text-xs leading-tight font-semibold
+                    text-gray-700 dark:bg-sage-300/20 dark:text-sage-100"
                 >
                   <span className="min-w-0 truncate leading-tight">{tag.name}</span>
                 </span>
@@ -65,7 +68,10 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                     aria-label={`${hiddenTags.length} more tags: ${hiddenTags
                       .map((tag) => tag.name)
                       .join(', ')}`}
-                    className="inline-flex min-h-6 items-center rounded-full bg-sage-100 px-2.5 py-0.5 text-xs leading-tight text-gray-700 dark:bg-sage-300/25 dark:text-sage-100"
+                    className="
+                      inline-flex min-h-6 items-center rounded-full bg-sage-100
+                      px-2.5 py-0.5 text-xs leading-tight text-gray-700 font-semibold
+                      dark:bg-sage-300/25 dark:text-sage-100"
                   >
                     +{hiddenTags.length}
                   </span>
@@ -73,7 +79,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
                     className="
                       pointer-events-none absolute bottom-full left-1/2 z-10 mb-2
                       w-52 -translate-x-1/2 rounded-lg border border-sage-200
-                      bg-white px-3 py-2 text-left text-xs text-gray-700 break-words
+                      bg-white px-3 py-2 text-left text-xs text-gray-700 wrap-break-words
                       opacity-0 shadow-lg shadow-gray-100 transition-opacity
                       group-hover:opacity-100
                       dark:border-gray-700 dark:bg-canvas-raised dark:text-gray-100 dark:shadow-none"
