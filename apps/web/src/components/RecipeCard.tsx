@@ -26,7 +26,7 @@ const RecipeCard = ({ id, rating, tags = [], title, imagePath }: RecipeCardProps
       tabIndex={0}
       className="
         flex h-full w-full flex-col
-        gap-4 p-4 bg-white border border-gray-200
+        gap-4 p-4 bg-white border border-sage-300/50
         rounded-xl shadow-md shadow-gray-100
         hover:shadow-none cursor-pointer
         dark:border-gray-700 dark:bg-canvas-card dark:text-gray-100

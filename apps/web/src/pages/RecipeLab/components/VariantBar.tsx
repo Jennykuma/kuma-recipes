@@ -37,7 +37,12 @@ const VariantBar = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-canvas-card">
+    <div
+      className="
+        flex flex-wrap items-center justify-between gap-4 rounded-2xl
+        border border-sage-300/50 bg-white p-4 shadow-sm shadow-gray-100
+        dark:border-gray-700 dark:bg-canvas-card dark:bg-none dark:shadow-none"
+    >
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xl font-bold text-gray-800 dark:text-gray-100">

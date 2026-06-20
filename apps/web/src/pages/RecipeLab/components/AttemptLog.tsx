@@ -53,7 +53,9 @@ const AttemptLog = ({
                 <div
                   className={[
                     'rounded-2xl border bg-white p-3.5 shadow-sm transition-colors dark:bg-canvas-card',
-                    isBest ? 'border-amber-200' : 'border-gray-100 dark:border-gray-700',
+                    isBest
+                      ? 'border-amber-200'
+                      : 'border-sage-200/50 dark:border-gray-700',
                   ].join(' ')}
                 >
                   <div className="flex items-start justify-between gap-2">

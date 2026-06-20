@@ -91,7 +91,7 @@ const RecipePhotoPicker = ({
             group relative flex cursor-pointer items-center justify-center
             overflow-hidden rounded-md border border-dashed border-sage-300
             bg-surface text-center text-sm text-gray-500 transition-colors
-            hover:border-sage-400 hover:bg-sage-50
+            hover:border-sage-400 hover:bg-sage-50 shadow-sm shadow-gray-100
             focus-within:ring-2 focus-within:ring-sage-300
             dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300
             dark:hover:bg-white/5 ${tileClassName}`}
@@ -126,7 +126,7 @@ const RecipePhotoPicker = ({
             className="
               absolute right-2 top-2 inline-flex h-7 w-7 items-center
               justify-center rounded-full bg-white/90 text-gray-500
-              shadow-sm transition-colors hover:bg-red-50 hover:text-red-500
+              shadow-sm shadow-gray-100 transition-colors hover:bg-red-50 hover:text-red-500
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-red-300 disabled:cursor-not-allowed
               disabled:opacity-60 dark:bg-gray-900/90
