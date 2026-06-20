@@ -62,7 +62,7 @@ const LogAttemptModal = ({
         className="relative z-10 w-[90vw] max-w-md rounded-xl bg-white p-5 shadow-lg dark:bg-canvas-card"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-jua text-sm font-bold text-gray-800 dark:text-gray-100">
+          <h2 className="text-sm font-bold text-gray-800 dark:text-gray-100">
             Log an attempt
           </h2>
           <button

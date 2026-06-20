@@ -176,7 +176,7 @@ const NewVariantModal = ({
         className="relative z-10 flex max-h-[90vh] w-[95vw] max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-lg dark:bg-canvas-card"
       >
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-700">
-          <h2 className="font-jua text-sm font-bold text-gray-800 dark:text-gray-100">
+          <h2 className="text-sm font-bold text-gray-800 dark:text-gray-100">
             New variant
           </h2>
           <button
@@ -255,7 +255,7 @@ const NewVariantModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="font-jua rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-canvas-hover"
+            className="rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-canvas-hover"
           >
             Cancel
           </button>
@@ -263,7 +263,7 @@ const NewVariantModal = ({
             type="button"
             onClick={handleSubmit}
             disabled={!name.trim() || isPending}
-            className="font-jua rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? 'Creating…' : 'Create variant'}
           </button>
