@@ -43,7 +43,7 @@ const StepsSection = ({
 
   useEffect(() => {
     resetForm();
-  }, [resetForm]);
+  }, [resetForm, isEditing]);
 
   useEditFormViewportLimit(editFormRef, isEditing);
 

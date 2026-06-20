@@ -30,13 +30,7 @@ const useEditFormAutoSave = ({
       saveTimeoutId = null;
     };
 
-    const handleFocusOut = (event: FocusEvent) => {
-      const nextFocusedElement = event.relatedTarget as Node | null;
-
-      if (nextFocusedElement instanceof Node && formElement.contains(nextFocusedElement)) {
-        return;
-      }
-
+    const handleFocusOut = () => {
       clearPendingSave();
       saveTimeoutId = window.setTimeout(() => {
         saveTimeoutId = null;
@@ -59,13 +53,34 @@ const useEditFormAutoSave = ({
       onCancel();
     };
 
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+
+      if (target instanceof Node && formElement.contains(target)) {
+        return;
+      }
+
+      clearPendingSave();
+      saveTimeoutId = window.setTimeout(() => {
+        saveTimeoutId = null;
+
+        if (formElement.contains(document.activeElement)) {
+          return;
+        }
+
+        onSave();
+      }, 0);
+    };
+
     formElement.addEventListener('focusout', handleFocusOut);
     formElement.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
 
     return () => {
       clearPendingSave();
       formElement.removeEventListener('focusout', handleFocusOut);
       formElement.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
     };
   }, [formRef, isEditing, onCancel, onSave]);
 };

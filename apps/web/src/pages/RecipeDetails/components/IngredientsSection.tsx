@@ -43,7 +43,7 @@ const IngredientsSection = ({
 
   useEffect(() => {
     resetForm();
-  }, [resetForm]);
+  }, [resetForm, isEditing]);
 
   useEditFormViewportLimit(editFormRef, isEditing);
 
