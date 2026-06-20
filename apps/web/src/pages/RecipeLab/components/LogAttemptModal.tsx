@@ -217,7 +217,7 @@ const LogAttemptModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="font-jua rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-canvas-hover"
+            className="rounded-md px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-canvas-hover"
           >
             Cancel
           </button>
