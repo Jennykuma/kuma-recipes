@@ -113,7 +113,7 @@ const NotesSection = ({
           id="notes"
           ref={textareaRef}
           className="
-            h-[180px] w-full p-2 rounded-md text-xs
+            h-[200px] w-full p-2 rounded-md text-xs
             resize-none bg-white border border-gray-200
             placeholder:text-xs dark:border-gray-700 dark:bg-canvas-card dark:text-gray-100
             focus:border-sage-300 focus:outline-none"
@@ -135,7 +135,7 @@ const NotesSection = ({
   const noteParts = getNoteParts(noteText);
 
   return (
-    <div className="flex h-full w-full min-w-0 flex-col">
+    <div className="flex h-full md:h-[215px] w-full min-w-0 flex-col">
       <span
         className="
           field-label inline-flex items-center gap-1 text-gray-500 rounded-full dark:text-gray-300"
