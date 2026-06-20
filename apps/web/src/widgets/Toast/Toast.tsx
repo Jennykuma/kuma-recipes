@@ -14,10 +14,10 @@ const Toast = (props: ToastProps) => {
       role="status"
       className="
         pointer-events-none
-        flex items-center gap-4 rounded-md bg-white px-6 py-4
+        flex items-center gap-4 rounded-md bg-white pl-5 pr-6 py-4
         border border-green-200"
     >
-      <CircleCheck className="h-5 w-5 text-green-500" />
+      <CircleCheck className="h-6 w-6 text-green-500" />
       <div>
         <span className="text-sm text-green-700 font-medium">Success</span>
         <p className="text-xs text-gray-500">{message}</p>
@@ -31,9 +31,9 @@ const Toast = (props: ToastProps) => {
       className="
         pointer-events-none
         flex items-center gap-4 rounded-md bg-white
-        px-6 py-4 border border-red-200"
+        pl-5 pr-6 py-4 border border-red-200"
     >
-      <CircleX className="h-5 w-5 text-red-500" />
+      <CircleX className="h-6 w-6 text-red-500" />
       <div>
         <span className="text-sm text-red-700 font-medium">Error</span>
         <p className="text-xs text-gray-500">{message}</p>
@@ -46,10 +46,10 @@ const Toast = (props: ToastProps) => {
       role="status"
       className="
         pointer-events-none
-        flex items-center gap-4 rounded-md bg-white px-6 py-4
+        flex items-center gap-4 rounded-md bg-white pl-5 pr-6 py-4
         border border-gray-200"
     >
-      <Info className="h-5 w-5 text-gray-500" />
+      <Info className="h-6 w-6 text-gray-500" />
       <div>
         <span className="text-sm text-gray-700 font-medium">Info</span>
         <p className="text-xs text-gray-500">{message}</p>

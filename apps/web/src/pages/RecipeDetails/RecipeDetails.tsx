@@ -118,6 +118,10 @@ const RecipeDetails = () => {
       await updateRecipeAsync(payload);
       onSuccess?.();
     } catch (err) {
+      showToast({
+        status: 'error',
+        message: "We couldn't save your changes. Please try again.",
+      });
       console.error(err);
       onError?.();
     }
