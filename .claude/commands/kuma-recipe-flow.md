@@ -65,14 +65,14 @@ The `/ai/parse-recipe` endpoint accepts a single `recipeInput` string. The route
 
 The Lab tab lives on the recipe details page and lets users track variants, attempts, and pins for a recipe.
 
-- Lab API routes (8 endpoints under `/recipes/:id/lab/*`): `apps/api/src/routes/lab.routes.ts`
+- Lab API routes (9 endpoints under `/recipes/:id/lab/*`): `apps/api/src/routes/lab.routes.ts`
 - Lab service logic: `apps/api/src/services/lab/lab.service.ts`
 - Lab types (LabData, CreateVariantBody, UpdateVariantBody, CreateAttemptBody, CreatePinBody): `apps/api/src/services/lab/lab.types.ts`
 - Models in Prisma schema: `RecipeVariant`, `RecipeAttempt`, `RecipePin` (all cascade-delete from `Recipe`)
 - Web API client: `apps/web/src/api/lab.ts`
-- Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
-- Lab UI root: `apps/web/src/pages/RecipeLab/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the two modals
-- Lab UI components: `apps/web/src/pages/RecipeLab/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `NewVariantModal.tsx`
+- Lab hooks: `apps/web/src/hooks/lab/` (`useLabData`, `useCreateVariant`, `useUpdateVariant`, `useDeleteVariant`, `useLogAttempt`, `useUpdateAttempt`, `useDeleteAttempt`, `useCreatePin`, `useDeletePin`)
+- Lab UI root: `apps/web/src/pages/RecipeLab/RDLabTab.tsx` — owns `selectedVariantId` state; renders VariantSwitcher, VariantBar, PinnedRecipePane, AttemptLog, and the modals
+- Lab UI components: `apps/web/src/pages/RecipeLab/components/` — `VariantSwitcher.tsx` (pill buttons), `VariantBar.tsx` (name/delta/rating/best badge), `PinnedRecipePane.tsx` (ingredients+steps with tweaked/new chips and sticky notes, pins are scoped to the selected variant), `ItemList.tsx` (renamed from `EditableItemList.tsx`), `StickyNote.tsx`, `AttemptLog.tsx`, `LogAttemptModal.tsx`, `EditAttemptModal.tsx`, `NewVariantModal.tsx`, `EditVariantModal.tsx`
 - `NewVariantModal` takes `onCreated(variantId: string)` — a plain callback, not the `selectedVariantId` setter — so `RDLabTab` owns wiring it to its own state instead of the setter leaking through the modal's props
 - `VariantItem` (`{ text, status }`) is defined in `apps/api/src/services/lab/lab.types.ts` via Zod (`VariantItemSchema`) and imported directly by PinnedRecipePane and NewVariantModal — `labTypes.ts` was deleted
 - `VariantItem[]` is the typed shape of `ingredients` and `steps` on `LabVariant`; Zod validates these at write time in `createVariant`/`updateVariant`, so no cast is needed when reading in PinnedRecipePane
@@ -86,8 +86,9 @@ Endpoints:
 - `PATCH /recipes/:id/lab/variants/:variantId` — update variant; setting `isBest: true` clears all other variants' `isBest` in a transaction
 - `DELETE /recipes/:id/lab/variants/:variantId`
 - `POST /recipes/:id/lab/attempts` — log an attempt
+- `PATCH /recipes/:id/lab/attempts/:attemptId` — edit an attempt's date/variant/changes/note/rating
 - `DELETE /recipes/:id/lab/attempts/:attemptId`
-- `POST /recipes/:id/lab/pins` — create a pin annotation
+- `POST /recipes/:id/lab/pins` — create a pin annotation; `variantId` must belong to the recipe (pins are variant-scoped)
 - `DELETE /recipes/:id/lab/pins/:pinId`
 
 All lab endpoints are auth-gated via `requireUser` and enforce userId ownership through the Recipe relation.
@@ -122,6 +123,10 @@ All lab endpoints are auth-gated via `requireUser` and enforce userId ownership 
 - API route and service tests live under `apps/api/tests`
 - Recipe route coverage: `apps/api/tests/routes/recipes.test.ts`
 - Recipe service coverage: `apps/api/tests/services/recipes.service.test.ts`
+- Lab route coverage: `apps/api/tests/routes/lab.test.ts` (PATCH attempts, variant-scoped pin creation)
+- Lab service coverage: `apps/api/tests/services/lab.service.test.ts` (`updateAttempt`, `deleteAttempt`, `createPin` variant scoping, `updateVariant` pin cleanup on removed items)
+- Edit attempt UI coverage: `apps/web/src/pages/RecipeLab/components/EditAttemptModal.test.tsx` (disabled save states, submit payload, error toast)
+- Still missing: tests for `lab.routes.ts`/`lab.service.ts` variant create/update/delete paths, `PinnedRecipePane.tsx`, `ItemList.tsx`, `EditVariantModal.tsx`, and `apps/web/src/utils/formatDate.ts`
 
 ### Working notes
 

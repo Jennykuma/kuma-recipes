@@ -2,6 +2,15 @@
 
 A cozy recipe journal for baking and matcha experiments.
 
+I kept losing track of which tweak actually made a recipe better, so I built this to fix that for myself. It's a recipe box with a memory for the iterating part, not just "here's the recipe" but "here's what I changed and whether it worked."
+
+## What it does
+
+- **Recipes, the normal way.** Write one up by hand, or paste in a URL or a wall of text and let AI pull out the ingredients and steps for you.
+- **Tags** so you can actually find things again ("matcha", "weeknight", "needs more sugar next time," whatever you want).
+- **Share links** for when someone asks for the recipe and you don't want to retype it into a text message.
+- **The Lab tab** is the part I actually built this whole thing for: spin off variants of a recipe ("less sugar," "high hydration"), log each attempt with notes and a rating, edit attempts after the fact when you remember more detail, pin sticky notes directly onto specific ingredients or steps, and mark whichever variant turned out to be the winner.
+
 ## Prerequisites
 
 - Node.js (LTS recommended)
