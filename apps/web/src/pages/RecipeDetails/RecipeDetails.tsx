@@ -16,14 +16,14 @@ import { getRecipePhotoUrl } from '../../api/supabaseStorage';
 import Rating from '../../components/Rating';
 import BackButton from '../../components/BackButton';
 import DeleteModal from '../../components/DeleteModal';
-import EditableTitle from './components/EditableTitle';
-import EditableSource from './components/EditableSource';
+import Title from './components/Title';
+import Source from './components/Source';
 import IngredientsSection from './components/IngredientsSection';
 import StepsSection from './components/StepsSection';
 import NotesSection from './components/NotesSection';
 import TagsSection from './components/TagsSection';
 import RecipePhotoPicker from '../../components/RecipePhotoPicker';
-import EditableYield from './components/EditableYield';
+import Yield from './components/Yield';
 import DeleteRecipe from './components/DeleteRecipe';
 import ShareRecipe from './components/ShareRecipe';
 import RecipeDetailsView from './RecipeDetailsView';
@@ -306,7 +306,7 @@ const RecipeDetails = () => {
       }
       title={
         <div className="flex flex-wrap items-center gap-2">
-          <EditableTitle
+          <Title
             title={recipe?.title}
             isEditing={activeTab === 'recipe' && editingField === 'title'}
             draftValue={draft.title}
@@ -380,7 +380,7 @@ const RecipeDetails = () => {
               <PieChart className="h-3 w-3 text-gray-500" aria-hidden="true" />
               Yield
             </span>
-            <EditableYield
+            <Yield
               recipeYield={recipe?.yield}
               isEditing={editingField === 'yield'}
               draftValue={draft.yield}
@@ -411,7 +411,7 @@ const RecipeDetails = () => {
               Source
             </span>
             <div className="mt-0.5 min-w-0 flex-1 text-xs">
-              <EditableSource
+              <Source
                 source={recipe?.source}
                 isEditing={editingField === 'source'}
                 draftValue={draft.source}

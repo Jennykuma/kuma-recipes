@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import type { VariantItem } from 'shared';
 import type { Recipe } from 'shared';
 import { useCreateVariant, useToast } from '../../../hooks';
-import EditableItemList, { type EditableItem } from './EditableItemList';
+import ItemList from './ItemList';
 
 type NewVariantModalProps = {
   recipeId: string;
@@ -20,10 +20,10 @@ const NewVariantModal = ({
 }: NewVariantModalProps) => {
   const [name, setName] = useState('');
   const [delta, setDelta] = useState('');
-  const [ingredients, setIngredients] = useState<EditableItem[]>(
+  const [ingredients, setIngredients] = useState<VariantItem[]>(
     (recipe.ingredients ?? []).map((text) => ({ text, status: 'original' }))
   );
-  const [steps, setSteps] = useState<EditableItem[]>(
+  const [steps, setSteps] = useState<VariantItem[]>(
     (recipe.steps ?? []).map((text) => ({ text, status: 'original' }))
   );
 
@@ -137,7 +137,7 @@ const NewVariantModal = ({
                     click badge to cycle status
                   </span>
                 </div>
-                <EditableItemList items={ingredients} onChange={setIngredients} />
+                <ItemList items={ingredients} onChange={setIngredients} />
               </div>
 
               <div>
@@ -149,7 +149,7 @@ const NewVariantModal = ({
                     click badge to cycle status
                   </span>
                 </div>
-                <EditableItemList items={steps} onChange={setSteps} ordered />
+                <ItemList items={steps} onChange={setSteps} ordered />
               </div>
             </div>
           </div>

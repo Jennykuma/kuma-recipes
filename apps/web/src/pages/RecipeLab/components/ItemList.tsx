@@ -12,9 +12,7 @@ const STATUS_CLASS: Record<ItemStatus, string> = {
   new: 'bg-green-100 text-green-700',
 };
 
-export type EditableItem = { text: string; status: ItemStatus };
-
-const cycleStatus = (items: EditableItem[], idx: number): EditableItem[] => {
+const cycleStatus = (items: VariantItem[], idx: number): VariantItem[] => {
   const currentIdx = STATUS_CYCLE.indexOf(items[idx].status);
   const next = STATUS_CYCLE[(currentIdx + 1) % STATUS_CYCLE.length];
   return items.map((it, i) => (i === idx ? { ...it, status: next } : it));
@@ -28,13 +26,13 @@ const insertAt = <T,>(arr: T[], idx: number, item: T): T[] => [
 
 const removeAt = <T,>(arr: T[], idx: number): T[] => arr.filter((_, i) => i !== idx);
 
-type EditableItemListProps = {
-  items: EditableItem[];
-  onChange: (items: EditableItem[]) => void;
+type ItemListProps = {
+  items: VariantItem[];
+  onChange: (items: VariantItem[]) => void;
   ordered?: boolean;
 };
 
-const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) => {
+const ItemList = ({ items, onChange, ordered }: ItemListProps) => {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const Tag = ordered ? 'ol' : 'ul';
   const isAddDisabled = (items[items.length - 1]?.text ?? '').trim() === '';
@@ -114,4 +112,4 @@ const EditableItemList = ({ items, onChange, ordered }: EditableItemListProps) =
   );
 };
 
-export default EditableItemList;
+export default ItemList;

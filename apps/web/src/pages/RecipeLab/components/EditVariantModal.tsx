@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import type { VariantItem } from 'shared';
 import type { LabVariant } from 'shared';
 import { useUpdateVariant, useToast } from '../../../hooks';
-import EditableItemList, { type EditableItem } from './EditableItemList';
+import ItemList from './ItemList';
 
 type EditVariantModalProps = {
   recipeId: string;
@@ -14,10 +14,10 @@ type EditVariantModalProps = {
 const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps) => {
   const [name, setName] = useState(variant.name);
   const [delta, setDelta] = useState(variant.delta ?? '');
-  const [ingredients, setIngredients] = useState<EditableItem[]>(
+  const [ingredients, setIngredients] = useState<VariantItem[]>(
     variant.ingredients.map((it) => ({ text: it.text, status: it.status }))
   );
-  const [steps, setSteps] = useState<EditableItem[]>(
+  const [steps, setSteps] = useState<VariantItem[]>(
     variant.steps.map((it) => ({ text: it.text, status: it.status }))
   );
 
@@ -132,7 +132,7 @@ const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps)
                     click badge to cycle status
                   </span>
                 </div>
-                <EditableItemList items={ingredients} onChange={setIngredients} />
+                <ItemList items={ingredients} onChange={setIngredients} />
               </div>
 
               <div>
@@ -144,7 +144,7 @@ const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps)
                     click badge to cycle status
                   </span>
                 </div>
-                <EditableItemList items={steps} onChange={setSteps} ordered />
+                <ItemList items={steps} onChange={setSteps} ordered />
               </div>
             </div>
           </div>

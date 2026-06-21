@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import EditableTitle from './EditableTitle';
+import Title from './Title';
 
 const defaultProps = {
   title: 'Matcha Cookies',
@@ -13,14 +13,14 @@ const defaultProps = {
   onCancel: vi.fn(),
 };
 
-describe('EditableTitle', () => {
+describe('Title', () => {
   it('saves when the input blurs', async () => {
     const user = userEvent.setup();
     const onSave = vi.fn();
 
     render(
       <>
-        <EditableTitle {...defaultProps} onSave={onSave} />
+        <Title {...defaultProps} onSave={onSave} />
         <button type="button">Outside</button>
       </>
     );
@@ -35,7 +35,7 @@ describe('EditableTitle', () => {
     const onSave = vi.fn();
     const onCancel = vi.fn();
 
-    render(<EditableTitle {...defaultProps} onSave={onSave} onCancel={onCancel} />);
+    render(<Title {...defaultProps} onSave={onSave} onCancel={onCancel} />);
 
     await user.keyboard('{Escape}');
 

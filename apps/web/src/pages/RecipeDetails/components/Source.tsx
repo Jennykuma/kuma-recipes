@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Pencil } from 'lucide-react';
 
-type EditableSourceProps = {
+type SourceProps = {
   source?: string;
   isEditing: boolean;
   draftValue?: string;
@@ -12,7 +12,7 @@ type EditableSourceProps = {
   hideLabel?: boolean;
 };
 
-const EditableSource = ({
+const Source = ({
   source,
   isEditing,
   draftValue,
@@ -21,7 +21,7 @@ const EditableSource = ({
   onSave,
   onCancel,
   hideLabel = false,
-}: EditableSourceProps) => {
+}: SourceProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -111,4 +111,4 @@ const EditableSource = ({
   );
 };
 
-export default EditableSource;
+export default Source;
