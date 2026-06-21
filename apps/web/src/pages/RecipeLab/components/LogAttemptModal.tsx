@@ -27,6 +27,8 @@ const LogAttemptModal = ({
 
   const { mutate: logAttempt, isPending } = useLogAttempt(recipeId);
 
+  const isFormEmpty = !variantId && changes.length === 0 && !note.trim() && rating === 0;
+
   const addChange = () => {
     const trimmed = changeInput.trim();
     if (trimmed && !changes.includes(trimmed)) {
@@ -148,7 +150,8 @@ const LogAttemptModal = ({
               <button
                 type="button"
                 onClick={addChange}
-                className="rounded-md bg-sage-200 px-2 py-1.5 text-xs text-gray-700 transition hover:bg-sage-300 hover:text-white"
+                disabled={!changeInput.trim()}
+                className="rounded-md bg-sage-300 px-2 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Add
               </button>
@@ -224,7 +227,7 @@ const LogAttemptModal = ({
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!date || isPending}
+            disabled={!date || isFormEmpty || isPending}
             className="rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? 'Saving…' : 'Save'}

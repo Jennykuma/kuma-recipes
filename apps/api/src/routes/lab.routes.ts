@@ -113,7 +113,7 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
 
   // PATCH /recipes/:id/lab/attempts/:attemptId
   fastify.patch<{ Body: UpdateAttemptBody }>(
-    ':id/lab/attempts/:attemptId',
+    '/:id/lab/attempts/:attemptId',
     async (request, reply) => {
       const userId = await requireUser(request, reply);
       if (!userId) return;
