@@ -79,6 +79,18 @@ export type CreateAttemptBody = {
   rating?: number;
 };
 
+export const UpdateAttemptBodySchema = z
+  .object({
+    variantId: z.string().nullable(),
+    date: z.string(),
+    changes: z.array(z.string()),
+    note: z.string().nullable(),
+    rating: z.number().int().nullable(),
+  })
+  .partial();
+
+export type UpdateAttemptBody = z.infer<typeof UpdateAttemptBodySchema>;
+
 export type CreatePinBody = {
   attachType?: string;
   attachMatch?: string;

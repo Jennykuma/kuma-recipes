@@ -273,7 +273,7 @@ const RecipeDetails = () => {
       <button
         type="button"
         onClick={() => setActiveTab('recipe')}
-        className={`relative border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold outline-none transition-colors ${
+        className={`relative border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold transition-colors ${
           activeTab === 'recipe'
             ? 'border-blush-400 text-accent dark:text-gray-100'
             : 'border-transparent text-gray-500 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
@@ -284,7 +284,7 @@ const RecipeDetails = () => {
       <button
         type="button"
         onClick={() => setActiveTab('lab')}
-        className={`relative inline-flex items-center gap-1.5 border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold outline-none transition-colors ${
+        className={`relative inline-flex items-center gap-1.5 border-b-2 px-4 pb-2 pt-1 text-sm quicksand-semibold transition-colors ${
           activeTab === 'lab'
             ? 'border-blush-400 text-accent dark:text-gray-100'
             : 'border-transparent text-gray-500 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300'

@@ -5,9 +5,11 @@ import {
   type CreateVariantBody,
   type UpdateVariantBody,
   type CreateAttemptBody,
+  type UpdateAttemptBody,
   type CreatePinBody,
   CreateVariantBodySchema,
   UpdateVariantBodySchema,
+  UpdateAttemptBodySchema,
 } from './lab.types.js';
 
 export async function getLabData(
@@ -125,6 +127,28 @@ export async function logAttempt(
       changes: body.changes ?? [],
       note: body.note ?? null,
       rating: body.rating ?? null,
+    },
+  });
+}
+
+export async function updateAttempt(
+  recipeId: string,
+  attemptId: string,
+  body: UpdateAttemptBody,
+  userId: string
+) {
+  const parsed = UpdateAttemptBodySchema.parse(body);
+  const attempt = await prisma.recipeAttempt.findFirst({
+    where: { id: attemptId, recipeId, recipe: { userId } },
+    select: { id: true },
+  });
+  if (!attempt) return null;
+
+  return prisma.recipeAttempt.update({
+    where: { id: attemptId },
+    data: {
+      ...parsed,
+      ...(parsed.date !== undefined ? { date: new Date(parsed.date) } : {}),
     },
   });
 }

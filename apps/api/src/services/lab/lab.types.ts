@@ -10,5 +10,7 @@ export {
   type LabPin,
   type LabData,
   type CreateAttemptBody,
+  type UpdateAttemptBody,
+  UpdateAttemptBodySchema,
   type CreatePinBody,
 } from 'shared';

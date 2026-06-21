@@ -4,6 +4,7 @@ import type {
   CreateVariantBody,
   UpdateVariantBody,
   CreateAttemptBody,
+  UpdateAttemptBody,
   CreatePinBody,
 } from '../services/lab/lab.types.js';
 
@@ -24,23 +25,28 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   // POST /recipes/:id/lab/variants
-  fastify.post<{ Body: CreateVariantBody }>('/:id/lab/variants', async (request, reply) => {
-    const userId = await requireUser(request, reply);
-    if (!userId) return;
+  fastify.post<{ Body: CreateVariantBody }>(
+    '/:id/lab/variants',
+    async (request, reply) => {
+      const userId = await requireUser(request, reply);
+      if (!userId) return;
 
-    const { createVariant } = await import('../services/lab/lab.service.js');
-    const { id } = request.params as { id: string };
-    try {
-      const variant = await createVariant(id, request.body, userId);
-      if (!variant) {
-        reply.code(404).send({ message: 'Recipe not found' });
-        return;
+      const { createVariant } = await import('../services/lab/lab.service.js');
+      const { id } = request.params as { id: string };
+      try {
+        const variant = await createVariant(id, request.body, userId);
+        if (!variant) {
+          reply.code(404).send({ message: 'Recipe not found' });
+          return;
+        }
+        reply.code(201).send(variant);
+      } catch (error) {
+        reply
+          .code(400)
+          .send({ message: (error as Error).message || 'Invalid variant payload' });
       }
-      reply.code(201).send(variant);
-    } catch (error) {
-      reply.code(400).send({ message: (error as Error).message || 'Invalid variant payload' });
     }
-  });
+  );
 
   // PATCH /recipes/:id/lab/variants/:variantId
   fastify.patch<{ Body: UpdateVariantBody }>(
@@ -59,7 +65,9 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
         }
         reply.send(variant);
       } catch (error) {
-        reply.code(400).send({ message: (error as Error).message || 'Invalid variant payload' });
+        reply
+          .code(400)
+          .send({ message: (error as Error).message || 'Invalid variant payload' });
       }
     }
   );
@@ -80,23 +88,52 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   // POST /recipes/:id/lab/attempts
-  fastify.post<{ Body: CreateAttemptBody }>('/:id/lab/attempts', async (request, reply) => {
-    const userId = await requireUser(request, reply);
-    if (!userId) return;
+  fastify.post<{ Body: CreateAttemptBody }>(
+    '/:id/lab/attempts',
+    async (request, reply) => {
+      const userId = await requireUser(request, reply);
+      if (!userId) return;
 
-    const { logAttempt } = await import('../services/lab/lab.service.js');
-    const { id } = request.params as { id: string };
-    try {
-      const attempt = await logAttempt(id, request.body, userId);
-      if (!attempt) {
-        reply.code(404).send({ message: 'Recipe not found' });
-        return;
+      const { logAttempt } = await import('../services/lab/lab.service.js');
+      const { id } = request.params as { id: string };
+      try {
+        const attempt = await logAttempt(id, request.body, userId);
+        if (!attempt) {
+          reply.code(404).send({ message: 'Recipe not found' });
+          return;
+        }
+        reply.code(201).send(attempt);
+      } catch (error) {
+        reply
+          .code(400)
+          .send({ message: (error as Error).message || 'Invalid attempt payload' });
       }
-      reply.code(201).send(attempt);
-    } catch (error) {
-      reply.code(400).send({ message: (error as Error).message || 'Invalid attempt payload' });
     }
-  });
+  );
+
+  // PATCH /recipes/:id/lab/attempts/:attemptId
+  fastify.patch<{ Body: UpdateAttemptBody }>(
+    ':id/lab/attempts/:attemptId',
+    async (request, reply) => {
+      const userId = await requireUser(request, reply);
+      if (!userId) return;
+
+      const { updateAttempt } = await import('../services/lab/lab.service.js');
+      const { id, attemptId } = request.params as { id: string; attemptId: string };
+      try {
+        const attempt = await updateAttempt(id, attemptId, request.body, userId);
+        if (!attempt) {
+          reply.code(404).send({ message: 'Attempt not found' });
+          return;
+        }
+        reply.send(attempt);
+      } catch (error) {
+        reply
+          .code(400)
+          .send({ message: (error as Error).message || 'Invalid attempt payload' });
+      }
+    }
+  );
 
   // DELETE /recipes/:id/lab/attempts/:attemptId
   fastify.delete('/:id/lab/attempts/:attemptId', async (request, reply) => {
@@ -128,7 +165,9 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
       }
       reply.code(201).send(pin);
     } catch (error) {
-      reply.code(400).send({ message: (error as Error).message || 'Invalid pin payload' });
+      reply
+        .code(400)
+        .send({ message: (error as Error).message || 'Invalid pin payload' });
     }
   });
 
