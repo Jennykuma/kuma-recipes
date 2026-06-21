@@ -1,33 +1,27 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { X } from 'lucide-react';
 import type { VariantItem } from 'shared';
-import type { Recipe } from 'shared';
-import { useCreateVariant, useToast } from '../../../hooks';
+import type { LabVariant } from 'shared';
+import { useUpdateVariant, useToast } from '../../../hooks';
 import EditableItemList, { type EditableItem } from './EditableItemList';
 
-type NewVariantModalProps = {
+type EditVariantModalProps = {
   recipeId: string;
-  recipe: Recipe;
-  onCreated: (variantId: string) => void;
+  variant: LabVariant;
   onClose: () => void;
 };
 
-const NewVariantModal = ({
-  recipeId,
-  recipe,
-  onCreated,
-  onClose,
-}: NewVariantModalProps) => {
-  const [name, setName] = useState('');
-  const [delta, setDelta] = useState('');
+const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps) => {
+  const [name, setName] = useState(variant.name);
+  const [delta, setDelta] = useState(variant.delta ?? '');
   const [ingredients, setIngredients] = useState<EditableItem[]>(
-    (recipe.ingredients ?? []).map((text) => ({ text, status: 'original' }))
+    variant.ingredients.map((it) => ({ text: it.text, status: it.status }))
   );
   const [steps, setSteps] = useState<EditableItem[]>(
-    (recipe.steps ?? []).map((text) => ({ text, status: 'original' }))
+    variant.steps.map((it) => ({ text: it.text, status: it.status }))
   );
 
-  const { mutate: createVariant, isPending } = useCreateVariant(recipeId);
+  const { mutate: updateVariant, isPending } = useUpdateVariant(recipeId);
   const { showToast } = useToast();
 
   const handleSubmit = () => {
@@ -41,23 +35,25 @@ const NewVariantModal = ({
       .filter((it) => it.text.trim())
       .map((it) => ({ text: it.text.trim(), status: it.status }));
 
-    createVariant(
+    updateVariant(
       {
-        name: name.trim(),
-        delta: delta.trim() || undefined,
-        ingredients: variantIngredients,
-        steps: variantSteps,
+        variantId: variant.id,
+        body: {
+          name: name.trim(),
+          delta: delta.trim() || null,
+          ingredients: variantIngredients,
+          steps: variantSteps,
+        },
       },
       {
-        onSuccess: (variant) => {
-          onCreated(variant.id);
+        onSuccess: () => {
           onClose();
         },
         onError: (err) => {
           console.error(err);
           showToast({
             status: 'error',
-            message: 'Failed to create variant. Please try again.',
+            message: 'Failed to save variant. Please try again.',
           });
         },
       }
@@ -69,17 +65,16 @@ const NewVariantModal = ({
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60"
         aria-hidden="true"
-        onClick={onClose}
       />
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="New variant"
+        aria-label="Edit variant"
         className="relative z-10 flex max-h-[90vh] w-[95vw] max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-lg dark:bg-canvas-card"
       >
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-700">
           <h2 className="text-sm font-bold text-gray-800 dark:text-gray-100">
-            New variant
+            Edit variant
           </h2>
           <button
             type="button"
@@ -169,7 +164,7 @@ const NewVariantModal = ({
             disabled={!name.trim() || isPending}
             className="rounded-md bg-sage-300 px-3 py-1.5 text-xs text-white transition hover:bg-sage-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isPending ? 'Creating…' : 'Create variant'}
+            {isPending ? 'Saving…' : 'Save'}
           </button>
         </div>
       </div>
@@ -177,4 +172,4 @@ const NewVariantModal = ({
   );
 };
 
-export default NewVariantModal;
+export default EditVariantModal;

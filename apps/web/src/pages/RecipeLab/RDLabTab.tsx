@@ -14,6 +14,7 @@ import PinnedRecipePane from './components/PinnedRecipePane';
 import AttemptLog from './components/AttemptLog';
 import LogAttemptModal from './components/LogAttemptModal';
 import NewVariantModal from './components/NewVariantModal';
+import EditVariantModal from './components/EditVariantModal';
 import DeleteModal from '../../components/DeleteModal';
 
 type RDLabTabProps = {
@@ -33,6 +34,7 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
     labData.variants.find((v) => v.isBest)?.id ?? labData.variants[0]?.id ?? null
   );
   const [showNewVariant, setShowNewVariant] = useState(false);
+  const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [showLogAttempt, setShowLogAttempt] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -44,6 +46,8 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
 
   const selectedVariant =
     labData.variants.find((v) => v.id === selectedVariantId) ?? null;
+
+  const editingVariant = labData.variants.find((v) => v.id === editingVariantId) ?? null;
 
   const handleMarkBest = () => {
     if (!selectedVariantId) return;
@@ -84,12 +88,7 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           variant={selectedVariant}
           onMarkBest={handleMarkBest}
           onClearBest={handleClearBest}
-          onUpdateDelta={(delta) =>
-            updateVariant({
-              variantId: selectedVariant.id,
-              body: { delta: delta || null },
-            })
-          }
+          onEdit={() => setEditingVariantId(selectedVariant.id)}
           onDelete={() => setShowDeleteModal(true)}
         />
       )}
@@ -122,6 +121,13 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           recipe={recipe}
           onCreated={(variantId) => setSelectedVariantId(variantId)}
           onClose={() => setShowNewVariant(false)}
+        />
+      )}
+      {editingVariant && (
+        <EditVariantModal
+          recipeId={recipeId}
+          variant={editingVariant}
+          onClose={() => setEditingVariantId(null)}
         />
       )}
       {showLogAttempt && (

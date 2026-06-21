@@ -1,12 +1,11 @@
-﻿import { useState, useRef } from 'react';
-import { Pencil, Star, Trash2 } from 'lucide-react';
+﻿import { Pencil, Star, Trash2 } from 'lucide-react';
 import type { LabVariant } from 'shared';
 
 type VariantBarProps = {
   variant: LabVariant;
   onMarkBest: () => void;
   onClearBest: () => void;
-  onUpdateDelta: (delta: string) => void;
+  onEdit: () => void;
   onDelete: () => void;
 };
 
@@ -14,28 +13,9 @@ const VariantBar = ({
   variant,
   onMarkBest,
   onClearBest,
-  onUpdateDelta,
+  onEdit,
   onDelete,
 }: VariantBarProps) => {
-  const [editingDelta, setEditingDelta] = useState(false);
-  const [deltaValue, setDeltaValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const startEdit = () => {
-    setDeltaValue(variant.delta != null ? String(variant.delta) : '');
-    setEditingDelta(true);
-    requestAnimationFrame(() => inputRef.current?.select());
-  };
-
-  const commitEdit = () => {
-    setEditingDelta(false);
-    onUpdateDelta(deltaValue.trim());
-  };
-
-  const cancelEdit = () => {
-    setEditingDelta(false);
-  };
-
   return (
     <div
       className="
@@ -49,40 +29,23 @@ const VariantBar = ({
             {variant.name}
           </span>
         </div>
-        {editingDelta ? (
-          <input
-            ref={inputRef}
-            value={deltaValue}
-            onChange={(e) => setDeltaValue(e.target.value)}
-            onBlur={commitEdit}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') commitEdit();
-              if (e.key === 'Escape') cancelEdit();
-            }}
-            placeholder="Describe changes…"
-            className="mt-0.5 w-full sm:w-1/2 text-sm text-gray-500 bg-transparent border-b border-gray-300 outline-none focus:border-primary dark:border-gray-600 dark:text-gray-400"
-          />
-        ) : (
-          <button
-            type="button"
-            onClick={startEdit}
-            className="mt-0.5 w-full sm:w-1/2 flex items-center gap-1 text-left text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 group overflow-hidden"
-          >
-            <span className="truncate">
-              {variant.delta != null && String(variant.delta) ? (
-                String(variant.delta)
-              ) : (
-                <span className="italic">+ Add change summary</span>
-              )}
-            </span>
-            <Pencil
-              className="w-3 h-3 shrink-0 link-blush opacity-0 group-hover:opacity-100 transition-opacity"
-              aria-hidden="true"
-            />
-          </button>
-        )}
+        <span className="mt-0.5 block w-full sm:w-1/2 truncate text-sm text-gray-400">
+          {variant.delta != null && String(variant.delta) ? (
+            String(variant.delta)
+          ) : (
+            <span className="italic">+ Add change summary</span>
+          )}
+        </span>
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-4">
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label="Edit variant"
+          className="flex items-center justify-center rounded-full p-2 text-blush-500 transition hover:bg-blush-100 hover:text-blush-700"
+        >
+          <Pencil className="h-4 w-4" aria-hidden="true" />
+        </button>
         {variant.isBest ? (
           <button
             type="button"
