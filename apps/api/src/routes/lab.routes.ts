@@ -160,7 +160,7 @@ const labRoutes: FastifyPluginAsync = async (fastify) => {
     try {
       const pin = await createPin(id, request.body, userId);
       if (!pin) {
-        reply.code(404).send({ message: 'Recipe not found' });
+        reply.code(404).send({ message: 'Variant not found' });
         return;
       }
       reply.code(201).send(pin);

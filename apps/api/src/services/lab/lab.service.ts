@@ -61,6 +61,14 @@ export async function createVariant(
   });
 }
 
+function itemIds(items: unknown): Set<string> {
+  return new Set(
+    (Array.isArray(items) ? items : [])
+      .map((item) => (item as { id?: string }).id)
+      .filter((id): id is string => typeof id === 'string')
+  );
+}
+
 export async function updateVariant(
   recipeId: string,
   variantId: string,
@@ -70,27 +78,45 @@ export async function updateVariant(
   const parsed = UpdateVariantBodySchema.parse(body);
   const variant = await prisma.recipeVariant.findFirst({
     where: { id: variantId, recipeId, recipe: { userId } },
-    select: { id: true },
+    select: { id: true, ingredients: true, steps: true },
   });
   if (!variant) return null;
 
-  if (parsed.isBest === true) {
-    return prisma.$transaction(async (tx) => {
-      await tx.recipeVariant.updateMany({
-        where: { recipeId, id: { not: variantId } },
-        data: { isBest: false },
-      });
-      return tx.recipeVariant.update({
+  const removedItemIds: string[] = [];
+  if (parsed.ingredients !== undefined) {
+    const before = itemIds(variant.ingredients);
+    const after = itemIds(parsed.ingredients);
+    removedItemIds.push(...[...before].filter((id) => !after.has(id)));
+  }
+  if (parsed.steps !== undefined) {
+    const before = itemIds(variant.steps);
+    const after = itemIds(parsed.steps);
+    removedItemIds.push(...[...before].filter((id) => !after.has(id)));
+  }
+
+  const updated = await (parsed.isBest === true
+    ? prisma.$transaction(async (tx) => {
+        await tx.recipeVariant.updateMany({
+          where: { recipeId, id: { not: variantId } },
+          data: { isBest: false },
+        });
+        return tx.recipeVariant.update({
+          where: { id: variantId },
+          data: parsed as Parameters<typeof tx.recipeVariant.update>[0]['data'],
+        });
+      })
+    : prisma.recipeVariant.update({
         where: { id: variantId },
-        data: parsed as Parameters<typeof tx.recipeVariant.update>[0]['data'],
-      });
+        data: parsed as Parameters<typeof prisma.recipeVariant.update>[0]['data'],
+      }));
+
+  if (removedItemIds.length > 0) {
+    await prisma.recipePin.deleteMany({
+      where: { variantId, itemId: { in: removedItemIds } },
     });
   }
 
-  return prisma.recipeVariant.update({
-    where: { id: variantId },
-    data: parsed as Parameters<typeof prisma.recipeVariant.update>[0]['data'],
-  });
+  return updated;
 }
 
 export async function deleteVariant(
@@ -169,17 +195,17 @@ export async function deleteAttempt(
 }
 
 export async function createPin(recipeId: string, body: CreatePinBody, userId: string) {
-  const recipe = await prisma.recipe.findFirst({
-    where: { id: recipeId, userId },
+  const variant = await prisma.recipeVariant.findFirst({
+    where: { id: body.variantId, recipeId, recipe: { userId } },
     select: { id: true },
   });
-  if (!recipe) return null;
+  if (!variant) return null;
 
   return prisma.recipePin.create({
     data: {
       recipeId,
-      attachType: body.attachType ?? null,
-      attachMatch: body.attachMatch ?? null,
+      variantId: body.variantId,
+      itemId: body.itemId ?? null,
       text: body.text,
       color: body.color,
       rotation: body.rotation,

@@ -15,10 +15,10 @@ const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps)
   const [name, setName] = useState(variant.name);
   const [delta, setDelta] = useState(variant.delta ?? '');
   const [ingredients, setIngredients] = useState<VariantItem[]>(
-    variant.ingredients.map((it) => ({ text: it.text, status: it.status }))
+    variant.ingredients.map((it) => ({ id: it.id, text: it.text, status: it.status }))
   );
   const [steps, setSteps] = useState<VariantItem[]>(
-    variant.steps.map((it) => ({ text: it.text, status: it.status }))
+    variant.steps.map((it) => ({ id: it.id, text: it.text, status: it.status }))
   );
 
   const { mutate: updateVariant, isPending } = useUpdateVariant(recipeId);
@@ -29,11 +29,11 @@ const EditVariantModal = ({ recipeId, variant, onClose }: EditVariantModalProps)
 
     const variantIngredients: VariantItem[] = ingredients
       .filter((it) => it.text.trim())
-      .map((it) => ({ text: it.text.trim(), status: it.status }));
+      .map((it) => ({ id: it.id, text: it.text.trim(), status: it.status }));
 
     const variantSteps: VariantItem[] = steps
       .filter((it) => it.text.trim())
-      .map((it) => ({ text: it.text.trim(), status: it.status }));
+      .map((it) => ({ id: it.id, text: it.text.trim(), status: it.status }));
 
     updateVariant(
       {

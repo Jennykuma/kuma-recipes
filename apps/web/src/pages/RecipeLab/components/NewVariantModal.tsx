@@ -21,10 +21,18 @@ const NewVariantModal = ({
   const [name, setName] = useState('');
   const [delta, setDelta] = useState('');
   const [ingredients, setIngredients] = useState<VariantItem[]>(
-    (recipe.ingredients ?? []).map((text) => ({ text, status: 'original' }))
+    (recipe.ingredients ?? []).map((text) => ({
+      id: crypto.randomUUID(),
+      text,
+      status: 'original',
+    }))
   );
   const [steps, setSteps] = useState<VariantItem[]>(
-    (recipe.steps ?? []).map((text) => ({ text, status: 'original' }))
+    (recipe.steps ?? []).map((text) => ({
+      id: crypto.randomUUID(),
+      text,
+      status: 'original',
+    }))
   );
 
   const { mutate: createVariant, isPending } = useCreateVariant(recipeId);
@@ -35,11 +43,11 @@ const NewVariantModal = ({
 
     const variantIngredients: VariantItem[] = ingredients
       .filter((it) => it.text.trim())
-      .map((it) => ({ text: it.text.trim(), status: it.status }));
+      .map((it) => ({ id: it.id, text: it.text.trim(), status: it.status }));
 
     const variantSteps: VariantItem[] = steps
       .filter((it) => it.text.trim())
-      .map((it) => ({ text: it.text.trim(), status: it.status }));
+      .map((it) => ({ id: it.id, text: it.text.trim(), status: it.status }));
 
     createVariant(
       {

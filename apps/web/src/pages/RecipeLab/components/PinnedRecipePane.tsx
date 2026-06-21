@@ -8,15 +8,11 @@ type PinnedRecipePaneProps = {
   variant: LabVariant | null;
   pins: LabPin[];
   onDeletePin: (pinId: string) => void;
-  onAddPin?: (
-    attachType: 'ingredient' | 'step',
-    attachMatch: string,
-    text: string
-  ) => void;
+  onAddPin?: (itemId: string, text: string) => void;
   onAddGeneralNote?: (text: string) => void;
 };
 
-type PendingPin = { type: 'ingredient' | 'step'; match: string };
+type PendingPin = { type: 'ingredient' | 'step'; itemId: string };
 
 const StatusChip = ({ status }: { status: 'tweaked' | 'new' }) => (
   <span
@@ -77,9 +73,9 @@ type PinnedSectionProps = {
   items: VariantItem[];
   pins: LabPin[];
   pendingPin: PendingPin | null;
-  onPinClick: (type: 'ingredient' | 'step', match: string) => void;
+  onPinClick: (type: 'ingredient' | 'step', itemId: string) => void;
   onCancelPin: () => void;
-  onAddPin?: (type: 'ingredient' | 'step', match: string, text: string) => void;
+  onAddPin?: (itemId: string, text: string) => void;
   onDeletePin: (pinId: string) => void;
 };
 
@@ -94,26 +90,20 @@ const PinnedSection = ({
   onAddPin,
   onDeletePin,
 }: PinnedSectionProps) => {
-  const findPin = (text: string) =>
-    pins.find(
-      (p) =>
-        p.attachType === type &&
-        p.attachMatch &&
-        text.toLowerCase().includes(p.attachMatch.toLowerCase())
-    );
+  const findPin = (itemId: string) => pins.find((p) => p.itemId === itemId);
 
-  const isPending = (match: string) =>
-    pendingPin?.type === type && pendingPin.match === match;
+  const isPending = (itemId: string) =>
+    pendingPin?.type === type && pendingPin.itemId === itemId;
 
   return (
     <div>
       <p className="mb-3 text-xs font-bold tracking-widest text-gray-400">{label}</p>
       <div>
         {items.map((item, idx) => {
-          const pin = findPin(item.text);
+          const pin = findPin(item.id);
           return (
             <div
-              key={idx}
+              key={item.id}
               className={`flex items-start gap-4 py-2 ${type === 'ingredient' ? 'border-b border-gray-50 last:border-0' : ''}`}
             >
               <div
@@ -141,16 +131,16 @@ const PinnedSection = ({
                     rotation={pin.rotation}
                     onRemove={() => onDeletePin(pin.id)}
                   />
-                ) : isPending(item.text) ? (
+                ) : isPending(item.id) ? (
                   <InlineNoteEditor
                     onSave={(text) => {
-                      onAddPin?.(type, item.text, text);
+                      onAddPin?.(item.id, text);
                       onCancelPin();
                     }}
                     onCancel={onCancelPin}
                   />
                 ) : (
-                  <PinButton onClick={() => onPinClick(type, item.text)} />
+                  <PinButton onClick={() => onPinClick(type, item.id)} />
                 )}
               </div>
             </div>
@@ -175,13 +165,22 @@ const PinnedRecipePane = ({
 
   const ingredients: VariantItem[] = variant
     ? (variant.ingredients ?? [])
-    : baseIngredients.map((text) => ({ text, status: 'original' }));
+    : baseIngredients.map((text, idx) => ({
+        id: `base-ingredient-${idx}`,
+        text,
+        status: 'original',
+      }));
 
   const steps: VariantItem[] = variant
     ? (variant.steps ?? [])
-    : baseSteps.map((text) => ({ text, status: 'original' }));
+    : baseSteps.map((text, idx) => ({
+        id: `base-step-${idx}`,
+        text,
+        status: 'original',
+      }));
 
-  const generalPins = pins.filter((p) => !p.attachType);
+  const variantPins = variant ? pins.filter((p) => p.variantId === variant.id) : [];
+  const generalPins = variantPins.filter((p) => p.itemId === null);
 
   return (
     <div className="flex flex-col gap-6">
@@ -189,22 +188,22 @@ const PinnedRecipePane = ({
         label="INGREDIENTS"
         type="ingredient"
         items={ingredients}
-        pins={pins}
+        pins={variantPins}
         pendingPin={pendingPin}
-        onPinClick={(type, match) => setPendingPin({ type, match })}
+        onPinClick={(type, itemId) => setPendingPin({ type, itemId })}
         onCancelPin={() => setPendingPin(null)}
-        onAddPin={onAddPin}
+        onAddPin={variant ? onAddPin : undefined}
         onDeletePin={onDeletePin}
       />
       <PinnedSection
         label="STEPS"
         type="step"
         items={steps}
-        pins={pins}
+        pins={variantPins}
         pendingPin={pendingPin}
-        onPinClick={(type, match) => setPendingPin({ type, match })}
+        onPinClick={(type, itemId) => setPendingPin({ type, itemId })}
         onCancelPin={() => setPendingPin(null)}
-        onAddPin={onAddPin}
+        onAddPin={variant ? onAddPin : undefined}
         onDeletePin={onDeletePin}
       />
 
@@ -224,7 +223,7 @@ const PinnedRecipePane = ({
               onRemove={() => onDeletePin(pin.id)}
             />
           ))}
-          {addingGeneralNote ? (
+          {!variant ? null : addingGeneralNote ? (
             <InlineNoteEditor
               onSave={(text) => {
                 onAddGeneralNote?.(text);

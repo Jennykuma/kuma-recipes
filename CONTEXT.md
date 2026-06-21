@@ -34,11 +34,11 @@ A logged cooking session. Tied to a Recipe and optionally to a specific Variant.
 
 ### Pin
 
-A sticky-note annotation. Attached to a Recipe (and optionally anchored to a specific ingredient or step via `attachType` / `attachMatch`). Has display properties: color, rotation. Displayed in the Lab's Pinned Recipe Pane.
+A sticky-note annotation. Attached to a specific Variant, and optionally anchored to one of that variant's ingredient/step items via `itemId` (a general note when `itemId` is null). Has display properties: color, rotation. Displayed in the Lab's Pinned Recipe Pane. Deleting the variant, or removing the item it's anchored to, deletes the pin.
 
 ### VariantItem
 
-The unit inside a Variant's ingredient or step list. Fields: `text` (the content) and `status` (`"original"` | `"tweaked"` | `"new"`). Drives the visual chip rendering in the Pinned Recipe Pane.
+The unit inside a Variant's ingredient or step list. Fields: `id` (stable identity for pin attachment, generated client-side and preserved across edits), `text` (the content) and `status` (`"original"` | `"tweaked"` | `"new"`). Drives the visual chip rendering in the Pinned Recipe Pane.
 
 ---
 

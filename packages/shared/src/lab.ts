@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const VariantItemSchema = z.object({
+  id: z.string(),
   text: z.string(),
   status: z.enum(['original', 'tweaked', 'new']),
 });
@@ -56,8 +57,8 @@ export type LabAttempt = {
 export type LabPin = {
   id: string;
   recipeId: string;
-  attachType: string | null;
-  attachMatch: string | null;
+  variantId: string;
+  itemId: string | null;
   text: string;
   color: string;
   rotation: number;
@@ -92,8 +93,8 @@ export const UpdateAttemptBodySchema = z
 export type UpdateAttemptBody = z.infer<typeof UpdateAttemptBodySchema>;
 
 export type CreatePinBody = {
-  attachType?: string;
-  attachMatch?: string;
+  variantId: string;
+  itemId?: string;
   text: string;
   color: string;
   rotation: number;

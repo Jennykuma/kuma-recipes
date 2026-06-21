@@ -45,6 +45,7 @@ model RecipeVariant {
   steps       Json
   order       Int
   attempts    RecipeAttempt[]
+  pins        RecipePin[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -71,19 +72,21 @@ model RecipeAttempt {
 }
 
 model RecipePin {
-  id          String  @id @default(uuid())
-  recipeId    String
-  attachType  String?
-  attachMatch String?
-  text        String
-  color       String
-  rotation    Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  recipeId  String
+  variantId String
+  itemId    String?
+  text      String
+  color     String
+  rotation  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe  Recipe        @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  variant RecipeVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@index([recipeId])
+  @@index([variantId])
 }
 
 model Tag {

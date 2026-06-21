@@ -71,7 +71,13 @@ const ItemList = ({ items, onChange, ordered }: ItemListProps) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter' && item.text.trim()) {
                 e.preventDefault();
-                onChange(insertAt(items, idx, { text: '', status: 'new' }));
+                onChange(
+                  insertAt(items, idx, {
+                    id: crypto.randomUUID(),
+                    text: '',
+                    status: 'new',
+                  })
+                );
                 requestAnimationFrame(() => refs.current[idx + 1]?.focus());
               }
               if (e.key === 'Backspace' && item.text === '' && items.length > 1) {
@@ -101,7 +107,7 @@ const ItemList = ({ items, onChange, ordered }: ItemListProps) => {
         type="button"
         onClick={() => {
           if (isAddDisabled) return;
-          onChange([...items, { text: '', status: 'new' }]);
+          onChange([...items, { id: crypto.randomUUID(), text: '', status: 'new' }]);
         }}
         disabled={isAddDisabled}
         className="mt-2 rounded-full px-2.5 py-1.5 text-xs text-sage-400 transition hover:bg-sage-400 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"

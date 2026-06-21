@@ -108,10 +108,19 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
             variant={selectedVariant}
             pins={labData.pins}
             onDeletePin={(pinId) => deletePin(pinId)}
-            onAddPin={(attachType, attachMatch, text) =>
-              createPin({ attachType, attachMatch, text, ...randomNoteStyle() })
+            onAddPin={(itemId, text) =>
+              selectedVariant &&
+              createPin({
+                variantId: selectedVariant.id,
+                itemId,
+                text,
+                ...randomNoteStyle(),
+              })
             }
-            onAddGeneralNote={(text) => createPin({ text, ...randomNoteStyle() })}
+            onAddGeneralNote={(text) =>
+              selectedVariant &&
+              createPin({ variantId: selectedVariant.id, text, ...randomNoteStyle() })
+            }
           />
         </div>
         <div className="w-80 flex-shrink-0">
