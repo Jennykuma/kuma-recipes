@@ -1,11 +1,13 @@
-﻿import { Trash2, Plus, Star } from 'lucide-react';
+﻿import { Trash2, Pencil, Plus, Star } from 'lucide-react';
 import type { LabAttempt, LabVariant } from 'shared';
 import Rating from '../../../components/Rating';
+import { formatShortDate } from '../../../utils/formatDate';
 
 type AttemptLogProps = {
   attempts: LabAttempt[];
   variants: LabVariant[];
   onLogAttempt: () => void;
+  onEditAttempt: (id: string) => void;
   onDeleteAttempt: (id: string) => void;
 };
 
@@ -13,6 +15,7 @@ const AttemptLog = ({
   attempts,
   variants,
   onLogAttempt,
+  onEditAttempt,
   onDeleteAttempt,
 }: AttemptLogProps) => {
   const sorted = [...attempts].sort(
@@ -66,17 +69,7 @@ const AttemptLog = ({
                           dateTime={String(attempt.date)}
                           className="text-sm font-bold text-gray-800 dark:text-gray-200"
                         >
-                          {(() => {
-                            const [y, m, d] = String(attempt.date)
-                              .slice(0, 10)
-                              .split('-')
-                              .map(Number);
-                            return new Date(y, m - 1, d).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            });
-                          })()}
+                          {formatShortDate(String(attempt.date))}
                         </time>
                         {variant && (
                           <span className="flex gap-1 items-center rounded-full bg-sage-300 px-2.5 py-0.5 text-xs font-bold text-white whitespace-nowrap">
@@ -111,14 +104,24 @@ const AttemptLog = ({
                         <Rating value={attempt.rating} readOnly className="gap-0.5" />
                       )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => onDeleteAttempt(attempt.id)}
-                      aria-label="Delete attempt"
-                      className="shrink-0 text-gray-300 transition hover:text-red-400 dark:text-gray-600"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => onEditAttempt(attempt.id)}
+                        aria-label="Edit attempt"
+                        className="text-gray-300 transition hover:text-blush-400 dark:text-gray-600"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onDeleteAttempt(attempt.id)}
+                        aria-label="Delete attempt"
+                        className="text-gray-300 transition hover:text-red-400 dark:text-gray-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

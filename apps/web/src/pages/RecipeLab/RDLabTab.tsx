@@ -13,9 +13,11 @@ import VariantBar from './components/VariantBar';
 import PinnedRecipePane from './components/PinnedRecipePane';
 import AttemptLog from './components/AttemptLog';
 import LogAttemptModal from './components/LogAttemptModal';
+import EditAttemptModal from './components/EditAttemptModal';
 import NewVariantModal from './components/NewVariantModal';
 import EditVariantModal from './components/EditVariantModal';
 import DeleteModal from '../../components/DeleteModal';
+import { formatShortDate } from '../../utils/formatDate';
 
 type RDLabTabProps = {
   recipeId: string;
@@ -37,6 +39,8 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
   const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [showLogAttempt, setShowLogAttempt] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editingAttemptId, setEditingAttemptId] = useState<string | null>(null);
+  const [deletingAttemptId, setDeletingAttemptId] = useState<string | null>(null);
 
   const { mutate: updateVariant } = useUpdateVariant(recipeId);
   const { mutate: deleteAttempt } = useDeleteAttempt(recipeId);
@@ -48,6 +52,10 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
     labData.variants.find((v) => v.id === selectedVariantId) ?? null;
 
   const editingVariant = labData.variants.find((v) => v.id === editingVariantId) ?? null;
+
+  const editingAttempt = labData.attempts.find((a) => a.id === editingAttemptId) ?? null;
+  const deletingAttempt =
+    labData.attempts.find((a) => a.id === deletingAttemptId) ?? null;
 
   const handleMarkBest = () => {
     if (!selectedVariantId) return;
@@ -111,7 +119,8 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
             attempts={labData.attempts}
             variants={labData.variants}
             onLogAttempt={() => setShowLogAttempt(true)}
-            onDeleteAttempt={(id) => deleteAttempt(id)}
+            onEditAttempt={(id) => setEditingAttemptId(id)}
+            onDeleteAttempt={(id) => setDeletingAttemptId(id)}
           />
         </div>
       </div>
@@ -143,6 +152,24 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           title={selectedVariant.name}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={handleDelete}
+        />
+      )}
+      {editingAttempt && (
+        <EditAttemptModal
+          recipeId={recipeId}
+          attempt={editingAttempt}
+          variants={labData.variants}
+          onClose={() => setEditingAttemptId(null)}
+        />
+      )}
+      {deletingAttempt && (
+        <DeleteModal
+          title={`${formatShortDate(String(deletingAttempt.date))} attempt`}
+          onClose={() => setDeletingAttemptId(null)}
+          onConfirm={() => {
+            deleteAttempt(deletingAttempt.id);
+            setDeletingAttemptId(null);
+          }}
         />
       )}
     </div>

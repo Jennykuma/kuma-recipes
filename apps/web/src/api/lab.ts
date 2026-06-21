@@ -7,6 +7,7 @@
   UpdateVariantBody,
   CreateAttemptBody,
   CreatePinBody,
+  UpdateAttemptBody,
 } from 'shared';
 import { buildApiUrl } from './client';
 
@@ -91,6 +92,26 @@ const lab = {
     });
     if (!response.ok) {
       throw await this.parseError(response, 'Failed to log attempt');
+    }
+    return response.json();
+  },
+
+  async updateAttempt(
+    recipeId: string,
+    attemptId: string,
+    body: UpdateAttemptBody,
+    token: string
+  ): Promise<LabAttempt> {
+    const response = await fetch(
+      buildApiUrl(`/recipes/${recipeId}/lab/attempts/${attemptId}`),
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      }
+    );
+    if (!response.ok) {
+      throw await this.parseError(response, 'Failed to update attempt');
     }
     return response.json();
   },

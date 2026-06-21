@@ -16,6 +16,7 @@ export { default as useCreateVariant } from './lab/useCreateVariant';
 export { default as useUpdateVariant } from './lab/useUpdateVariant';
 export { default as useDeleteVariant } from './lab/useDeleteVariant';
 export { default as useLogAttempt } from './lab/useLogAttempt';
+export { default as useUpdateAttempt } from './lab/useUpdateAttempt';
 export { default as useDeleteAttempt } from './lab/useDeleteAttempt';
 export { default as useCreatePin } from './lab/useCreatePin';
 export { default as useDeletePin } from './lab/useDeletePin';
