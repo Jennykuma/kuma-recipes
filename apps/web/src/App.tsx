@@ -67,17 +67,28 @@ const App = () => {
           <Link role="link" className="font-nanum text-2xl link-blush" to={'/'}>
             Kuma Recipes 🐻‍❄️
           </Link>
-          <Link
-            role="link"
-            tabIndex={0}
-            className="
-              inline-flex items-center gap-2 rounded-md
-              bg-accent px-4 py-2 text-xs font-bold
-              text-white shadow-sm transition hover:bg-blush-500"
-            to={`/recipes/new`}
-          >
-            Add recipe
-          </Link>
+          <div className="flex gap-5">
+            <Link
+              role="link"
+              className="
+                inline-flex items-center gap-2 rounded-md
+                bg-accent px-4 py-2 text-xs font-bold
+                text-white shadow-sm transition hover:bg-blush-500"
+              to={`/tag-explorer`}
+            >
+              Tag Explorer
+            </Link>
+            <Link
+              role="link"
+              className="
+                inline-flex items-center gap-2 rounded-md
+                bg-accent px-4 py-2 text-xs font-bold
+                text-white shadow-sm transition hover:bg-blush-500"
+              to={`/recipes/new`}
+            >
+              Add recipe
+            </Link>
+          </div>
         </header>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
           <Search value={searchTerm} onChange={handleUpdateSearch} />

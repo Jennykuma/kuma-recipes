@@ -57,6 +57,21 @@ const router = createBrowserRouter(
       },
     },
     {
+      path: 'tag-explorer',
+      lazy: async () => {
+        const { default: TagExplorer } =
+          await import('./pages/TagExplorer/TagExplorer.tsx');
+
+        return {
+          Component: () => (
+            <ProtectedRoute>
+              <TagExplorer />
+            </ProtectedRoute>
+          ),
+        };
+      },
+    },
+    {
       path: 'shared-recipes/:token',
       lazy: async () => {
         const { default: SharedRecipeDetails } =
