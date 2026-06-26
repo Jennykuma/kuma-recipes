@@ -23,6 +23,7 @@ const App = () => {
   );
 
   const selectedTags = allTags.filter((tag) => selectedTagSlugs.includes(tag.slug));
+  const hasActiveFilters = searchTerm.trim().length > 0 || selectedTags.length > 0;
 
   const handleUpdateSearch = (nextSearchTerm: string) => {
     const updatedSearchParams = new URLSearchParams(searchParams);
@@ -92,23 +93,33 @@ const App = () => {
             </span>
           ) : null}
         </div>
-        <div
-          data-testid="recipe-list"
-          className="
-            grid grid-cols-1 gap-4 pt-6 pb-6
-            sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        >
-          {filteredRecipes?.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              id={recipe.id}
-              rating={recipe.rating}
-              tags={recipe.tags}
-              title={recipe.title}
-              imagePath={recipe.imagePath}
-            />
-          ))}
-        </div>
+        {filteredRecipes && filteredRecipes.length > 0 ? (
+          <div
+            data-testid="recipe-list"
+            className="
+              grid grid-cols-1 gap-4 pt-6 pb-6
+              sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
+            {filteredRecipes.map((recipe: RecipeListItem) => (
+              <RecipeCard
+                key={recipe.id}
+                id={recipe.id}
+                rating={recipe.rating}
+                tags={recipe.tags}
+                title={recipe.title}
+                imagePath={recipe.imagePath}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="h-100 flex flex-col items-center justify-center py-20 text-center text-gray-400">
+            <p>
+              {hasActiveFilters
+                ? 'No recipes match your search. Try a different term or clear your tags.'
+                : 'No recipes yet. Add your first one to get cooking.'}
+            </p>
+          </div>
+        )}
       </div>
     </PageShell>
   );

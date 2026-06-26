@@ -94,4 +94,38 @@ describe('App recipe search', () => {
     );
     expect(screen.getByText('Cookie Latte')).toBeInTheDocument();
   });
+
+  it('shows an empty state when there are no recipes and no filters', () => {
+    mockUseRecipes.mockReturnValue({
+      recipes: [],
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    });
+
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/no recipes yet/i)).toBeInTheDocument();
+    expect(screen.queryByTestId('recipe-list')).not.toBeInTheDocument();
+  });
+
+  it('shows a "no matches" empty state when search yields no results', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
+
+    const searchInput = screen.getByPlaceholderText(/search recipes by name/i);
+    await user.type(searchInput, 'nonexistent recipe');
+
+    expect(screen.getByText(/no recipes match your search/i)).toBeInTheDocument();
+    expect(screen.queryByText('Chocolate Cake')).not.toBeInTheDocument();
+  });
 });
