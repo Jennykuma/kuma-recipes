@@ -8,7 +8,10 @@ type CancelModalProps = {
 const CancelModal = ({ onClose, onDiscard }: CancelModalProps) => {
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm dark:bg-black/60"
+        aria-hidden="true"
+      />
       <div
         role="dialog"
         aria-modal="true"

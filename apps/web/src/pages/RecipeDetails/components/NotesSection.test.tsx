@@ -78,7 +78,12 @@ describe('NotesSection', () => {
 
     render(
       <>
-        <NotesSection {...defaultProps} isEditing draftValue="plain note" onSave={onSave} />
+        <NotesSection
+          {...defaultProps}
+          isEditing
+          draftValue="plain note"
+          onSave={onSave}
+        />
         <button type="button">Outside</button>
       </>
     );
