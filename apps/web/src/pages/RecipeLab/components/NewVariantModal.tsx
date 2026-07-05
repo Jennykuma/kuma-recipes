@@ -59,7 +59,6 @@ const NewVariantModal = ({
       {
         onSuccess: (variant) => {
           onCreated(variant.id);
-          onClose();
         },
         onError: (err) => {
           console.error(err);

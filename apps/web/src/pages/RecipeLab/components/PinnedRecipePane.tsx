@@ -110,7 +110,7 @@ const PinnedSection = ({
                 className={`flex min-w-0 flex-1 gap-2 ${type === 'ingredient' ? 'flex-wrap items-center' : 'items-start'}`}
               >
                 {type === 'step' && (
-                  <span className="flex-shrink-0 font-bold leading-relaxed text-accent">
+                  <span className="shrink-0 font-bold leading-relaxed text-accent">
                     {idx + 1}.
                   </span>
                 )}
@@ -123,7 +123,7 @@ const PinnedSection = ({
                   {item.status !== 'original' && <StatusChip status={item.status} />}
                 </div>
               </div>
-              <div className="w-52 flex-shrink-0">
+              <div className="w-52 shrink-0">
                 {pin ? (
                   <StickyNote
                     text={pin.text}
@@ -139,9 +139,9 @@ const PinnedSection = ({
                     }}
                     onCancel={onCancelPin}
                   />
-                ) : (
+                ) : onAddPin ? (
                   <PinButton onClick={() => onPinClick(type, item.id)} />
-                )}
+                ) : null}
               </div>
             </div>
           );

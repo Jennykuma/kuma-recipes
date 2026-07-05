@@ -301,7 +301,12 @@ const RecipeDetails = () => {
       tabBar={tabBar}
       labTab={
         activeTab === 'lab' && labData ? (
-          <RDLabTab recipeId={recipeId} recipe={recipe} labData={labData} />
+          <RDLabTab
+            recipeId={recipeId}
+            recipe={recipe}
+            labData={labData}
+            onExitLab={() => setActiveTab('recipe')}
+          />
         ) : undefined
       }
       title={

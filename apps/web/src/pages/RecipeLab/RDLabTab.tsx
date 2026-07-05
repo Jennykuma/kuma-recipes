@@ -23,6 +23,7 @@ type RDLabTabProps = {
   recipeId: string;
   recipe: Recipe;
   labData: LabData;
+  onExitLab: () => void;
 };
 
 const NOTE_COLORS = ['#FEFCE8', '#F0FDF4', '#EFF6FF', '#FDF4FF', '#FFF7ED'];
@@ -31,11 +32,14 @@ const randomNoteStyle = () => ({
   rotation: parseFloat((Math.random() * 6 - 3).toFixed(1)),
 });
 
-const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
+const RDLabTab = ({ recipeId, recipe, labData, onExitLab }: RDLabTabProps) => {
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
     labData.variants.find((v) => v.isBest)?.id ?? labData.variants[0]?.id ?? null
   );
   const [showNewVariant, setShowNewVariant] = useState(false);
+  // A selected id with no variants in labData means a variant was just
+  // created and the refetch hasn't landed yet — don't re-force the modal.
+  const forceNewVariant = labData.variants.length === 0 && selectedVariantId === null;
   const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
   const [showLogAttempt, setShowLogAttempt] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -133,12 +137,18 @@ const RDLabTab = ({ recipeId, recipe, labData }: RDLabTabProps) => {
           />
         </div>
       </div>
-      {showNewVariant && (
+      {(showNewVariant || forceNewVariant) && (
         <NewVariantModal
           recipeId={recipeId}
           recipe={recipe}
-          onCreated={(variantId) => setSelectedVariantId(variantId)}
-          onClose={() => setShowNewVariant(false)}
+          onCreated={(variantId) => {
+            setSelectedVariantId(variantId);
+            setShowNewVariant(false);
+          }}
+          onClose={() => {
+            setShowNewVariant(false);
+            if (forceNewVariant) onExitLab();
+          }}
         />
       )}
       {editingVariant && (
