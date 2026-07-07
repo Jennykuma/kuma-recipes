@@ -5,7 +5,7 @@ import { normalizeProxyHeaders, readRequestBody } from './fastifyProxy.js';
 let appPromise: ReturnType<typeof initApp> | null = null;
 
 async function initApp() {
-  const app = buildApp();
+  const app = await buildApp();
   await app.ready();
   return app;
 }
