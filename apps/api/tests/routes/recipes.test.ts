@@ -38,7 +38,7 @@ describe('recipes routes', () => {
     process.env.CLERK_SECRET_KEY = 'test-secret';
     vi.clearAllMocks();
     vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
-    app = buildApp();
+    app = await buildApp();
     await app.ready();
   });
 
