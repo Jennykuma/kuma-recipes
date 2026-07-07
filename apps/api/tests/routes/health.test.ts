@@ -1,7 +1,12 @@
+import { FastifyInstance } from 'fastify';
 import { buildApp } from '../../src/app';
 
 describe('health routes', () => {
-  const app = buildApp();
+  let app: FastifyInstance;
+
+  beforeAll(async () => {
+    app = await buildApp();
+  });
 
   test('GET /health should return status OK', async () => {
     const response = await app.inject({
