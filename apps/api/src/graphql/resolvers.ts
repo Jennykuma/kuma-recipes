@@ -20,6 +20,36 @@ export const resolvers = {
       const tags = await listTags(userId);
       return tags;
     },
+    recipes: async (
+      parent: unknown,
+      args: { tag?: string[] },
+      context: GraphQLContext
+    ) => {
+      const userId = context.userId;
+      if (!userId) {
+        throw new GraphQLError('User ID cannot be found', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
+      }
+      const { listRecipes } = await import('../services/recipes/recipes.service.js');
+      const recipes = await listRecipes(userId, args.tag);
+      return recipes;
+    },
+    recipe: async (parent: unknown, args: { id: string }, context: GraphQLContext) => {
+      const userId = context.userId;
+      if (!userId) {
+        throw new GraphQLError('User ID cannot be found', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
+      }
+      const { recipeDetails } = await import('../services/recipes/recipes.service.js');
+      const recipe = await recipeDetails(args.id, userId);
+      return recipe;
+    },
   },
   Mutation: {
     createTag: async (

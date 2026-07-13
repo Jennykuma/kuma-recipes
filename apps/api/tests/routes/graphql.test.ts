@@ -11,7 +11,13 @@ vi.mock('../../src/services/tags/tags.service', () => ({
   createOrGetTag: vi.fn(),
 }));
 
+vi.mock('../../src/services/recipes/recipes.service', () => ({
+  listRecipes: vi.fn(),
+  recipeDetails: vi.fn(),
+}));
+
 import { listTags, createOrGetTag } from '../../src/services/tags/tags.service';
+import { listRecipes, recipeDetails } from '../../src/services/recipes/recipes.service';
 import { verifyToken } from '@clerk/backend';
 
 describe('graphql tags', () => {
@@ -109,5 +115,117 @@ describe('graphql tags', () => {
     expect(body.errors).toBeUndefined();
     expect(body.data.createTag).toEqual({ id: 'tag-2', name: 'Matcha', slug: 'matcha' });
     expect(createOrGetTag).toHaveBeenCalledWith('Matcha', 'test-user-1');
+  });
+
+  test('recipes query without a token returns an UNAUTHENTICATED error', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: {
+        query: `query { recipes { id title rating } }`,
+      },
+    });
+
+    const body = res.json();
+    expect(body.data).toBeNull();
+    expect(body.errors[0].extensions.code).toBe('UNAUTHENTICATED');
+    expect(listRecipes).not.toHaveBeenCalled();
+  });
+
+  test('recipes query with a valid token returns recipes from the service', async () => {
+    vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
+    vi.mocked(listRecipes).mockResolvedValue([
+      { id: 'recipe-1', title: 'Matcha Latte', rating: 5, tags: [], imagePath: null },
+    ] as any);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      headers: authHeaders,
+      payload: {
+        query: `query($tag: [String!]) { recipes(tag: $tag) { id title rating } }`,
+        variables: { tag: ['matcha'] },
+      },
+    });
+
+    const body = res.json();
+    expect(body.errors).toBeUndefined();
+    expect(body.data.recipes).toEqual([
+      { id: 'recipe-1', title: 'Matcha Latte', rating: 5 },
+    ]);
+    expect(listRecipes).toHaveBeenCalledWith('test-user-1', ['matcha']);
+  });
+
+  test('recipe query without a token returns an UNAUTHENTICATED error', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: {
+        query: `query($id: ID!) { recipe(id: $id) { id title } }`,
+        variables: { id: 'recipe-1' },
+      },
+    });
+
+    const body = res.json();
+    expect(body.data).toEqual({ recipe: null });
+    expect(body.errors[0].extensions.code).toBe('UNAUTHENTICATED');
+    expect(recipeDetails).not.toHaveBeenCalled();
+  });
+
+  test('recipe query with a valid token returns recipe details from the service', async () => {
+    vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
+    vi.mocked(recipeDetails).mockResolvedValue({
+      id: 'recipe-1',
+      title: 'Matcha Latte',
+      ingredients: ['matcha', 'milk'],
+      notes: '',
+      rating: 5,
+      steps: ['whisk', 'pour'],
+      tags: [],
+      source: '',
+      imagePath: null,
+      yield: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    } as any);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      headers: authHeaders,
+      payload: {
+        query: `query($id: ID!) { recipe(id: $id) { id title ingredients steps } }`,
+        variables: { id: 'recipe-1' },
+      },
+    });
+
+    const body = res.json();
+    expect(body.errors).toBeUndefined();
+    expect(body.data.recipe).toEqual({
+      id: 'recipe-1',
+      title: 'Matcha Latte',
+      ingredients: ['matcha', 'milk'],
+      steps: ['whisk', 'pour'],
+    });
+    expect(recipeDetails).toHaveBeenCalledWith('recipe-1', 'test-user-1');
+  });
+
+  test('recipe query returns null when the recipe is not found', async () => {
+    vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
+    vi.mocked(recipeDetails).mockResolvedValue(null as any);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      headers: authHeaders,
+      payload: {
+        query: `query($id: ID!) { recipe(id: $id) { id title } }`,
+        variables: { id: 'missing-recipe' },
+      },
+    });
+
+    const body = res.json();
+    expect(body.errors).toBeUndefined();
+    expect(body.data.recipe).toBeNull();
   });
 });
