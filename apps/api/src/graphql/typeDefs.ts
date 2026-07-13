@@ -32,6 +32,18 @@ export const typeDefs = `#graphql
     name: String!
   }
 
+  input CreateRecipeInput {
+    title: String!
+    ingredients: [String!]
+    notes: String
+    rating: Int
+    steps: [String!]
+    tagIds: [String!]
+    source: String
+    imagePath: String
+    yield: String
+  }
+
   type Query {
     tags: [Tag!]!
     recipes(tag: [String!]): [RecipeListItem!]!
@@ -40,5 +52,6 @@ export const typeDefs = `#graphql
 
   type Mutation {
     createTag(input: CreateTagInput!): Tag!
+    createRecipe(input: CreateRecipeInput!): Recipe!
   }
 `;

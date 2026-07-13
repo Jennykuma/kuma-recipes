@@ -69,5 +69,34 @@ export const resolvers = {
       const { input } = args;
       return createOrGetTag(input.name, userId);
     },
+    createRecipe: async (
+      parent: unknown,
+      args: {
+        input: {
+          ingredients?: string[];
+          notes?: string;
+          rating?: number;
+          steps?: string[];
+          tagIds?: string[];
+          title: string;
+          source?: string;
+          imagePath?: string | null;
+          yield?: string;
+        };
+      },
+      context: GraphQLContext
+    ) => {
+      const userId = context.userId;
+      if (!userId) {
+        throw new GraphQLError('User ID cannot be found', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
+      }
+      const { createNewRecipe } = await import('../services/recipes/recipes.service.js');
+      const { input } = args;
+      return createNewRecipe(input, userId);
+    },
   },
 };

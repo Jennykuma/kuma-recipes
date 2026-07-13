@@ -14,10 +14,15 @@ vi.mock('../../src/services/tags/tags.service', () => ({
 vi.mock('../../src/services/recipes/recipes.service', () => ({
   listRecipes: vi.fn(),
   recipeDetails: vi.fn(),
+  createNewRecipe: vi.fn(),
 }));
 
 import { listTags, createOrGetTag } from '../../src/services/tags/tags.service';
-import { listRecipes, recipeDetails } from '../../src/services/recipes/recipes.service';
+import {
+  listRecipes,
+  recipeDetails,
+  createNewRecipe,
+} from '../../src/services/recipes/recipes.service';
 import { verifyToken } from '@clerk/backend';
 
 describe('graphql tags', () => {
@@ -227,5 +232,69 @@ describe('graphql tags', () => {
     const body = res.json();
     expect(body.errors).toBeUndefined();
     expect(body.data.recipe).toBeNull();
+  });
+
+  test('createRecipe mutation without a token returns an UNAUTHENTICATED error', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      payload: {
+        query: `mutation($input: CreateRecipeInput!) {
+          createRecipe(input: $input) { id title }
+        }`,
+        variables: { input: { title: 'Matcha Latte' } },
+      },
+    });
+
+    const body = res.json();
+    expect(body.data).toBeNull();
+    expect(body.errors[0].extensions.code).toBe('UNAUTHENTICATED');
+    expect(createNewRecipe).not.toHaveBeenCalled();
+  });
+
+  test('createRecipe mutation with a valid token creates a recipe via the service', async () => {
+    vi.mocked(verifyToken).mockResolvedValue({ sub: 'test-user-1' } as any);
+    vi.mocked(createNewRecipe).mockResolvedValue({
+      id: 'recipe-1',
+      title: 'Matcha Latte',
+      ingredients: ['matcha', 'milk'],
+      notes: '',
+      rating: 0,
+      steps: ['whisk', 'pour'],
+      tags: [],
+      source: '',
+      imagePath: null,
+      yield: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    } as any);
+
+    const input = {
+      title: 'Matcha Latte',
+      ingredients: ['matcha', 'milk'],
+      steps: ['whisk', 'pour'],
+    };
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/graphql',
+      headers: authHeaders,
+      payload: {
+        query: `mutation($input: CreateRecipeInput!) {
+          createRecipe(input: $input) { id title ingredients steps }
+        }`,
+        variables: { input },
+      },
+    });
+
+    const body = res.json();
+    expect(body.errors).toBeUndefined();
+    expect(body.data.createRecipe).toEqual({
+      id: 'recipe-1',
+      title: 'Matcha Latte',
+      ingredients: ['matcha', 'milk'],
+      steps: ['whisk', 'pour'],
+    });
+    expect(createNewRecipe).toHaveBeenCalledWith(input, 'test-user-1');
   });
 });
