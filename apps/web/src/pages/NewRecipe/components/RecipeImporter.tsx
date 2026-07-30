@@ -164,14 +164,14 @@ const RecipeImporter = ({ onParsed, onClose }: RecipeImporterProps) => {
             disabled={isPending || !canImportRecipe}
             onClick={handleImport}
           >
-            {isPending ? (
-              <>
-                <Loader2 className="w-3 h-3 animate-spin" />
-                Importing...
-              </>
-            ) : (
+            {/* {isPending ? ( */}
+            <div className="flex gap-2 items-center">
+              <Loader2 className="w-3 h-3 animate-spin" />
+              Importing...
+            </div>
+            {/* ) : (
               'Import'
-            )}
+            )} */}
           </button>
         </div>
       </div>
